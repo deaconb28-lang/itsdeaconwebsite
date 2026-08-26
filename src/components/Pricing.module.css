@@ -1,0 +1,318 @@
+.section {
+  background: var(--cream);
+  padding: 0 var(--pad-x) clamp(60px, 6vw, 96px);
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+  padding-top: 56px;
+  border-top: 3px solid var(--ink);
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(34px, 4.6vw, 72px);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+}
+
+/* --- the anchor price ----------------------------------------------------- */
+
+.anchor {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 14px 20px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--panel);
+}
+
+.anchorLabel,
+.anchorLabelAccent {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.anchorLabel {
+  color: var(--muted-2);
+}
+
+.anchorLabelAccent {
+  color: var(--ac);
+}
+
+.anchorStruck,
+.anchorPrice {
+  margin: 3px 0 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 27px;
+  letter-spacing: -0.02em;
+}
+
+.anchorStruck {
+  color: var(--faint);
+  text-decoration: line-through;
+}
+
+.anchorArrow {
+  font-size: 22px;
+  color: var(--faint);
+}
+
+/* --- plans ---------------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(265px, 100%), 1fr));
+  gap: 20px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: 10px;
+  transition: background 0.25s;
+}
+
+.plain {
+  border: 3px solid var(--ink);
+}
+
+.plain:hover {
+  background: var(--ink-04);
+}
+
+.solid {
+  border: 3px solid var(--ink);
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.tinted {
+  border: 3px solid var(--ac);
+  background: var(--ac-07);
+}
+
+.tinted:hover {
+  background: var(--ac-13);
+}
+
+.badgeSolid,
+.badgeOutline {
+  position: absolute;
+  top: -14px;
+  left: 30px;
+  padding: 5px 13px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+
+.badgeSolid {
+  background: var(--ac);
+  color: var(--ink);
+}
+
+.badgeOutline {
+  border: 2px solid var(--ac);
+  background: var(--cream);
+  color: var(--ac);
+}
+
+.planName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 27px;
+  letter-spacing: -0.02em;
+}
+
+.priceRow {
+  margin: 20px 0 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.price {
+  margin: 20px 0 4px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 54px;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+/* Inside a price row the margin is carried by the row itself. */
+.priceRow .price {
+  margin: 0;
+}
+
+.monthly {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 25px;
+  color: var(--ac);
+}
+
+.per {
+  font-size: 14px;
+}
+
+.cadence,
+.cadenceOnInk {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cadence {
+  color: var(--muted-2);
+}
+
+.cadenceOnInk {
+  color: var(--cream-55);
+}
+
+.subtitle,
+.subtitleOnInk {
+  margin: 16px 0 20px;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.subtitle {
+  color: var(--muted-2);
+}
+
+.subtitleOnInk {
+  color: var(--cream-65);
+}
+
+.features {
+  display: grid;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--muted);
+  /* Absorbs the leftover height so every CTA lands on the same baseline,
+     while align-content keeps the bullets together at the top instead of
+     spreading them down the card. */
+  flex: 1;
+  align-content: start;
+}
+
+.featuresOnInk {
+  color: var(--cream-82);
+}
+
+.feature {
+  display: flex;
+  gap: 11px;
+}
+
+.check {
+  color: var(--ac);
+  font-weight: 700;
+}
+
+.valueNote {
+  margin: 20px 0 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--ink-07);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.valueNote b {
+  color: var(--ink);
+}
+
+/* --- calls to action ------------------------------------------------------ */
+
+.ctaOutline,
+.ctaAccentToCream,
+.ctaAccentToInk {
+  margin-top: 26px;
+  text-align: center;
+  padding: 15px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.ctaOutline {
+  border: 2px solid var(--ink);
+}
+
+.ctaOutline:hover {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.ctaAccentToCream {
+  background: var(--ac);
+  color: var(--ink);
+}
+
+.ctaAccentToCream:hover {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.ctaAccentToInk {
+  margin-top: 20px;
+  background: var(--ac);
+  color: var(--ink);
+}
+
+.ctaAccentToInk:hover {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+/* --- footnote ------------------------------------------------------------- */
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 40px;
+  justify-content: space-between;
+  margin-top: 30px;
+  padding-top: 22px;
+  border-top: 2px solid var(--ink-2);
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.footer b {
+  color: var(--ink);
+}
+
+.footerAside {
+  font-style: italic;
+  color: var(--muted-2);
+}

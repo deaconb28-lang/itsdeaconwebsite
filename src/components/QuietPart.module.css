@@ -1,0 +1,119 @@
+.section {
+  background: var(--ac);
+  color: var(--ink);
+  padding: var(--pad-y) var(--pad-x);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: 64px;
+  align-items: center;
+}
+
+.eyebrow {
+  margin: 0 0 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.bigStat {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(96px, 15vw, 240px);
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  color: var(--ink);
+}
+
+.percent {
+  font-size: 0.4em;
+}
+
+.heading {
+  margin: 18px 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(24px, 2.6vw, 38px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  max-width: 30ch;
+}
+
+.highlight {
+  background: var(--ink-14);
+  padding: 0 0.12em;
+}
+
+.source {
+  margin: 24px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.closer {
+  margin: 20px 0 0;
+  font-size: 16px;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.dinerGrid {
+  display: grid;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+  /* Twenty columns of fixed 7px gutters need 133px before a single figure is
+     drawn, which is most of a small phone. Letting the gutters scale keeps the
+     grid inside its column at any width and hits the designed 9px/7px once
+     there is room. */
+  gap: clamp(4px, 0.7vw, 9px) clamp(3px, 0.55vw, 7px);
+}
+
+.diner svg,
+.dinerFaded svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dinerFaded {
+  opacity: 0.4;
+}
+
+.legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legendIcon {
+  width: 11px;
+}
+
+.legendIcon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.legendFaded {
+  opacity: 0.6;
+}

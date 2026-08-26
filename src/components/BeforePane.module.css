@@ -1,0 +1,215 @@
+/* Harbor & Vine circa 2004. Its own visual world — none of the brand tokens
+   apply, on purpose. */
+
+.pane {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #fff;
+  font-family: "Times New Roman", Times, serif;
+  color: #111;
+  font-size: 13px;
+}
+
+.banner {
+  background: #000080;
+  color: #ffff00;
+  text-align: center;
+  padding: 8px;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.strip {
+  background: #ffff99;
+  text-align: center;
+  padding: 5px;
+  font-size: 12px;
+  color: #000;
+}
+
+.blink {
+  color: #cc0000;
+  animation: dc-blink 1.1s steps(1) infinite;
+}
+
+.marqueeBar {
+  overflow: hidden;
+  white-space: nowrap;
+  background: #000;
+  color: #00ff00;
+  padding: 4px 0;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+}
+
+.marquee {
+  display: inline-block;
+  animation: dc-old-marq 16s linear infinite;
+}
+
+.nav {
+  display: flex;
+  gap: 1px;
+  background: #c0c0c0;
+  padding: 4px;
+  font-size: 11px;
+  flex-wrap: wrap;
+}
+
+.navButton {
+  padding: 3px 8px;
+  background: #e8e8e8;
+  border: 1px outset #999;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px;
+}
+
+.sidebar {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.construction {
+  background: #ffff00;
+  border: 2px dashed #cc0000;
+  padding: 6px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.brokenImage {
+  border: 1px solid #999;
+  background: #eee;
+  padding: 18px 6px;
+  text-align: center;
+  font-size: 10px;
+  color: #666;
+}
+
+.counter {
+  background: #000;
+  color: #0f0;
+  font-family: "Courier New", monospace;
+  text-align: center;
+  padding: 6px;
+  font-size: 15px;
+}
+
+.counterCaption {
+  font-size: 8px;
+  color: #0a0;
+}
+
+.badges {
+  display: grid;
+  gap: 4px;
+  font-size: 9px;
+  color: #333;
+}
+
+.badge {
+  border: 1px solid #999;
+  background: #ddd;
+  padding: 3px;
+  text-align: center;
+}
+
+.copy {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.newFlag {
+  color: #cc0000;
+  font-weight: 700;
+  animation: dc-blink 1.1s steps(1) infinite;
+}
+
+.familyOwned {
+  color: #008000;
+  font-weight: 700;
+}
+
+.fakeLink {
+  color: #0000ee;
+  text-decoration: underline;
+}
+
+.magenta {
+  color: #cc00cc;
+}
+
+.red {
+  color: #cc0000;
+}
+
+.hours {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 14px;
+  margin-top: 12px;
+  border: 1px solid #999;
+  padding: 8px;
+  font-size: 12px;
+  background: #f4f4f4;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #999;
+  background: #eee;
+  padding: 7px;
+  text-align: center;
+  font-size: 10px;
+  color: #555;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.dialog {
+  position: absolute;
+  bottom: 54px;
+  right: 18px;
+  width: 190px;
+  border: 2px outset #ddd;
+  background: #ececec;
+  font-family: Tahoma, sans-serif;
+}
+
+.dialogBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #000080;
+  color: #fff;
+  padding: 3px 6px;
+  font-size: 10px;
+}
+
+.dialogBody {
+  padding: 10px;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.dialogButton {
+  margin-top: 8px;
+  padding: 4px;
+  border: 2px outset #999;
+  background: #ddd;
+  font-weight: 700;
+}

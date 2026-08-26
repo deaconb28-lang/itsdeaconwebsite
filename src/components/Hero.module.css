@@ -1,0 +1,325 @@
+.hero {
+  padding: clamp(45px, 7.4vw, 72px) var(--pad-x) 88px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
+  gap: 64px;
+  align-items: center;
+}
+
+.availability {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 15px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ac);
+  animation: dc-pulse 1.6s ease-in-out infinite;
+}
+
+.aside {
+  font-size: 15px;
+  color: var(--muted-2);
+  font-style: italic;
+}
+
+.greeting {
+  margin: 0 0 14px;
+  font-size: 19px;
+  color: var(--muted-2);
+  font-style: italic;
+}
+
+.headline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(44px, 6.6vw, 104px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+}
+
+/* "hardest-working" carries a non-breaking hyphen so it never splits, which
+   means the word has to fit whole. At the 44px floor it needs ~342px, more
+   than a 320px screen can give it. Below the design's narrowest tested width
+   the type steps down just far enough; 375px and up are untouched. */
+@media (max-width: 359px) {
+  .headline {
+    font-size: 36px;
+  }
+}
+
+.accent {
+  color: var(--ac);
+}
+
+.lede {
+  margin: 30px 0 0;
+  max-width: 50ch;
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 19px 30px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s;
+}
+
+.primary {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.primary span {
+  font-size: 18px;
+}
+
+.primary:hover {
+  background: var(--ac);
+  color: var(--ink);
+}
+
+.secondary {
+  border: 2px solid var(--ink);
+}
+
+.secondary:hover {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.kicker {
+  margin: 26px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+/* --- Employee of the Month card ------------------------------------------ */
+
+.cardColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 360px;
+  padding: 26px 26px 22px;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  background: var(--panel);
+  box-shadow: 14px 14px 0 var(--ink-12);
+  animation: dc-float 7s ease-in-out infinite;
+}
+
+.star {
+  text-align: center;
+  margin-bottom: 6px;
+  font-size: 22px;
+  color: var(--ac);
+}
+
+.cardLabel {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.phone {
+  margin: 20px auto 0;
+  width: 196px;
+  padding: 8px;
+  border: 3px solid var(--ink);
+  border-radius: 26px;
+  background: var(--ink);
+}
+
+.screen {
+  border-radius: 19px;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+.statusRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 12px 5px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted-2);
+}
+
+.appBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--ink-14);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.burger {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--muted-2);
+}
+
+.screenBody {
+  padding: 16px 12px 14px;
+}
+
+.restaurantName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.place {
+  margin: 6px 0 0;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ac);
+}
+
+.orderButton {
+  margin-top: 12px;
+  padding: 8px;
+  text-align: center;
+  border-radius: 999px;
+  background: var(--ac);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 600;
+  animation: dc-tap 4.5s ease-in-out infinite;
+}
+
+.rows {
+  margin-top: 12px;
+  display: grid;
+  gap: 6px;
+  font-size: 9px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--ink-12);
+}
+
+.rowLast {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.rowValue {
+  color: var(--muted-2);
+}
+
+.chips {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  font-size: 9px;
+  text-align: center;
+}
+
+.chip {
+  padding: 6px;
+  border: 1px solid var(--ink-3);
+  border-radius: 999px;
+}
+
+.cardFooter {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 2px solid var(--ink-2);
+  text-align: center;
+}
+
+.cardFooterTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.cardFooterBody {
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted-2);
+}
+
+.cardFooterBody b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.cardAside {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted-2);
+  font-style: italic;
+}

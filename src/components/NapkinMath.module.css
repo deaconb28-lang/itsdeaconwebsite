@@ -1,0 +1,184 @@
+.section {
+  background: var(--ac);
+  color: var(--ink);
+  padding: var(--pad-y) var(--pad-x);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
+  gap: 64px;
+  align-items: center;
+}
+
+.eyebrow {
+  margin: 0 0 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(34px, 4.6vw, 72px);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+}
+
+.lede {
+  margin: 24px 0 0;
+  max-width: 42ch;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 12px 18px;
+  border: 2px dashed var(--ink);
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.hint span {
+  font-size: 18px;
+}
+
+/* --- the napkin ----------------------------------------------------------- */
+
+.napkin {
+  padding: clamp(24px, 3.4vw, 40px);
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  background: var(--cream);
+  box-shadow: 16px 16px 0 var(--ink-18);
+}
+
+.rows {
+  display: grid;
+  gap: 18px;
+  font-size: clamp(17px, 1.5vw, 21px);
+  line-height: 1.5;
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.row {
+  padding-top: 18px;
+  border-top: 2px dashed var(--ink-25);
+}
+
+.figure {
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+
+.figureAccent {
+  color: var(--ac);
+}
+
+/* The editable field is the emphasised element of the whole section. */
+.field {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 12px;
+  border: 3px solid var(--ac);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 3px 0 var(--ac);
+}
+
+.fieldLabel {
+  position: absolute;
+  top: -9px;
+  left: 10px;
+  padding: 0 6px;
+  background: var(--cream);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ac);
+  white-space: nowrap;
+  cursor: text;
+}
+
+.currency {
+  font-weight: 600;
+}
+
+.input {
+  width: 2.8em;
+  border: none;
+  background: transparent;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2em;
+  color: var(--ink);
+  padding: 0;
+  outline: none;
+  cursor: text;
+}
+
+.pencil {
+  font-size: 0.7em;
+  opacity: 0.5;
+}
+
+.stamp {
+  margin: 8px 0 0;
+  padding: 16px 20px;
+  border: 3px solid var(--ac);
+  border-radius: 999px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(18px, 1.7vw, 25px);
+  letter-spacing: -0.02em;
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 16px 22px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 16px;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s;
+}
+
+.cta span {
+  font-size: 17px;
+}
+
+.cta:hover {
+  background: var(--ac);
+  color: var(--ink);
+}
+
+.ctaNote {
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted-2);
+}

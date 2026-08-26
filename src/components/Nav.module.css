@@ -1,0 +1,144 @@
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  padding: 14px 24px;
+  /* Content dissolves into the page rather than hitting a hard bar edge. */
+  background: linear-gradient(var(--cream) 62%, rgba(248, 241, 227, 0));
+}
+
+.capsule {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 9px 10px 9px 18px;
+  border: 2px solid var(--ink);
+  border-radius: 26px;
+  background: rgba(248, 241, 227, 0.92);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 6px 22px var(--ink-12);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ac);
+  color: var(--ink);
+}
+
+.clocheIcon {
+  width: 17px;
+  height: 17px;
+  display: block;
+}
+
+.brandName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  /* "safe" keeps the first link reachable once the row overflows — plain
+     centring pushes the start of the row off the left edge, where it cannot
+     be scrolled back to. */
+  justify-content: safe center;
+  font-size: 13.5px;
+  font-weight: 500;
+  flex: 1 1 auto;
+  min-width: 0;
+  /* One line that scrolls, rather than a stack. */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.links::-webkit-scrollbar {
+  display: none;
+}
+
+/* The one media query on the site.
+   Everything else here is fluid, but the nav is the case where that fails:
+   left to wrap on its own the capsule grew to four rows and 27% of a phone
+   viewport, and it is sticky, so it covered the page while you scrolled. On a
+   narrow screen the brand and the call to action take the first line and the
+   links get the second — the two lines the design intends. */
+@media (max-width: 620px) {
+  .links {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: safe flex-start;
+  }
+}
+
+.link {
+  padding: 8px 10px;
+  border-radius: 999px;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+
+.link:hover {
+  background: rgba(19, 49, 44, 0.08);
+  color: var(--ink);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 20px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s;
+}
+
+.cta span {
+  font-size: 15px;
+}
+
+.cta:hover {
+  background: var(--ac);
+  color: var(--ink);
+}
+
+.track {
+  height: 2px;
+  margin: 12px 4px 0;
+  background: var(--ink-12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  width: 0%;
+  background: var(--ac);
+}

@@ -1,0 +1,297 @@
+.section {
+  padding: clamp(56px, 7.4vw, 90px) var(--pad-x);
+  background: var(--cream);
+  color: var(--ink);
+  border-top: 3px solid var(--ink);
+}
+
+.inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ac);
+}
+
+.heading {
+  margin: 10px 0 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(24px, 2.8vw, 38px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.note {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* --- input ---------------------------------------------------------------- */
+
+.form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.input {
+  flex: 1;
+  min-width: 220px;
+  padding: 15px 16px;
+  border: 2px solid var(--ink-35);
+  border-radius: 8px;
+  background: var(--panel);
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.input:focus {
+  border-color: var(--ink);
+  outline: none;
+}
+
+.submit {
+  padding: 15px 26px;
+  border: none;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--ac);
+  color: var(--ink);
+}
+
+.submit:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.error {
+  margin: 16px 0 0;
+  font-size: 15px;
+  color: var(--ac);
+}
+
+/* --- the phone ------------------------------------------------------------ */
+
+.panel {
+  display: flex;
+  gap: 26px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-top: 26px;
+  padding-top: 26px;
+  border-top: 2px solid var(--ink-18);
+}
+
+.phoneShell {
+  width: 306px;
+  flex-shrink: 0;
+  padding: 9px;
+  border: 3px solid var(--ink);
+  border-radius: 26px;
+  background: var(--ink);
+}
+
+.phoneScreen {
+  position: relative;
+  width: 282px;
+  height: 508px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--panel);
+}
+
+.phoneScreen img {
+  /* Anchored to the top so the capture starts where the page does. */
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* A 375px-wide viewport scaled down to fit the 282px screen. */
+.frame {
+  width: 375px;
+  max-width: none;
+  height: 675px;
+  border: none;
+  transform: scale(0.752);
+  transform-origin: top left;
+}
+
+/* Fills the width and lets the fold cut the bottom, the way the page would
+   actually appear. Scaling to fill the height instead would crop the sides
+   and zoom a desktop-width capture into uselessness. */
+.shot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  height: 100%;
+  padding: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted-2);
+}
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--ink-2);
+  border-top-color: var(--ac);
+  border-radius: 50%;
+  animation: dc-spin 0.9s linear infinite;
+}
+
+.copy {
+  flex: 1;
+  min-width: 240px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.copy p + p {
+  margin: 12px 0 0;
+}
+
+.copyLabel {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+/* --- self-assessment ------------------------------------------------------ */
+
+.assessment {
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 2px solid var(--ink-18);
+}
+
+.toggles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(255px, 100%), 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.toggleOn {
+  background: var(--ac-16);
+}
+
+.box {
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  background: var(--cream);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.verdict {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  background: var(--ink-06);
+}
+
+.score {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.verdictText {
+  flex: 1;
+  min-width: 200px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.fix {
+  padding: 13px 22px;
+  border-radius: 999px;
+  background: var(--ac);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+
+.fix:hover {
+  background: var(--ink);
+  color: var(--cream);
+}

@@ -1,0 +1,267 @@
+.section {
+  background: var(--ink);
+  color: var(--cream);
+  padding: var(--pad-y) var(--pad-x);
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+}
+
+.eyebrow {
+  margin: 0 0 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ac);
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(36px, 5.6vw, 88px);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+}
+
+.note {
+  margin: 0;
+  max-width: 36ch;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--cream-75);
+  padding-bottom: 8px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 24px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  color: var(--cream);
+  border: 2px solid var(--cream-28);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.4s, transform 0.5s var(--ease);
+}
+
+.card:hover {
+  border-color: var(--ac);
+  transform: translateY(-6px);
+  color: var(--cream);
+}
+
+.wide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+}
+
+.shotColumn {
+  display: flex;
+  flex-direction: column;
+  background: var(--cream-04);
+}
+
+/* --- browser chrome ------------------------------------------------------- */
+
+.chrome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  background: var(--cream-1);
+  border-bottom: 2px solid var(--cream-22);
+}
+
+.chromeDots {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.chromeDots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--cream-35);
+}
+
+.chromeUrl {
+  flex: 1;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--ink-5);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--cream-7);
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.statusLive,
+.statusClient {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.statusLive {
+  color: var(--ac);
+}
+
+.statusClient {
+  color: var(--cream-45);
+}
+
+/* --- screenshots ---------------------------------------------------------- */
+
+.wideShot {
+  position: relative;
+  flex: 1;
+  min-height: 300px;
+  overflow: hidden;
+}
+
+.shot {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--cream-04);
+}
+
+.image,
+.imageContain {
+  transition: transform 0.7s var(--ease);
+}
+
+.image {
+  object-fit: cover;
+  object-position: top center;
+}
+
+.imageContain {
+  object-fit: contain;
+}
+
+.card:hover .image,
+.card:hover .imageContain {
+  transform: scale(1.05);
+}
+
+/* --- copy ----------------------------------------------------------------- */
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 30px;
+  border-left: 2px solid var(--cream-22);
+}
+
+.foot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 26px 26px;
+  border-top: 2px solid var(--cream-22);
+}
+
+.meta {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.index {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--ac);
+}
+
+.kind {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cream-5);
+}
+
+.wideTitle {
+  margin: 14px 0 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(28px, 2.8vw, 42px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.wideBody {
+  margin: 16px 0 0;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--cream-78);
+}
+
+.title {
+  margin: 12px 0 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.body {
+  margin: 12px 0 0;
+  max-width: 34ch;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--cream-7);
+}
+
+.specs {
+  display: grid;
+  font-size: 15px;
+}
+
+.spec {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 0;
+  border-top: 1px solid var(--cream-2);
+}
+
+.specLabel {
+  color: var(--cream-55);
+}
+
+.arrow {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--cream-35);
+  font-size: 16px;
+}
