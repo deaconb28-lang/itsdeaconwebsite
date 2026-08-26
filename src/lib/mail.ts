@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 
+import { env, envBool, envInt } from "@/lib/env";
+
 export type MailMessage = {
   to: string;
   from: string;
@@ -21,11 +23,16 @@ export type MailResult =
  * honest "email me directly" response rather than silently dropping the lead.
  */
 export async function sendMail(message: MailMessage): Promise<MailResult> {
-  if (process.env.RESEND_API_KEY) {
-    return sendViaResend(message, process.env.RESEND_API_KEY);
-  }
-  if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-    return sendViaSmtp(message);
+  const resendKey = env("RESEND_API_KEY");
+  if (resendKey) return sendViaResend(message, resendKey);
+
+  const smtp = {
+    host: env("SMTP_HOST"),
+    user: env("SMTP_USER"),
+    pass: env("SMTP_PASS"),
+  };
+  if (smtp.host && smtp.user && smtp.pass) {
+    return sendViaSmtp(message, smtp.host, smtp.user, smtp.pass);
   }
   return {
     ok: false,
@@ -71,18 +78,21 @@ async function sendViaResend(
   }
 }
 
-async function sendViaSmtp(message: MailMessage): Promise<MailResult> {
-  const port = Number.parseInt(process.env.SMTP_PORT ?? "587", 10);
+async function sendViaSmtp(
+  message: MailMessage,
+  host: string,
+  user: string,
+  pass: string,
+): Promise<MailResult> {
+  const port = envInt("SMTP_PORT", 587);
 
   try {
     const transport = nodemailer.createTransport({
-      host: process.env.SMTP_HOST!,
+      host,
       port,
       // Port 465 is implicit TLS; 587 and 25 start plain and upgrade.
-      secure: process.env.SMTP_SECURE
-        ? process.env.SMTP_SECURE === "true"
-        : port === 465,
-      auth: { user: process.env.SMTP_USER!, pass: process.env.SMTP_PASS! },
+      secure: envBool("SMTP_SECURE") ?? port === 465,
+      auth: { user, pass },
       connectionTimeout: 10_000,
       greetingTimeout: 10_000,
       socketTimeout: 20_000,

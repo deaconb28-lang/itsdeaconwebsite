@@ -5,6 +5,7 @@ import {
   Instrument_Sans,
   Instrument_Serif,
 } from "next/font/google";
+import { siteUrl } from "@/lib/env";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -37,7 +38,7 @@ const instrumentSerif = Instrument_Serif({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://itsdeacon.com";
+const SITE_URL = siteUrl();
 const TITLE = "Deacon — websites for local restaurants";
 const DESCRIPTION =
   "I design and build websites for local restaurants — by hand, one at a time. Free homepage first, before you owe me a cent.";

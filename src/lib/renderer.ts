@@ -6,6 +6,8 @@
  * so rather than claiming phone width — the honesty of that section is part
  * of the pitch.
  */
+import { env } from "./env";
+
 export type Renderer = "screenshotone" | "apiflash" | "playwright" | "mshots";
 
 /** True only for renderers that lay the page out at phone width. */
@@ -64,8 +66,8 @@ export function loadPlaywright(): Promise<PlaywrightModule | null> {
 }
 
 export async function activeRenderer(): Promise<Renderer> {
-  if (process.env.SCREENSHOTONE_API_KEY) return "screenshotone";
-  if (process.env.APIFLASH_KEY) return "apiflash";
+  if (env("SCREENSHOTONE_API_KEY")) return "screenshotone";
+  if (env("APIFLASH_KEY")) return "apiflash";
   if (await loadPlaywright()) return "playwright";
   return "mshots";
 }

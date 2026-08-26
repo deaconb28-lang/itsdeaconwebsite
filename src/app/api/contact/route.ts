@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { envOr } from "@/lib/env";
 import { sendMail } from "@/lib/mail";
 import { calcNapkin } from "@/lib/napkin";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
@@ -8,14 +9,14 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /** Every enquiry lands here. */
-const INBOX = process.env.CONTACT_TO ?? "hello@itsdeacon.com";
+const INBOX = envOr("CONTACT_TO", "hello@itsdeacon.com");
 
 /**
  * The envelope sender. Resend and most SMTP providers will only send from a
  * domain you have verified, so this is configurable; the default assumes
  * itsdeacon.com is verified with the provider.
  */
-const SENDER = process.env.CONTACT_FROM ?? "Deacon site <hello@itsdeacon.com>";
+const SENDER = envOr("CONTACT_FROM", "Deacon site <hello@itsdeacon.com>");
 
 const LIMIT = 5;
 const WINDOW_MS = 10 * 60 * 1000;

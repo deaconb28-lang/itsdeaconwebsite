@@ -145,6 +145,13 @@ Any Node host running `npm run build && npm start` will do. Set the environment
 variables from `.env.example` — at minimum a mail provider, or the contact form
 cannot deliver.
 
+Every environment variable is read through `src/lib/env.ts`, which treats a
+blank value as absent. This is not fussiness: importing a deployment's
+variables from a template leaves empty strings behind, `??` only falls back on
+`undefined`, and an empty `NEXT_PUBLIC_SITE_URL` reaching `new URL()` fails the
+build outright with "Invalid URL". Read new variables through those helpers
+rather than `process.env` directly.
+
 `vercel.json` pins the framework preset to `nextjs`. This matters: a Vercel
 project created against the repository *before* it had any commits detects no
 framework and silently falls back to "Other", which builds the site correctly

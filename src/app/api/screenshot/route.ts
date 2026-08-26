@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { env } from "@/lib/env";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { loadPlaywright, type PlaywrightBrowser } from "@/lib/renderer";
 import { assertPublicHost } from "@/lib/safe-fetch";
@@ -83,7 +84,7 @@ export async function GET(request: Request) {
 type Shot = { body: ArrayBuffer; contentType: string; renderer: string };
 
 async function viaScreenshotOne(url: string): Promise<Shot | null> {
-  const key = process.env.SCREENSHOTONE_API_KEY;
+  const key = env("SCREENSHOTONE_API_KEY");
   if (!key) return null;
 
   const endpoint = new URL("https://api.screenshotone.com/take");
@@ -101,7 +102,7 @@ async function viaScreenshotOne(url: string): Promise<Shot | null> {
 }
 
 async function viaApiFlash(url: string): Promise<Shot | null> {
-  const key = process.env.APIFLASH_KEY;
+  const key = env("APIFLASH_KEY");
   if (!key) return null;
 
   const endpoint = new URL("https://api.apiflash.com/v1/urltoimage");
@@ -134,7 +135,7 @@ async function viaPlaywright(url: string): Promise<Shot | null> {
       args: ["--no-sandbox", "--disable-dev-shm-usage"],
       // Set PLAYWRIGHT_EXECUTABLE_PATH when the host already has a Chromium
       // that Playwright's own download layout wouldn't find.
-      executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || undefined,
+      executablePath: env("PLAYWRIGHT_EXECUTABLE_PATH"),
     });
 
     const context = await browser.newContext({
