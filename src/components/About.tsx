@@ -49,10 +49,6 @@ export function About() {
             ))}
           </div>
 
-          <p className={styles.statement}>
-            Take the free homepage first. If it&rsquo;s right, tell me and the
-            whole site is live in two weeks.
-          </p>
           <p className={styles.capacity}>
             I take three projects a month — that&rsquo;s the whole company.
           </p>
@@ -76,10 +72,6 @@ export function About() {
             </a>
           </div>
 
-          <div className={styles.signature}>
-            <p className={styles.signatureLabel}>Signed</p>
-            <p className={styles.signatureName}>— Deacon</p>
-          </div>
         </div>
       </div>
     </section>

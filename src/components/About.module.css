@@ -71,18 +71,9 @@
   color: var(--cream-75);
 }
 
-.statement {
-  margin: 34px 0 0;
-  max-width: 42ch;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(21px, 2.1vw, 30px);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
 
 .capacity {
-  margin: 20px 0 0;
+  margin: 34px 0 0;
   font-size: 16px;
   font-style: italic;
   color: var(--cream-6);
@@ -128,26 +119,5 @@
   color: var(--ac);
 }
 
-.signature {
-  padding: 22px;
-  border: 2px solid var(--cream-28);
-  border-radius: 10px;
-  background: rgba(248, 241, 227, 0.05);
-}
 
-.signatureLabel {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--cream-5);
-}
 
-.signatureName {
-  margin: 10px 0 0;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 24px;
-  letter-spacing: -0.02em;
-}

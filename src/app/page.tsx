@@ -3,7 +3,6 @@ import { Contact } from "@/components/Contact";
 import { Difference } from "@/components/Difference";
 import { Effects } from "@/components/Effects";
 import { Hero } from "@/components/Hero";
-import { HowIStart } from "@/components/HowIStart";
 import { Lookup } from "@/components/Lookup";
 import { NapkinMath } from "@/components/NapkinMath";
 import { Nav } from "@/components/Nav";
@@ -12,7 +11,6 @@ import { Process } from "@/components/Process";
 import { QuietPart } from "@/components/QuietPart";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteStateProvider } from "@/components/SiteState";
-import { WhyItMatters } from "@/components/WhyItMatters";
 import { Work } from "@/components/Work";
 
 /**
@@ -27,10 +25,8 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <WhyItMatters />
         <QuietPart />
         <Difference />
-        <HowIStart />
         <Work />
         <Process />
         <Pricing />

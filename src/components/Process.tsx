@@ -1,5 +1,13 @@
 import styles from "./Process.module.css";
 
+/**
+ * The whole engagement, once.
+ *
+ * "How I start" ran directly above this with its own headline, lede, button
+ * and three numbered rows, describing the same free-homepage-first sequence
+ * these four steps describe. The offer keeps the headline it earned; the steps
+ * carry the detail.
+ */
 const STEPS = [
   {
     timing: "Free · step one",
@@ -26,20 +34,26 @@ const STEPS = [
 export function Process() {
   return (
     <section id="process" className={styles.section}>
-      <p className={styles.eyebrow}>How it goes</p>
-
       <div className={styles.header}>
-        <h2 className={styles.heading}>
-          From mockup
-          <br />
-          to launch.
-        </h2>
-        <div className={styles.headerNote}>
+        <div>
+          <p className={styles.eyebrow}>How it goes</p>
+          <h2 className={styles.heading}>
+            <span className={styles.accent}>Your homepage first.</span>
+            <br />
+            Before you owe me a cent.
+          </h2>
+        </div>
+
+        <div className={styles.headerSide}>
           <p className={styles.note}>
-            Step one is free and comes first — I build the homepage before you
-            decide anything. You only pay if you want the rest of it.
+            Tell me your restaurant and I&rsquo;ll spend an evening on it and
+            send back a finished homepage. Turn me down and the page is still
+            yours to use.
           </p>
-          <p className={styles.kicker}>About two weeks, start to launch</p>
+          <a href="#contact" className={styles.button}>
+            Get your free homepage <span aria-hidden="true">→</span>
+          </a>
+          <p className={styles.aside}>no deposit, no contract, no call required</p>
         </div>
       </div>
 

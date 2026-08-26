@@ -88,8 +88,7 @@
 
 .legend {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  gap: 28px;
   flex-wrap: wrap;
   margin-top: 18px;
   font-family: var(--font-mono);
@@ -115,5 +114,63 @@
 }
 
 .legendFaded {
+  opacity: 0.6;
+}
+
+/* --------------------------------------------------------------------------
+   The three supporting statistics.
+   They had a section of their own — three cards, each with a kicker, a giant
+   number, a visualiser and a source line — to make the point the 68% above
+   already makes. Kept and still attributed, but as one ruled strip.
+   -------------------------------------------------------------------------- */
+
+.supporting {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 0 clamp(24px, 4vw, 56px);
+  margin-top: clamp(40px, 5vw, 64px);
+  border-top: 2px solid var(--ink-25);
+}
+
+.support {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 18px 0;
+  flex-wrap: wrap;
+}
+
+.support + .support {
+  border-top: 1px solid var(--ink-22);
+}
+
+/* Once they sit side by side the shared top rule is enough. */
+@media (min-width: 780px) {
+  .support + .support {
+    border-top: none;
+  }
+}
+
+.supportStat {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.supportClaim {
+  flex: 1;
+  min-width: 120px;
+  font-size: 15px;
+  line-height: 1.4;
+  opacity: 0.82;
+}
+
+.supportSource {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   opacity: 0.6;
 }

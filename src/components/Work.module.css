@@ -10,7 +10,7 @@
   justify-content: space-between;
   gap: 40px;
   flex-wrap: wrap;
-  margin-bottom: 44px;
+  margin-bottom: 40px;
 }
 
 .eyebrow {
@@ -62,17 +62,7 @@
   color: var(--cream);
 }
 
-.wide {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-}
 
-.shotColumn {
-  display: flex;
-  flex-direction: column;
-  background: var(--cream-04);
-}
 
 /* --- browser chrome ------------------------------------------------------- */
 
@@ -131,12 +121,6 @@
 
 /* --- screenshots ---------------------------------------------------------- */
 
-.wideShot {
-  position: relative;
-  flex: 1;
-  min-height: 300px;
-  overflow: hidden;
-}
 
 .shot {
   position: relative;
@@ -166,14 +150,6 @@
 
 /* --- copy ----------------------------------------------------------------- */
 
-.detail {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 28px;
-  padding: 30px;
-  border-left: 2px solid var(--cream-22);
-}
 
 .foot {
   display: flex;
@@ -205,21 +181,7 @@
   color: var(--cream-5);
 }
 
-.wideTitle {
-  margin: 14px 0 0;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(28px, 2.8vw, 42px);
-  line-height: 1;
-  letter-spacing: -0.03em;
-}
 
-.wideBody {
-  margin: 16px 0 0;
-  font-size: 17px;
-  line-height: 1.6;
-  color: var(--cream-78);
-}
 
 .title {
   margin: 12px 0 0;
@@ -238,22 +200,8 @@
   color: var(--cream-7);
 }
 
-.specs {
-  display: grid;
-  font-size: 15px;
-}
 
-.spec {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 11px 0;
-  border-top: 1px solid var(--cream-2);
-}
 
-.specLabel {
-  color: var(--cream-55);
-}
 
 .arrow {
   flex-shrink: 0;

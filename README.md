@@ -8,6 +8,12 @@ a visitor sees the price before they are invited to look up their own site, and
 works through the napkin math before reaching the form that inherits its
 figures. `src/app/page.tsx` says as much; please don't reorder it.
 
+**One idea per section.** The page was twelve sections and 1,675 words, and two
+pairs of them argued the same point twice — so the three sourced statistics
+folded into the 68% band they were restating, and "How I start" folded into the
+process it was previewing. Nothing was rewritten and no claim was dropped;
+adding a section back means finding a point none of the others already make.
+
 Built from the design handoff in [`docs/design-reference/`](docs/design-reference/),
 which remains the source of truth for copy, colour and behaviour.
 
