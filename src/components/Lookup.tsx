@@ -1,55 +1,35 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import type { Finding } from "@/lib/audit";
 import type { PreviewResult } from "@/lib/preview";
 import { normaliseUrl } from "@/lib/url";
 import styles from "./Lookup.module.css";
 
-const CHECKS = [
-  { key: "A", label: "Our menu is a PDF, or a photo of a menu" },
-  { key: "B", label: "Buttons are fiddly to tap on a phone" },
-  { key: "C", label: "It takes a moment to load" },
-  { key: "D", label: "The hours or phone number are out of date" },
-] as const;
-
-/**
- * Keyed by how many are true. The 0 case is what makes the other four
- * credible — it stays as written.
- */
-const VERDICTS = [
-  "Nothing to fix from here. Genuinely — keep it and spend the money on the room.",
-  "One thing, and it's the cheap kind. Worth an email even if you never hire me.",
-  "That's two of the reasons the 68% gave. Both are a week's work, not a rebuild.",
-  "Three of four. A diner deciding between you and the next place is not getting past this.",
-  "All four. You are losing tables you never hear about, every week, quietly.",
-];
-
-type CheckKey = (typeof CHECKS)[number]["key"];
 type Phase = "idle" | "checking" | "ready" | "error";
+
+type Audit = {
+  findings: Finding[];
+  summary: string;
+  /** The host served a bot check instead of the page; nothing was read. */
+  blocked?: boolean;
+};
 
 export function Lookup() {
   const [url, setUrl] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [preview, setPreview] = useState<PreviewResult | null>(null);
   const [error, setError] = useState("");
-  const [checks, setChecks] = useState<Record<CheckKey, boolean>>({
-    A: false,
-    B: false,
-    C: false,
-    D: false,
-  });
-
-  const hits = useMemo(
-    () => CHECKS.filter((check) => checks[check.key]).length,
-    [checks],
-  );
+  const [audit, setAudit] = useState<Audit | null>(null);
+  const [auditing, setAuditing] = useState(false);
 
   const run = useCallback(async () => {
     const normalised = normaliseUrl(url);
     if (!normalised) {
       setPhase("error");
       setPreview(null);
+      setAudit(null);
       setError("That doesn't look like a web address. Try yourrestaurant.com.");
       return;
     }
@@ -57,6 +37,30 @@ export function Lookup() {
     setPhase("checking");
     setError("");
     setPreview(null);
+    setAudit(null);
+    setAuditing(true);
+
+    // The audit runs alongside the captures — it reads the page itself and
+    // does not wait on a screenshot.
+    void fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: normalised }),
+    })
+      .then(async (response) => {
+        const data = (await response.json()) as
+          | { ok: true; findings: Finding[]; summary: string; blocked?: boolean }
+          | { ok: false; error: string };
+        if (data.ok) {
+          setAudit({
+            findings: data.findings,
+            summary: data.summary,
+            blocked: data.blocked,
+          });
+        }
+      })
+      .catch(() => {})
+      .finally(() => setAuditing(false));
 
     try {
       const response = await fetch("/api/preview", {
@@ -81,10 +85,6 @@ export function Lookup() {
       setError("That didn't load. Try again in a moment.");
     }
   }, [url]);
-
-  const toggle = useCallback((key: CheckKey) => {
-    setChecks((current) => ({ ...current, [key]: !current[key] }));
-  }, []);
 
   return (
     <section id="lookup" className={styles.section}>
@@ -132,52 +132,106 @@ export function Lookup() {
         <div className={styles.body}>
           <Stage phase={phase} preview={preview} />
 
-          <div className={styles.assess}>
-            <p className={styles.assessLabel}>
-              Be honest — tap any that are true
-            </p>
-
-            <ul className={styles.checks}>
-              {CHECKS.map((check) => {
-                const on = checks[check.key];
-                return (
-                  <li key={check.key}>
-                    <button
-                      type="button"
-                      aria-pressed={on}
-                      onClick={() => toggle(check.key)}
-                      className={on ? `${styles.check} ${styles.checkOn}` : styles.check}
-                    >
-                      <span className={styles.box} aria-hidden="true">
-                        {on ? "✓" : ""}
-                      </span>
-                      <span className={styles.checkLabel}>{check.label}</span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-
-            <div className={styles.verdict} aria-live="polite">
-              <p className={styles.score}>
-                <span className={styles.scoreNum}>{hits}</span>
-                <span className={styles.scoreOf}>
-                  of
-                  <br />
-                  four
-                </span>
-              </p>
-              <p className={styles.verdictText}>{VERDICTS[hits]}</p>
-            </div>
-
-            <a href="#contact" className={styles.fix}>
-              {hits === 0 ? "Get a free mockup" : "Fix it for $1,200"}
-              <span aria-hidden="true">→</span>
-            </a>
-          </div>
+          <Report
+            phase={phase}
+            auditing={auditing}
+            audit={audit}
+          />
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * What is actually wrong with the site.
+ *
+ * Every finding here was measured on the page by /api/analyze — a missing
+ * viewport tag, a PDF menu, a load time, a stale copyright. Claude rewrites
+ * the wording when a key is configured but can never add a finding, so
+ * nothing on this list is a guess about someone's business.
+ */
+function Report({
+  phase,
+  auditing,
+  audit,
+}: {
+  phase: Phase;
+  auditing: boolean;
+  audit: Audit | null;
+}) {
+  if (phase === "idle" || (phase === "error" && !audit)) {
+    return (
+      <div className={styles.report}>
+        <p className={styles.reportLabel}>What I&rsquo;d fix</p>
+        <p className={styles.reportIdle}>
+          Paste your address and I&rsquo;ll read the page the way a phone does,
+          then tell you what&rsquo;s costing you tables.
+        </p>
+      </div>
+    );
+  }
+
+  if (auditing || !audit) {
+    return (
+      <div className={styles.report}>
+        <p className={styles.reportLabel}>Reading your site…</p>
+        <ul className={styles.findings}>
+          {[0, 1, 2].map((i) => (
+            <li key={i} className={styles.finding}>
+              <span className={`${styles.skelLine} ${styles.skelTitle}`} />
+              <span className={`${styles.skelLine} ${styles.skelBody}`} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  const clean = audit.findings.length === 0;
+
+  return (
+    <div className={styles.report}>
+      <p className={styles.reportLabel}>
+        {audit.blocked
+          ? "Couldn\u2019t read it"
+          : clean
+            ? "Nothing to fix"
+            : `What I\u2019d fix \u2014 ${audit.findings.length}`}
+      </p>
+
+      {!clean && (
+        <ul className={styles.findings}>
+          {audit.findings.map((finding) => (
+            <li key={finding.id} className={styles.finding}>
+              <span
+                className={`${styles.dot} ${
+                  finding.severity === "high"
+                    ? styles.dotHigh
+                    : finding.severity === "medium"
+                      ? styles.dotMed
+                      : styles.dotLow
+                }`}
+                aria-label={`${finding.severity} priority`}
+              />
+              <div className={styles.findingBody}>
+                <h4 className={styles.findingTitle}>{finding.title}</h4>
+                <p className={styles.findingDetail}>{finding.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <p className={clean ? styles.summaryClean : styles.summary}>
+        {audit.summary}
+      </p>
+
+      <a href="#contact" className={styles.fix}>
+        {clean || audit.blocked ? "Get a free mockup" : "Fix it for $1,200"}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
   );
 }
 
@@ -244,13 +298,32 @@ function Stage({
 }
 
 function Placeholder({ phase }: { phase: Phase }) {
+  if (phase === "checking") return <Skeleton />;
   return (
     <div className={styles.placeholder}>
-      {phase === "checking" ? (
-        <span className={styles.spinner} aria-hidden="true" />
-      ) : (
-        <p className={styles.placeholderText}>Paste your address above.</p>
-      )}
+      <p className={styles.placeholderText}>Paste your address above.</p>
+    </div>
+  );
+}
+
+/**
+ * A page loading, rather than a spinner in an empty rectangle. A capture can
+ * take several seconds, and a shape that looks like a website arriving reads
+ * as progress instead of as something broken.
+ */
+function Skeleton() {
+  return (
+    <div className={styles.skeleton} aria-label="Loading" role="status">
+      <div className={styles.skelBar}>
+        <span className={`${styles.skelLine} ${styles.skelLogo}`} />
+        <span className={`${styles.skelLine} ${styles.skelNav}`} />
+      </div>
+      <span className={styles.skelHero} />
+      <div className={styles.skelText}>
+        <span className={`${styles.skelLine} ${styles.skelWide}`} />
+        <span className={`${styles.skelLine} ${styles.skelMid}`} />
+        <span className={`${styles.skelLine} ${styles.skelNarrow}`} />
+      </div>
     </div>
   );
 }
@@ -298,14 +371,12 @@ function Capture({
     };
   }, [url, device]);
 
-  if (state !== "ready") {
+  if (state === "loading") return <Skeleton />;
+
+  if (state === "failed") {
     return (
       <div className={styles.placeholder}>
-        {state === "loading" ? (
-          <span className={styles.spinner} aria-hidden="true" />
-        ) : (
-          <p className={styles.placeholderText}>No capture.</p>
-        )}
+        <p className={styles.placeholderText}>No capture.</p>
       </div>
     );
   }

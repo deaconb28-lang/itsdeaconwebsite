@@ -87,6 +87,32 @@ Both routes normalise the URL and refuse anything that resolves to a loopback,
 link-local, private or otherwise non-public address, checked after DNS
 resolution rather than on the hostname alone.
 
+### "What I'd fix" — the audit
+
+`POST /api/analyze` fetches the page and **measures** things: a missing
+viewport tag, a PDF menu, load time, HTML weight, a phone number that isn't a
+`tel:` link, a copyright two years stale, no ordering or booking link, a
+missing title. `src/lib/audit.ts` turns those measurements into findings. No
+model is involved in deciding a finding exists.
+
+`ANTHROPIC_API_KEY` adds a rewrite pass: Claude puts the findings in Deacon's
+voice and orders them by what matters. It may reword and reorder — it may not
+invent or drop one. Any id it returns that wasn't measured is discarded, and
+anything it forgets keeps its measured wording; if the counts don't match, the
+whole rewrite is thrown away. Without the key, or if the call fails, the
+measured wording ships as-is.
+
+Two things this deliberately refuses to do, because the section's whole
+argument is that it shows an owner the truth:
+
+- **Absence is only reported when the page actually rendered.** A JavaScript
+  shell that hasn't run tells you nothing about whether ordering exists, so
+  those findings are suppressed rather than guessed at.
+- **A bot challenge is never analysed.** Hosts behind a shield answer a
+  datacenter request with a CAPTCHA page that parses perfectly well. Without
+  the check in `looksBlocked()` the audit would describe *that* page — telling
+  an owner their site is broken, or that it is flawless, having never seen it.
+
 ## Layout of the code
 
 ```

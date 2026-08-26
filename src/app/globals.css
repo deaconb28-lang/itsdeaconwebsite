@@ -255,6 +255,16 @@ html.dc-js [data-reveal].dc-in [data-grow] {
   }
 }
 
+@keyframes dc-shimmer {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.42;
+  }
+}
+
 /* --------------------------------------------------------------------------
    Reduced motion.
    The handoff asks for this explicitly: drop the loops and the diner wave,
