@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { env } from "@/lib/env";
+import { VIEWPORTS, type Device } from "@/lib/preview";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { loadPlaywright, type PlaywrightBrowser } from "@/lib/renderer";
 import { assertPublicHost } from "@/lib/safe-fetch";
@@ -11,10 +12,6 @@ export const dynamic = "force-dynamic";
 
 const LIMIT = 20;
 const WINDOW_MS = 5 * 60 * 1000;
-
-/** The viewport a diner actually holds. */
-const PHONE_WIDTH = 375;
-const PHONE_HEIGHT = 667;
 
 const BROWSER_UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
@@ -36,9 +33,9 @@ export async function GET(request: Request) {
     );
   }
 
-  const target = normaliseUrl(
-    new URL(request.url).searchParams.get("url") ?? "",
-  );
+  const params = new URL(request.url).searchParams;
+  const device: Device = params.get("device") === "desktop" ? "desktop" : "phone";
+  const target = normaliseUrl(params.get("url") ?? "");
   if (!target) {
     return NextResponse.json(
       { ok: false, error: "That doesn't look like a web address." },
@@ -58,15 +55,23 @@ export async function GET(request: Request) {
   }
 
   const shot =
-    (await viaScreenshotOne(target)) ??
-    (await viaApiFlash(target)) ??
-    (await viaPlaywright(target)) ??
-    (await viaMshots(target));
+    (await viaScreenshotOne(target, device)) ??
+    (await viaApiFlash(target, device)) ??
+    (await viaPlaywright(target, device)) ??
+    // mShots renders at a desktop viewport and crops; asking it for a phone
+    // would produce a zoomed slice of a desktop page pretending to be one.
+    (device === "desktop" ? await viaMshots(target) : null);
 
   if (!shot) {
     return NextResponse.json(
-      { ok: false, error: "Couldn't get a picture of that one." },
-      { status: 502 },
+      {
+        ok: false,
+        error:
+          device === "phone"
+            ? "No phone-width renderer is configured."
+            : "Couldn't get a picture of that one.",
+      },
+      { status: device === "phone" ? 422 : 502 },
     );
   }
 
@@ -75,6 +80,7 @@ export async function GET(request: Request) {
     headers: {
       "Content-Type": shot.contentType,
       "X-Deacon-Renderer": shot.renderer,
+      "X-Deacon-Device": device,
       // A restaurant's homepage does not change minute to minute.
       "Cache-Control": "public, max-age=3600, s-maxage=86400",
     },
@@ -83,15 +89,19 @@ export async function GET(request: Request) {
 
 type Shot = { body: ArrayBuffer; contentType: string; renderer: string };
 
-async function viaScreenshotOne(url: string): Promise<Shot | null> {
+async function viaScreenshotOne(
+  url: string,
+  device: Device,
+): Promise<Shot | null> {
   const key = env("SCREENSHOTONE_API_KEY");
   if (!key) return null;
+  const viewport = VIEWPORTS[device];
 
   const endpoint = new URL("https://api.screenshotone.com/take");
   endpoint.searchParams.set("access_key", key);
   endpoint.searchParams.set("url", url);
-  endpoint.searchParams.set("viewport_width", String(PHONE_WIDTH));
-  endpoint.searchParams.set("viewport_height", String(PHONE_HEIGHT));
+  endpoint.searchParams.set("viewport_width", String(viewport.width));
+  endpoint.searchParams.set("viewport_height", String(viewport.height));
   endpoint.searchParams.set("device_scale_factor", "2");
   endpoint.searchParams.set("format", "webp");
   endpoint.searchParams.set("block_cookie_banners", "true");
@@ -101,15 +111,16 @@ async function viaScreenshotOne(url: string): Promise<Shot | null> {
   return fetchImage(endpoint.toString(), "screenshotone");
 }
 
-async function viaApiFlash(url: string): Promise<Shot | null> {
+async function viaApiFlash(url: string, device: Device): Promise<Shot | null> {
   const key = env("APIFLASH_KEY");
   if (!key) return null;
+  const viewport = VIEWPORTS[device];
 
   const endpoint = new URL("https://api.apiflash.com/v1/urltoimage");
   endpoint.searchParams.set("access_key", key);
   endpoint.searchParams.set("url", url);
-  endpoint.searchParams.set("width", String(PHONE_WIDTH));
-  endpoint.searchParams.set("height", String(PHONE_HEIGHT));
+  endpoint.searchParams.set("width", String(viewport.width));
+  endpoint.searchParams.set("height", String(viewport.height));
   endpoint.searchParams.set("scale_factor", "2");
   endpoint.searchParams.set("format", "webp");
   endpoint.searchParams.set("response_type", "image");
@@ -125,7 +136,7 @@ async function viaApiFlash(url: string): Promise<Shot | null> {
  * `npm i playwright && npx playwright install chromium` gets the best result
  * the section can show.
  */
-async function viaPlaywright(url: string): Promise<Shot | null> {
+async function viaPlaywright(url: string, device: Device): Promise<Shot | null> {
   const playwright = await loadPlaywright();
   if (!playwright) return null;
 
@@ -138,14 +149,16 @@ async function viaPlaywright(url: string): Promise<Shot | null> {
       executablePath: env("PLAYWRIGHT_EXECUTABLE_PATH"),
     });
 
+    const phone = device === "phone";
     const context = await browser.newContext({
-      viewport: { width: PHONE_WIDTH, height: PHONE_HEIGHT },
+      viewport: VIEWPORTS[device],
       deviceScaleFactor: 2,
-      isMobile: true,
-      hasTouch: true,
-      userAgent:
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) " +
-        "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+      isMobile: phone,
+      hasTouch: phone,
+      userAgent: phone
+        ? "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) " +
+          "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+        : BROWSER_UA,
     });
 
     const page = await context.newPage();
@@ -178,16 +191,18 @@ async function viaPlaywright(url: string): Promise<Shot | null> {
 /**
  * WordPress's public mShots service. No key, no account, no browser.
  *
- * It renders at a desktop viewport and crops to the requested size, so this
- * is a picture of the site rather than a phone-width layout — the lookup's
- * copy says as much when this is the renderer in play.
+ * It only ever renders at a desktop viewport, which is why it is offered for
+ * the desktop view alone. Asked for a phone it returns a cropped slice of a
+ * desktop page, which looks like a bug and misrepresents the site.
  *
  * A 3xx means the capture is still being generated, so the first request for
  * an uncached site kicks off the render and later ones collect it.
  */
 async function viaMshots(url: string): Promise<Shot | null> {
+  const { width, height } = VIEWPORTS.desktop;
   const endpoint =
-    `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=750&h=1334`;
+    `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}` +
+    `?w=${width}&h=${height}`;
 
   const attempts = 12;
   for (let attempt = 0; attempt < attempts; attempt += 1) {

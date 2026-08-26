@@ -77,20 +77,8 @@ export function Lookup() {
       setPreview(data.result);
       setPhase("ready");
     } catch {
-      // The check itself failed, not the site. Show it anyway and let the
-      // iframe try — a blank panel is still informative.
-      setPreview({
-        url: normalised,
-        pretty: normalised.replace(/^https?:\/\//, ""),
-        reachable: true,
-        embeddable: true,
-        blockedBy: null,
-        title: null,
-        status: null,
-        renderer: "mshots",
-        phoneWidth: false,
-      });
-      setPhase("ready");
+      setPhase("error");
+      setError("That didn't load. Try again in a moment.");
     }
   }, [url]);
 
@@ -101,97 +89,90 @@ export function Lookup() {
   return (
     <section id="lookup" className={styles.section}>
       <div className={styles.inner}>
-        <div className={styles.header}>
-          <div>
-            <p className={styles.eyebrow}>Look yourself up</p>
-            <h3 className={styles.heading}>
-              See your own site the way a diner does.
-            </h3>
-          </div>
-          <p className={styles.note}>
-            Paste your address. It loads at phone width, unchanged. Most owners
-            haven&rsquo;t looked at it this way in years.
-          </p>
+        <p className={styles.eyebrow}>Look yourself up</p>
+
+        <div className={styles.head}>
+          <h3 className={styles.heading}>
+            See your own site
+            <br />
+            the way a diner does.
+          </h3>
+
+          <form
+            className={styles.form}
+            onSubmit={(event) => {
+              event.preventDefault();
+              void run();
+            }}
+          >
+            <label htmlFor="lookup-url" className="srOnly">
+              Your website address
+            </label>
+            <input
+              id="lookup-url"
+              type="text"
+              inputMode="url"
+              autoComplete="url"
+              value={url}
+              onChange={(event) => setUrl(event.target.value)}
+              placeholder="yourrestaurant.com"
+              className={styles.input}
+            />
+            <button
+              type="submit"
+              className={styles.submit}
+              disabled={phase === "checking"}
+            >
+              {phase === "checking" ? "Looking…" : "Show me"}
+            </button>
+            {phase === "error" && <p className={styles.error}>{error}</p>}
+          </form>
         </div>
 
-        <form
-          className={styles.form}
-          onSubmit={(event) => {
-            event.preventDefault();
-            void run();
-          }}
-        >
-          <label htmlFor="lookup-url" className="srOnly">
-            Your website address
-          </label>
-          <input
-            id="lookup-url"
-            type="text"
-            inputMode="url"
-            autoComplete="url"
-            value={url}
-            onChange={(event) => setUrl(event.target.value)}
-            placeholder="yourrestaurant.com"
-            className={styles.input}
-          />
-          <button
-            type="submit"
-            className={styles.submit}
-            disabled={phase === "checking"}
-          >
-            {phase === "checking" ? "Looking…" : "Show me on a phone"}
-          </button>
-        </form>
+        <div className={styles.body}>
+          <Stage phase={phase} preview={preview} />
 
-        {phase === "error" && <p className={styles.error}>{error}</p>}
+          <div className={styles.assess}>
+            <p className={styles.assessLabel}>
+              Be honest — tap any that are true
+            </p>
 
-        {phase === "checking" && (
-          <div className={styles.panel}>
-            <div className={styles.phoneShell}>
-              <div className={styles.phoneScreen}>
-                <div className={styles.loading}>
-                  <span className={styles.spinner} aria-hidden="true" />
-                  <span>Loading your site…</span>
-                </div>
-              </div>
+            <ul className={styles.checks}>
+              {CHECKS.map((check) => {
+                const on = checks[check.key];
+                return (
+                  <li key={check.key}>
+                    <button
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => toggle(check.key)}
+                      className={on ? `${styles.check} ${styles.checkOn}` : styles.check}
+                    >
+                      <span className={styles.box} aria-hidden="true">
+                        {on ? "✓" : ""}
+                      </span>
+                      <span className={styles.checkLabel}>{check.label}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className={styles.verdict} aria-live="polite">
+              <p className={styles.score}>
+                <span className={styles.scoreNum}>{hits}</span>
+                <span className={styles.scoreOf}>
+                  of
+                  <br />
+                  four
+                </span>
+              </p>
+              <p className={styles.verdictText}>{VERDICTS[hits]}</p>
             </div>
-            <div className={styles.copy}>
-              <p className={styles.copyLabel}>Checking</p>
-              <p>Pulling it up at phone width. This takes a few seconds.</p>
-            </div>
-          </div>
-        )}
 
-        {phase === "ready" && preview && <Preview preview={preview} />}
-
-        <div className={styles.assessment}>
-          <p className={styles.copyLabel}>Then be honest — tap any that are true</p>
-
-          <div className={styles.toggles}>
-            {CHECKS.map((check) => {
-              const on = checks[check.key];
-              return (
-                <button
-                  key={check.key}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => toggle(check.key)}
-                  className={on ? `${styles.toggle} ${styles.toggleOn}` : styles.toggle}
-                >
-                  <span className={styles.box} aria-hidden="true">
-                    {on ? "✓" : ""}
-                  </span>
-                  {check.label}
-                </button>
-              );
-            })}
-          </div>
-
-          <div className={styles.verdict} aria-live="polite">
-            <span className={styles.score}>{hits} of 4</span>
-            <span className={styles.verdictText}>{VERDICTS[hits]}</span>
             <a href="#contact" className={styles.fix}>
-              Fix it for $1,200
+              {hits === 0 ? "Get a free mockup" : "Fix it for $1,200"}
+              <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>
@@ -201,70 +182,95 @@ export function Lookup() {
 }
 
 /**
- * Shows the site live when it allows embedding, and a server-rendered
- * screenshot when it doesn't — which is most sites, since almost everything
- * sets X-Frame-Options or a frame-ancestors policy.
+ * A laptop with a phone leaning on it. Showing both at once answers the
+ * question the section actually asks — what a diner sees, on either thing —
+ * without a toggle to operate, and the phone simply drops out when it can't
+ * be rendered truthfully rather than being faked from a desktop capture.
  */
-function Preview({ preview }: { preview: PreviewResult }) {
-  if (!preview.reachable) {
-    return (
-      <div className={styles.panel}>
-        <div className={styles.copy}>
-          <p className={styles.copyLabel}>Showing {preview.pretty}</p>
-          <p>
-            Nothing came back from that address — it may be down, or spelled a
-            little differently. Send it to me and I&rsquo;ll dig into it.
-          </p>
+function Stage({
+  phase,
+  preview,
+}: {
+  phase: Phase;
+  preview: PreviewResult | null;
+}) {
+  const showPhone = phase === "ready" && preview?.phoneCapable === true;
+
+  return (
+    <div className={styles.stage}>
+      <div className={styles.laptop}>
+        <div className={styles.chrome} aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <div className={styles.chromeUrl}>{preview?.pretty ?? ""}</div>
+        </div>
+        <div className={styles.laptopScreen}>
+          {phase === "ready" && preview ? (
+            <Capture url={preview.url} pretty={preview.pretty} device="desktop" />
+          ) : (
+            <Placeholder phase={phase} />
+          )}
         </div>
       </div>
-    );
-  }
 
-  if (preview.embeddable) {
-    return (
-      <div className={styles.panel}>
-        <div className={styles.phoneShell}>
+      {showPhone && preview && (
+        <div className={styles.phone}>
           <div className={styles.phoneScreen}>
-            <iframe
-              src={preview.url}
-              title="Your site at phone width"
-              sandbox="allow-scripts allow-forms allow-popups"
-              referrerPolicy="no-referrer"
-              className={styles.frame}
-            />
+            {preview.embeddable ? (
+              <iframe
+                src={preview.url}
+                title="Your site at phone width"
+                sandbox="allow-scripts allow-forms allow-popups"
+                referrerPolicy="no-referrer"
+                className={styles.frame}
+              />
+            ) : (
+              <Capture url={preview.url} pretty={preview.pretty} device="phone" />
+            )}
           </div>
         </div>
-        <div className={styles.copy}>
-          <p className={styles.copyLabel}>Showing {preview.pretty}</p>
-          {preview.title && <p className={styles.title}>{preview.title}</p>}
-          <p>
-            This is your live site at 375 pixels wide — the width of most phones
-            in your dining room. Nothing has been altered.
-          </p>
-          <p>
-            If the panel stayed blank, your site blocks being embedded.
-            That&rsquo;s normal and not a fault — send me the address and
-            I&rsquo;ll run it properly.
-          </p>
-        </div>
-      </div>
-    );
-  }
+      )}
 
-  return <Screenshot preview={preview} />;
+      <p className={styles.caption}>
+        {phase === "ready" && preview
+          ? showPhone
+            ? `${preview.pretty} — 1280px and 375px`
+            : `${preview.pretty} — 1280px`
+          : "A laptop and a phone, side by side"}
+      </p>
+    </div>
+  );
+}
+
+function Placeholder({ phase }: { phase: Phase }) {
+  return (
+    <div className={styles.placeholder}>
+      {phase === "checking" ? (
+        <span className={styles.spinner} aria-hidden="true" />
+      ) : (
+        <p className={styles.placeholderText}>Paste your address above.</p>
+      )}
+    </div>
+  );
 }
 
 /**
- * Fetches the capture rather than pointing an <img> at the endpoint, for two
- * reasons: a capture can take several seconds and deserves a real loading
- * state, and the response header says which renderer actually ran. The
- * preview only predicts that, and a prediction is not good enough to base
- * "taken at phone width" on — the fallback may quietly have been used.
+ * Fetches the capture rather than pointing an <img> at the endpoint: it can
+ * take several seconds and deserves a real loading state, and a failure is
+ * worth saying rather than showing as a broken image.
  */
-function Screenshot({ preview }: { preview: PreviewResult }) {
+function Capture({
+  url,
+  pretty,
+  device,
+}: {
+  url: string;
+  pretty: string;
+  device: "phone" | "desktop";
+}) {
   const [state, setState] = useState<"loading" | "ready" | "failed">("loading");
   const [src, setSrc] = useState("");
-  const [phoneWidth, setPhoneWidth] = useState(preview.phoneWidth);
 
   useEffect(() => {
     let cancelled = false;
@@ -273,14 +279,12 @@ function Screenshot({ preview }: { preview: PreviewResult }) {
     setState("loading");
     setSrc("");
 
-    fetch(`/api/screenshot?url=${encodeURIComponent(preview.url)}`)
+    fetch(`/api/screenshot?url=${encodeURIComponent(url)}&device=${device}`)
       .then(async (response) => {
         if (!response.ok) throw new Error("no capture");
-        const renderer = response.headers.get("X-Deacon-Renderer");
         const blob = await response.blob();
         if (cancelled) return;
         objectUrl = URL.createObjectURL(blob);
-        setPhoneWidth(renderer !== null && renderer !== "mshots");
         setSrc(objectUrl);
         setState("ready");
       })
@@ -292,64 +296,23 @@ function Screenshot({ preview }: { preview: PreviewResult }) {
       cancelled = true;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [preview.url]);
+  }, [url, device]);
 
-  return (
-    <div className={styles.panel}>
-      <div className={styles.phoneShell}>
-        <div className={styles.phoneScreen}>
-          {state === "loading" && (
-            <div className={styles.loading}>
-              <span className={styles.spinner} aria-hidden="true" />
-              <span>Taking a picture of your site…</span>
-            </div>
-          )}
-          {state === "failed" && (
-            <div className={styles.loading}>
-              <span>Couldn&rsquo;t get a picture of this one.</span>
-            </div>
-          )}
-          {state === "ready" && (
-            /* eslint-disable-next-line @next/next/no-img-element --
-               a blob of a third-party capture; there is nothing for
-               next/image to optimise. */
-            <img
-              src={src}
-              alt={`${preview.pretty} as it looks to a visitor`}
-              className={styles.shot}
-            />
-          )}
-        </div>
-      </div>
-
-      <div className={styles.copy}>
-        <p className={styles.copyLabel}>Showing {preview.pretty}</p>
-        {preview.title && <p className={styles.title}>{preview.title}</p>}
-
-        {state === "failed" ? (
-          <p>
-            Your site blocks being loaded inside another page — normal, and not
-            a fault — and the picture didn&rsquo;t come back either. Send me the
-            address and I&rsquo;ll run it properly.
-          </p>
+  if (state !== "ready") {
+    return (
+      <div className={styles.placeholder}>
+        {state === "loading" ? (
+          <span className={styles.spinner} aria-hidden="true" />
         ) : (
-          <>
-            <p>
-              Your site blocks being loaded inside another page — normal, and
-              not a fault — so this is a picture of it instead
-              {phoneWidth
-                ? ", taken at 375 pixels wide, the width of most phones in your dining room."
-                : ", taken at desktop width. It isn't quite what a phone shows — send me the address and I'll run it properly."}{" "}
-              Nothing has been altered.
-            </p>
-            <p>
-              A capture can take a few seconds the first time, and it
-              won&rsquo;t show anything that only appears after you tap. The
-              first impression is the point.
-            </p>
-          </>
+          <p className={styles.placeholderText}>No capture.</p>
         )}
       </div>
-    </div>
+    );
+  }
+
+  return (
+    /* eslint-disable-next-line @next/next/no-img-element --
+       a blob of a third-party capture; nothing for next/image to optimise. */
+    <img src={src} alt={`${pretty} as a visitor sees it`} className={styles.shot} />
   );
 }

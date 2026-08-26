@@ -60,7 +60,8 @@ async function inspect(url: string): Promise<PreviewResult> {
     title: null,
     status: null,
     renderer,
-    phoneWidth: isPhoneWidth(renderer),
+    // Filled in by describe() once embeddability is known.
+    phoneCapable: isPhoneWidth(renderer),
   };
 
   let response: Response;
@@ -114,13 +115,17 @@ async function describe(
     blockedBy = "frame-ancestors";
   }
 
+  const embeddable = blockedBy === null && response.status < 400;
+
   return {
     ...base,
     reachable: response.status < 500,
     status: response.status,
-    embeddable: blockedBy === null && response.status < 400,
+    embeddable,
     blockedBy,
     title: await readTitle(response),
+    // A live frame is already phone width, so embeddable sites always qualify.
+    phoneCapable: embeddable || base.phoneCapable,
   };
 }
 
