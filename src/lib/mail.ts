@@ -12,7 +12,12 @@ export type MailMessage = {
 };
 
 export type MailResult =
-  | { ok: true; provider: "resend" | "smtp" }
+  | {
+      ok: true;
+      provider: "resend" | "smtp";
+      /** The provider's id for this message, for tracing a lead later. */
+      id: string | null;
+    }
   | { ok: false; reason: "unconfigured" | "failed"; detail: string };
 
 /**
@@ -72,7 +77,9 @@ async function sendViaResend(
         detail: `Resend responded ${response.status}: ${body.slice(0, 400)}`,
       };
     }
-    return { ok: true, provider: "resend" };
+
+    const body = (await response.json().catch(() => null)) as { id?: string } | null;
+    return { ok: true, provider: "resend", id: body?.id ?? null };
   } catch (error) {
     return { ok: false, reason: "failed", detail: describe(error) };
   }
@@ -98,7 +105,7 @@ async function sendViaSmtp(
       socketTimeout: 20_000,
     });
 
-    await transport.sendMail({
+    const info = await transport.sendMail({
       from: message.from,
       to: message.to,
       replyTo: message.replyTo,
@@ -107,7 +114,7 @@ async function sendViaSmtp(
       html: message.html,
     });
 
-    return { ok: true, provider: "smtp" };
+    return { ok: true, provider: "smtp", id: info.messageId ?? null };
   } catch (error) {
     return { ok: false, reason: "failed", detail: describe(error) };
   }

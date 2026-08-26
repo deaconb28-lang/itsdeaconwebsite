@@ -97,6 +97,12 @@ export async function POST(request: Request) {
   });
 
   if (result.ok) {
+    // Deliberately no address or message body — just enough to find the send
+    // in the provider's dashboard if an enquiry is ever disputed or lost.
+    console.log(
+      `[contact] delivered to ${INBOX} via ${result.provider}` +
+        `${result.id ? ` id=${result.id}` : ""}`,
+    );
     return NextResponse.json({ ok: true });
   }
 
