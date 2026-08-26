@@ -33,6 +33,13 @@ Everything else on the page is static. These two are not.
 
 ### The contact form → `hello@itsdeacon.com`
 
+Enquiries go **from `form@itsdeacon.com` to `hello@itsdeacon.com`** — both are
+the code defaults, so neither needs an environment variable. `CONTACT_FROM` and
+`CONTACT_TO` override them if set, which is worth remembering: a stale value
+left in a deployment wins over the default silently. Each successful send is
+logged with the addresses used and the provider's message id, so a delivery can
+be traced afterwards.
+
 `POST /api/contact` validates the submission, renders a plain-text and an HTML
 copy, and hands it to whichever provider is configured — **Resend** if
 `RESEND_API_KEY` is set, otherwise **SMTP** if `SMTP_HOST`/`SMTP_USER`/`SMTP_PASS`

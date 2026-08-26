@@ -12,11 +12,19 @@ export const dynamic = "force-dynamic";
 const INBOX = envOr("CONTACT_TO", "hello@itsdeacon.com");
 
 /**
- * The envelope sender. Resend and most SMTP providers will only send from a
- * domain you have verified, so this is configurable; the default assumes
- * itsdeacon.com is verified with the provider.
+ * Enquiries are sent from a dedicated address rather than from the inbox that
+ * receives them, so a reply to a lead never looks like it came from the form,
+ * and so form traffic can be filtered on its own.
  */
-const SENDER = envOr("CONTACT_FROM", "Deacon site <hello@itsdeacon.com>");
+const DEFAULT_SENDER = "Deacon <form@itsdeacon.com>";
+
+/**
+ * The envelope sender. Resend and most SMTP providers will only send from a
+ * domain you have verified, so this stays configurable; the default assumes
+ * itsdeacon.com is verified with the provider. Any address on that domain
+ * works — providers verify the domain, not the individual mailbox.
+ */
+const SENDER = envOr("CONTACT_FROM", DEFAULT_SENDER);
 
 const LIMIT = 5;
 const WINDOW_MS = 10 * 60 * 1000;
@@ -100,7 +108,7 @@ export async function POST(request: Request) {
     // Deliberately no address or message body — just enough to find the send
     // in the provider's dashboard if an enquiry is ever disputed or lost.
     console.log(
-      `[contact] delivered to ${INBOX} via ${result.provider}` +
+      `[contact] delivered ${SENDER} -> ${INBOX} via ${result.provider}` +
         `${result.id ? ` id=${result.id}` : ""}`,
     );
     return NextResponse.json({ ok: true });
