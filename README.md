@@ -141,9 +141,16 @@ confirming: the hero card's `41 bookings` and Glacier House's `18 days`.
 
 ## Deploying
 
-Any Node host running `npm run build && npm start` will do; Vercel needs no
-configuration. Set the environment variables from `.env.example` — at minimum a
-mail provider, or the contact form cannot deliver.
+Any Node host running `npm run build && npm start` will do. Set the environment
+variables from `.env.example` — at minimum a mail provider, or the contact form
+cannot deliver.
+
+`vercel.json` pins the framework preset to `nextjs`. This matters: a Vercel
+project created against the repository *before* it had any commits detects no
+framework and silently falls back to "Other", which builds the site correctly
+and then serves nothing — every route 404s at the edge with `NOT_FOUND` even
+though the build log looks perfect. Pinning it in the repo makes the preset
+independent of what the dashboard guessed.
 
 Playwright will not run on most serverless platforms. On Vercel, set
 `SCREENSHOTONE_API_KEY` or `APIFLASH_KEY` for phone-width captures; without one
