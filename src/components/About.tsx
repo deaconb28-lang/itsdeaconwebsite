@@ -61,7 +61,11 @@ export function About() {
                 src={portrait}
                 alt="Deacon"
                 fill
-                sizes="(max-width: 900px) 100vw, 40vw"
+                /* The column is two-up with a 64px gap inside clamped padding,
+                   which lands at ~45vw — not the 40vw declared here before.
+                   Under-declaring makes next/image pick a candidate narrower
+                   than the box and upscale it. */
+                sizes="(max-width: 900px) 100vw, 45vw"
                 className={styles.portraitImage}
                 placeholder="blur"
               />
