@@ -54,7 +54,9 @@ export default function Restaurants() {
         <About />
         <Contact />
       </main>
-      <SiteFooter />
+      <SiteFooter
+        crossLink={{ href: "/small-business", label: "Not a restaurant?" }}
+      />
     </SiteStateProvider>
   );
 }

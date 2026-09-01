@@ -20,7 +20,11 @@ export function Difference() {
         </p>
       </section>
 
-      <ComparisonFrame before={<BeforePane />} after={<AfterPane />} />
+      <ComparisonFrame
+        before={<BeforePane />}
+        after={<AfterPane />}
+        address="harborandvine.com"
+      />
     </>
   );
 }

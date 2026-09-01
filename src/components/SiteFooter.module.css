@@ -52,6 +52,7 @@
 
 .links {
   display: flex;
+  flex-wrap: wrap;
   gap: 24px;
 }
 
@@ -62,4 +63,14 @@
 
 .link:hover {
   color: var(--cream);
+}
+
+/* The other pitch. Accented so it reads as a question, not a fourth nav item. */
+.crossLink {
+  color: var(--ac);
+  transition: opacity 0.2s;
+}
+
+.crossLink:hover {
+  opacity: 0.75;
 }

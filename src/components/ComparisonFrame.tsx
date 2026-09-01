@@ -19,9 +19,12 @@ const KEY_STEP = 4;
 export function ComparisonFrame({
   before,
   after,
+  address,
 }: {
   before: React.ReactNode;
   after: React.ReactNode;
+  /** Shown in the browser bar. Required: a wrong one mislabels the demo. */
+  address: string;
 }) {
   const [position, setPosition] = useState(START);
   const boxRef = useRef<HTMLDivElement>(null);
@@ -93,7 +96,7 @@ export function ComparisonFrame({
               <span />
               <span />
             </div>
-            <div className={styles.address}>harborandvine.com</div>
+            <div className={styles.address}>{address}</div>
             <div className={styles.barSpacer} />
           </div>
 
