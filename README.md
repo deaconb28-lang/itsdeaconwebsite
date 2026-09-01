@@ -63,6 +63,48 @@ npm run dev                  # http://localhost:3000
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript, no emit |
 
+## Agent tooling — treg
+
+[treg](https://treg.to) is a registry that fronts ~2,600 third-party endpoints
+behind one token, injecting each provider's credentials server-side. It is
+**tooling for whoever works on this repo, not part of the site** — nothing
+`npm run build` produces depends on it, and no deployment needs it set.
+
+`.mcp.json` is committed and registers treg as an HTTP MCP server. The token is
+not committed; the file refers to `${TREG_TOKEN}` and the agent expands it.
+
+**That expansion reads the shell environment, not `.env.local`.** Everything
+else in this repo is configured through `.env.local`, so this is the one that
+will catch you: a `TREG_TOKEN` sitting in `.env.local` is invisible to the MCP
+client, which starts the server anyway and fails on the first call with a 401.
+Export it in your shell, or set it as an environment variable on the
+Claude Code environment:
+
+```bash
+export TREG_TOKEN=<team token>
+```
+
+Team tokens carry an expiry — the current one runs out **2026-10-01**. When
+calls start returning 401, that is the first thing to check.
+
+The CLI is optional and separate from the above; it is worth having for
+`treg catalog search` and `treg balance`, neither of which the MCP server
+exposes as conveniently:
+
+```bash
+curl -fsSL https://treg.to/install.sh | sh -s -- --token <team token>
+```
+
+That installs the CLI, signs in, drops a `treg` skill into every agent it
+detects, and registers the same MCP server at *user* scope — which is
+per-machine and duplicates what `.mcp.json` already does per-repo. On an
+ephemeral machine (a Claude Code web session) it has to be re-run each time;
+`.mcp.json` is what survives, which is why the repo carries it.
+
+Calls are prepaid and metered per call — most cost well under a cent, and a new
+team starts with $1.00. `treg balance` shows what is left.
+
+
 ## The two moving parts
 
 Everything else on the page is static. These two are not.
