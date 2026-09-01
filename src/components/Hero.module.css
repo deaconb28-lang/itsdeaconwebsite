@@ -61,11 +61,23 @@
 /* "hardest-working" carries a non-breaking hyphen so it never splits, which
    means the word has to fit whole. At the 44px floor it needs ~342px, more
    than a 320px screen can give it. Below the design's narrowest tested width
-   the type steps down just far enough; 375px and up are untouched. */
+   the type steps down just far enough; 375px and up are untouched.
+
+   That phrase now heads /small-business rather than /restaurants, but this
+   rule stays here because both heroes share .headline — HeroBusiness imports
+   this module for its whole left column. Don't move it. */
 @media (max-width: 359px) {
   .headline {
     font-size: 36px;
   }
+}
+
+/* A longer headline at the same display size runs to five lines and pushes the
+   buttons off a laptop screen. This is the same type, stepped down to sit in
+   three or four — the restaurant hero uses it; the small-business one, whose
+   headline is short, does not. */
+.headlineLong {
+  font-size: clamp(38px, 5vw, 72px);
 }
 
 .accent {

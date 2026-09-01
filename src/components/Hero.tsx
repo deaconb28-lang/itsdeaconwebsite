@@ -14,10 +14,11 @@ export function Hero() {
 
         <p className={styles.greeting}>hi — I&rsquo;m Deacon.</p>
 
-        <h1 className={styles.headline}>
-          Your website should be your{" "}
-          {/* Non-breaking hyphen: this phrase must never break badly. */}
-          <span className={styles.accent}>hardest&#8209;working employee.</span>
+        <h1 className={`${styles.headline} ${styles.headlineLong}`}>
+          Make customers hungry{" "}
+          <span className={styles.accent}>
+            before they ever walk in the door.
+          </span>
         </h1>
 
         <p className={styles.lede}>

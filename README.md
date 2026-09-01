@@ -230,7 +230,9 @@ both to fix things that were broken rather than to restyle anything:
    non-breaking hyphen means "hardest-working" can never split, so the word has
    to fit whole; at the 44px floor it needs more room than a 320px screen has.
    Below the handoff's narrowest tested width the type steps down. 375px and up
-   are untouched.
+   are untouched. That phrase now heads `/small-business`, but the rule stays
+   in `Hero.module.css` because both heroes share `.headline` —
+   `HeroBusiness` imports this module for its entire left column.
 
 Every `repeat(auto-fit, minmax(Npx, 1fr))` also became
 `minmax(min(Npx, 100%), 1fr)`, which behaves identically above the floor and

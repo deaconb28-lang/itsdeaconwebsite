@@ -1,11 +1,12 @@
 import styles from "./SiteFooter.module.css";
 
 /**
- * The marquee quotes the page above it — the first phrase is the restaurant
- * hero's headline — so a page with a different headline passes its own.
+ * The marquee quotes the page above it — the first phrase is the hero's
+ * headline — so a page with a different headline passes its own. This is the
+ * restaurant page's, which is also the fallback.
  */
 const PHRASES = [
-  "Your hardest-working employee",
+  "Hungry before they walk in",
   "Free mockup first",
   "Live in two weeks",
   "No hostages",

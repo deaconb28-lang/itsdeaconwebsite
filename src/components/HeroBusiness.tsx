@@ -13,7 +13,8 @@ import styles from "./HeroBusiness.module.css";
  * the restaurant page's phone card on purpose. A restaurant is recommended and
  * then looked up; a trades business is *found* — someone searches a category
  * and compares three names side by side. Two of them look alive. The third is
- * the one that has a website nobody has touched.
+ * the one whose website has, in the headline's terms, clocked off: no reviews,
+ * no hours, and the sentence the template shipped with.
  */
 export function HeroBusiness() {
   return (
@@ -30,14 +31,16 @@ export function HeroBusiness() {
         <p className={hero.greeting}>hi — I&rsquo;m Deacon.</p>
 
         <h1 className={hero.headline}>
-          You&rsquo;re one of{" "}
-          <span className={hero.accent}>three names on a screen.</span>
+          Your website should be your{" "}
+          {/* Non-breaking hyphen: this phrase must never break badly. */}
+          <span className={hero.accent}>hardest&#8209;working employee.</span>
         </h1>
 
         <p className={hero.lede}>
-          Trades, shops, studios, services — whoever needs you is comparing you
-          to two other people before you get to say a word. I build the website
-          that wins that ten seconds. By hand, one at a time.
+          Trades, shops, studios, services — while you&rsquo;re out on a job,
+          your website is the only one of you still working. Most of them have
+          clocked off. I build the kind that hasn&rsquo;t, by hand, one at a
+          time.
         </p>
 
         <div className={hero.buttons}>
@@ -56,7 +59,7 @@ export function HeroBusiness() {
 
       <div className={hero.cardColumn}>
         <SearchResults />
-        <p className={hero.cardAside}>this is the whole shortlist</p>
+        <p className={hero.cardAside}>yours is the one that clocked off</p>
       </div>
     </header>
   );

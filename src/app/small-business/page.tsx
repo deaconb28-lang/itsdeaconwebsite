@@ -45,11 +45,11 @@ export const metadata = metadataFor(META);
  * reason: the price lands before the invitation to look yourself up, and the
  * napkin math before the form that inherits its figures. Don't reorder these.
  *
- * The marquee phrases differ from the restaurant page's because its first
- * phrase quotes that page's headline, and this page's headline is not that.
+ * The marquee's first phrase quotes the hero above it, so it differs from the
+ * restaurant page's along with the headline.
  */
 const MARQUEE = [
-  "You're one of three names",
+  "Your hardest-working employee",
   "Free mockup first",
   "Live in two weeks",
   "No hostages",

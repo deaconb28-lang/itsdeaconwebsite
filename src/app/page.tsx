@@ -61,11 +61,11 @@ export default function Chooser() {
 
       <div className={styles.middle}>
         <h1 className={styles.headline}>
-          Your website should be your{" "}
-          <span className={styles.accent}>hardest&#8209;working employee.</span>
+          I build websites for{" "}
+          <span className={styles.accent}>local businesses.</span>
         </h1>
         <p className={styles.lede}>
-          I build them by hand, one at a time. Which are you?
+          By hand, one at a time. Which are you?
         </p>
 
         <nav className={styles.paths} aria-label="Choose your pitch">
