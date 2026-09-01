@@ -2,7 +2,7 @@
   "name": "itsdeacon-website",
   "version": "1.0.0",
   "private": true,
-  "description": "Marketing site for Deacon — websites for local restaurants.",
+  "description": "Marketing site for Deacon — websites for local businesses.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

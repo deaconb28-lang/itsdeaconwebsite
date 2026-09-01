@@ -1,0 +1,263 @@
+/* Ridgeline, rebuilt. Uses the --rl-* sample palette only. */
+
+.pane {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--rl-ink);
+  color: var(--rl-paper);
+  font-family: var(--font-body);
+}
+
+/* --- top bar ------------------------------------------------------------ */
+
+.topBar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 46px;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--rl-line);
+}
+
+.wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+}
+
+.wordmarkThin {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 7.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rl-signal);
+}
+
+.topNav {
+  display: flex;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(241, 239, 234, 0.6);
+}
+
+.phonePill {
+  padding: 5px 12px;
+  border: 1px solid var(--rl-signal);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--rl-signal);
+  white-space: nowrap;
+}
+
+/* --- the lockup and the booking panel ----------------------------------- */
+
+.stage {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 20px;
+  padding: 20px 18px;
+  align-items: center;
+}
+
+.lockup {
+  min-width: 0;
+}
+
+.headline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(24px, 3.6vw, 46px);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.headlineSignal {
+  color: var(--rl-signal);
+}
+
+.sub {
+  margin: 14px 0 0;
+  max-width: 32ch;
+  font-size: 11px;
+  line-height: 1.55;
+  color: rgba(241, 239, 234, 0.62);
+}
+
+.booking {
+  padding: 14px;
+  border: 1px solid var(--rl-line);
+  border-radius: 8px;
+  background: var(--rl-deep);
+}
+
+.bookingLabel {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(241, 239, 234, 0.5);
+}
+
+.bookingSlot {
+  margin: 5px 0 11px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+  color: var(--rl-signal);
+}
+
+.slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 11px;
+}
+
+.slot,
+.slotTaken {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  white-space: nowrap;
+}
+
+.slot {
+  border: 1px solid rgba(25, 194, 207, 0.55);
+  color: var(--rl-paper);
+}
+
+.slotTaken {
+  border: 1px solid var(--rl-line);
+  color: var(--rl-steel);
+  text-decoration: line-through;
+}
+
+/* The thing the pane opposite promises and never does. */
+.book {
+  display: block;
+  padding: 9px;
+  border-radius: 5px;
+  background: var(--rl-signal);
+  color: var(--rl-deep);
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.bookingNote {
+  margin: 8px 0 0;
+  font-size: 8.5px;
+  text-align: center;
+  color: rgba(241, 239, 234, 0.45);
+}
+
+/* --- the colour band, standing in for a photograph ---------------------- */
+
+.band {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rl-line);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 11px 14px;
+  background: var(--rl-deep);
+}
+
+.cell:nth-child(1) {
+  background: var(--rl-signal);
+  color: var(--rl-deep);
+}
+
+.cell:nth-child(2) {
+  background: var(--rl-steel);
+  color: var(--rl-paper);
+}
+
+.cellNumber {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  opacity: 0.65;
+}
+
+.cellName {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+}
+
+.cellNote {
+  font-size: 9px;
+  opacity: 0.7;
+}
+
+/* --- bottom bar --------------------------------------------------------- */
+
+.bottomBar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 11px 18px;
+  border-top: 1px solid var(--rl-line);
+}
+
+/* Display size, and a link — the whole point of the pane opposite's footer. */
+.bigPhone {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+
+.phoneGlyph {
+  color: var(--rl-signal);
+  font-size: 15px;
+}
+
+.emergency {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rl-signal);
+}
+
+.licence {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  color: var(--rl-steel);
+}

@@ -1,0 +1,295 @@
+/* Ridgeline as a 2016 template left it. Its own visual world — none of the
+   brand tokens apply, on purpose, and none of Harbor & Vine's either. The
+   palette is the one every drag-and-drop builder shipped that year: navy,
+   grey, a blue gradient, and 4px corners on everything. */
+
+.pane {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #fff;
+  color: #4a4a4a;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- header ------------------------------------------------------------- */
+
+.topBar {
+  flex-shrink: 0;
+  padding: 10px 16px 0;
+  border-bottom: 3px solid #1f3864;
+  background: #fff;
+}
+
+.brandBlock {
+  position: relative;
+  text-align: center;
+}
+
+.logo {
+  display: block;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1f3864;
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  display: block;
+  margin-top: 2px;
+  font-size: 9.5px;
+  font-style: italic;
+  color: #8a8a8a;
+}
+
+/* The template's mobile menu, never hidden on desktop. It lands on the
+   wordmark, which is the sort of thing nobody notices for four years. */
+.burger {
+  position: absolute;
+  top: -2px;
+  right: 4px;
+  font-size: 19px;
+  color: #1f3864;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 9px;
+}
+
+.navItem {
+  padding: 6px 14px;
+  font-size: 10.5px;
+  color: #1f3864;
+  border-bottom: 3px solid transparent;
+}
+
+.navItem:first-child {
+  border-bottom-color: #4a86c8;
+  font-weight: 700;
+}
+
+/* --- hero --------------------------------------------------------------- */
+
+.hero {
+  flex-shrink: 0;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 14px;
+  align-items: center;
+  background: #f4f6f9;
+}
+
+/* A stock photograph, rendered as the thing it actually is. */
+.brokenImage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 104px;
+  padding: 8px;
+  border: 1px solid #d0d5dd;
+  border-radius: 4px;
+  background: #e4e7ec;
+  color: #98a2b3;
+  font-size: 8.5px;
+  text-align: center;
+  word-break: break-all;
+}
+
+.brokenGlyph {
+  font-size: 22px;
+  opacity: 0.55;
+}
+
+.heroCopy {
+  text-align: center;
+}
+
+.heroTitle {
+  margin: 0 0 7px;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f3864;
+  letter-spacing: 0.02em;
+}
+
+.heroSub {
+  margin: 0;
+  font-size: 10px;
+  color: #667085;
+}
+
+.quoteRow {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* The gradient button of 2016. It is a span — it always was. */
+.quoteButton {
+  display: inline-block;
+  padding: 7px 16px;
+  border: 1px solid #2f6ba8;
+  border-radius: 4px;
+  background: linear-gradient(#5a9bd8, #2f6ba8);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.quoteNote {
+  font-size: 8.5px;
+  font-style: italic;
+  color: #b0b7c3;
+}
+
+/* --- the three-column feature row --------------------------------------- */
+
+.cards {
+  flex: 1;
+  min-height: 0;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.card {
+  padding: 10px;
+  border: 1px solid #e4e7ec;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.cardTitle {
+  margin: 0 0 5px;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1f3864;
+}
+
+.cardBody {
+  margin: 0;
+  font-size: 9.5px;
+  color: #8a8a8a;
+}
+
+/* --- hours -------------------------------------------------------------- */
+
+.hours {
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 16px;
+  background: #f4f6f9;
+  border-top: 1px solid #e4e7ec;
+  font-size: 10px;
+}
+
+.hoursTitle {
+  font-weight: 700;
+  color: #1f3864;
+}
+
+/* Directly contradicts the line beside it, and has for years. */
+.hoursNote {
+  font-style: italic;
+  color: #98a2b3;
+}
+
+/* --- footer ------------------------------------------------------------- */
+
+.footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 9px 16px;
+  background: #1f3864;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 9px;
+  text-align: center;
+}
+
+/* Printed, not linked. Reading it off the screen is the only way to call. */
+.footerPhone {
+  color: #fff;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: #3b5998;
+  color: #fff;
+  font-family: Georgia, serif;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.footerLine {
+  flex-basis: 100%;
+}
+
+/* --- the two overlays --------------------------------------------------- */
+
+.cookies {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 9px 14px;
+  background: rgba(32, 38, 46, 0.94);
+  color: #fff;
+  font-size: 9.5px;
+}
+
+.cookieButton {
+  padding: 4px 10px;
+  border-radius: 3px;
+  background: #4a86c8;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.chat {
+  position: absolute;
+  right: 10px;
+  bottom: 44px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #4a86c8;
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}

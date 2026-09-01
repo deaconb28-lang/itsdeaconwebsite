@@ -63,6 +63,17 @@
   --hv-blush: #e4886f;
   --hv-offwhite: #f9f5ec;
 
+  /* Sample site — Ridgeline Plumbing & Heating. Also deliberately separate
+     from the brand, and from Harbor & Vine: two demos that shared a palette
+     would read as one template with the colours swapped. Cyan on deep navy
+     is utility-trade, and is nowhere near the terracotta accent. */
+  --rl-ink: #0e1922;
+  --rl-deep: #08111a;
+  --rl-paper: #f1efea;
+  --rl-signal: #19c2cf;
+  --rl-steel: #55636e;
+  --rl-line: rgba(241, 239, 234, 0.16);
+
   /* Shape */
   --pad-y: clamp(60px, 7.4vw, 96px);
   --pad-x: clamp(18px, 3.6vw, 36px);

@@ -1,21 +1,51 @@
 # itsdeacon.com
 
 The marketing site for Deacon — a one-person service building websites for
-local restaurants.
+local businesses.
 
-One page, one argument. The section order *is* the pitch, and it is deliberate:
-a visitor sees the price before they are invited to look up their own site, and
-works through the napkin math before reaching the form that inherits its
-figures. `src/app/page.tsx` says as much; please don't reorder it.
+## Three routes
 
-**One idea per section.** The page was twelve sections and 1,675 words, and two
-pairs of them argued the same point twice — so the three sourced statistics
+| Route | What it is |
+|---|---|
+| `/` | A door, not a page. Two cards, one viewport, nothing to scroll. |
+| `/restaurants` | The original pitch, moved here verbatim. |
+| `/small-business` | The same argument, made to someone who gets *found* rather than recommended. |
+
+Each pitch is one page and one argument, and **the section order *is* the
+pitch**: a visitor sees the price before they are invited to look up their own
+site, and works through the napkin math before reaching the form that inherits
+its figures. Both page files say as much; please don't reorder them.
+
+Metadata is declared per route through `metadataFor()` in
+`src/lib/page-meta.tsx`. A canonical URL in the root layout would tell Google
+that every page is a duplicate of whichever one it named, so the layout carries
+only what is true of all three.
+
+Moving the restaurant pitch off `/` has a cost worth knowing: any inbound link
+to `/#pricing` now lands on the chooser instead. Fragments never reach the
+server, so that cannot be redirected.
+
+**One idea per section.** The restaurant page was twelve sections and 1,675
+words, and two pairs of them argued the same point twice — so the three sourced statistics
 folded into the 68% band they were restating, and "How I start" folded into the
 process it was previewing. Nothing was rewritten and no claim was dropped;
 adding a section back means finding a point none of the others already make.
 
 Built from the design handoff in [`docs/design-reference/`](docs/design-reference/),
 which remains the source of truth for copy, colour and behaviour.
+
+## Two audiences, one set of machinery
+
+`src/lib/audience.ts` carries the two readers and **only what genuinely
+differs**: the noun a figure is counted in (`table` / `customer`), the number
+the calculator starts from ($70 / $120), the words a form labels its fields
+with. Sentences do not go there. The test is stated in the file: if a value
+would ever want a `<span>`, a second sentence, or an em dash mid-clause, it is
+prose, and prose lives beside the page that says it — `src/app/*/copy.ts`.
+
+That boundary is the point. Parameterising everything would turn deliberate
+copy into template soup, and a general-audience page that reads as a template
+is the one thing a one-person shop cannot afford.
 
 ## Running it
 
@@ -49,8 +79,15 @@ be traced afterwards.
 `POST /api/contact` validates the submission, renders a plain-text and an HTML
 copy, and hands it to whichever provider is configured — **Resend** if
 `RESEND_API_KEY` is set, otherwise **SMTP** if `SMTP_HOST`/`SMTP_USER`/`SMTP_PASS`
-are. `Reply-To` is the restaurant's address, so replying from the inbox goes
-straight back to them. The email carries the visitor's napkin-math figures.
+are. `Reply-To` is the sender's address, so replying from the inbox goes straight
+back to them. The email carries the visitor's napkin-math figures and says
+which page they came from.
+
+The route also accepts the old `restaurant` and `table` field names alongside
+today's `business` and `spend`, and answers a missing name under both keys.
+Vercel serves stale JS chunks for a while after a deploy, and an enquiry lost
+to a field rename is the one failure this route exists to prevent. **Drop the
+aliases a release after they stop appearing in the logs.**
 
 Also handled: required name and email with server-side validation, a hidden
 honeypot field, and a rate limit of 5 submissions per address per 10 minutes.
@@ -90,10 +127,17 @@ resolution rather than on the hostname alone.
 ### "What I'd fix" — the audit
 
 `POST /api/analyze` fetches the page and **measures** things: a missing
-viewport tag, a PDF menu, load time, HTML weight, a phone number that isn't a
-`tel:` link, a copyright two years stale, no ordering or booking link, a
+viewport tag, a PDF where a page should be, load time, HTML weight, a phone
+number that isn't a `tel:` link, a copyright two years stale, no way to act, a
 missing title. `src/lib/audit.ts` turns those measurements into findings. No
 model is involved in deciding a finding exists.
+
+The audience changes two things there and only two: the words a finding is
+written in, and whether a quote form counts as a way to act — it does for a
+small business, and does not for a restaurant, where a contact page is still
+not a way to order dinner. **Finding ids are identical for both audiences on
+purpose**, because the guard below matches the model's rewrite against them; an
+id that varied by page would disable that check silently rather than loudly.
 
 `ANTHROPIC_API_KEY` adds a rewrite pass: Claude puts the findings in Deacon's
 voice and orders them by what matters. It may reword and reorder — it may not
@@ -118,15 +162,18 @@ argument is that it shows an owner the truth:
 ```
 src/
   app/
-    layout.tsx            fonts, metadata, structured data
-    page.tsx              section order — the pitch
+    layout.tsx            fonts, and only the metadata true of every route
+    page.tsx              the chooser
+    restaurants/          section order — the pitch, plus its copy.ts
+    small-business/       the same, for a business that gets found
     globals.css           design tokens, keyframes, reveal + reduced-motion
     api/contact/          the form
     api/preview/          can this site be framed?
     api/screenshot/       render it when it can't
   components/             one file per section, colocated CSS module
   lib/
-    napkin.ts             the arithmetic behind sections 10 and 12
+    audience.ts           the two readers — nouns and defaults, never sentences
+    napkin.ts             the arithmetic behind the math and contact sections
     url.ts                normalising and the public-address rules
     safe-fetch.ts         DNS-checked fetch that re-validates redirects
     mail.ts               Resend / SMTP
@@ -142,14 +189,32 @@ property (`--ac`), so the site can be re-themed from one line.
 - **The copy is deliberate.** The italic asides, "no hostages", "the quiet
   part", and the 0-of-4 verdict that tells an owner to keep their site have all
   been iterated on. The statistics are cited and real; keep the attributions.
-- **Harbor & Vine is fictional** — invented for the before/after. Never present
-  it as a client.
+- **Harbor & Vine and Ridgeline Plumbing & Heating are both fictional** —
+  invented for the before/after panes. Never present either as a client. The
+  demo businesses in the search-results graphic (Cascade, Meridian) are
+  invented too.
+- **The two before/after panes tell different jokes on purpose.** Harbor &
+  Vine's is about *age* — marquees, WebRings, a hit counter. Ridgeline's is
+  about *neglect*: a 2016 drag-and-drop template nobody has opened since 2019,
+  which looks fine at a glance and falls apart when you read it. Repeating the
+  2004 gag would have been the same joke twice.
+- **Ridgeline's panes are deliberately image-free.** A plumber has no
+  equivalent of the food shot, and a stock photograph of a smiling tradesperson
+  would be *less* honest than none — it is the exact cliché the "before" pane
+  is making fun of. Its stock photo is rendered as the grey box with a filename
+  that it actually is.
 - **The heavy border is the brand.** 3px is structural, 2px secondary. Don't
   soften either to 1px.
 - **No-JS must stay readable.** The scroll-reveal hidden state is only applied
   once an inline script confirms JS is running.
 - `prefers-reduced-motion` stops the loops and the diner wave, and shows
   count-ups at their final value.
+- **The statistics on `/small-business` are the ones already on the site.** The
+  68% headline is about *diners* and cannot move, and no small-business figure
+  was invented to replace it. The three that transfer honestly — 0.05s and 57%
+  (Google), 75% (Stanford) — carry that page's `#why` section as a sequence
+  rather than a single number, with every attribution kept. A new headline
+  statistic would have to be one Deacon can cite.
 
 ### Deliberate departures from the handoff
 
@@ -175,8 +240,11 @@ stops the grid forcing a sideways scroll below it.
 
 `public/assets/hv-hero.png` is an **AI-generated placeholder** and should be
 swapped for a licensed food photograph before launch. The three client
-screenshots are real work. Two figures on the page are placeholders that want
-confirming: the hero card's `41 bookings` and Glacier House's `18 days`.
+screenshots are real work. Two figures on the restaurant page are placeholders
+that want confirming: the hero card's `41 bookings` and Glacier House's
+`18 days`. `/small-business` deliberately carries no unverified figure — its
+hero graphic is type, and every number in the Ridgeline panes is either a
+price, a licence number or a made-up business's own detail.
 
 ## Deploying
 

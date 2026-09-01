@@ -193,9 +193,13 @@ function renderText({
   ].join("\n");
 }
 
-/** Keeps the plain-text labels in one column however long they are. */
+/**
+ * Keeps the plain-text labels in one column. 17 is one wider than the longest
+ * label plus its colon ("Restaurant name:"), so every value gets at least one
+ * space in front of it rather than running straight into the label.
+ */
 function pad(label: string): string {
-  return `${label}:`.padEnd(15, " ");
+  return `${label}:`.padEnd(17, " ");
 }
 
 function renderHtml({
