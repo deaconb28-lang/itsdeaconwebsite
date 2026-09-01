@@ -104,6 +104,54 @@ ephemeral machine (a Claude Code web session) it has to be re-run each time;
 Calls are prepaid and metered per call — most cost well under a cent, and a new
 team starts with $1.00. `treg balance` shows what is left.
 
+### The session hook
+
+`.claude/hooks/session-start.sh` runs at the start of a **web** session only —
+local machines already have their own setup and it exits immediately there. It
+does three things:
+
+1. `npm install`, because a web container is cloned fresh with no `node_modules`.
+2. `npx next typegen`. This is the non-obvious one: `next-env.d.ts` is gitignored
+   and only written by a Next build, and it is what declares the image modules
+   that `About`, `Work` and `AfterPane` import. Without it `npm run typecheck`
+   reports five phantom "cannot find module" errors on a clean clone. `typegen`
+   writes the file in about a second; a full build would take far longer to
+   prove the same thing.
+3. Installs the treg CLI and signs it in, if `TREG_TOKEN` is set.
+
+Only the first two are load-bearing. Every treg step is best-effort: no token, a
+failed install, an expired token — each prints a line and exits 0, because a
+credential problem in a side tool should not stop the session from starting.
+
+It deliberately installs the CLI *without* `--token`. Passing the token makes
+the installer also run `treg mcp install`, which registers the MCP server at
+user scope — a duplicate of what `.mcp.json` already provides per repo. Signing
+in as a separate step keeps the server defined in exactly one place.
+
+The hook is **synchronous**: the session starts once it finishes (~25s from
+cold). That is the trade for never handing the session a half-built tree —
+async would start faster but lets an agent reach for `npm run lint` while the
+install is still running.
+
+### Slash commands
+
+Three, in `.claude/commands/`. Each names the treg endpoints it will call and
+the skill it should load, and each states a cost budget before spending
+anything — the calls draw on a real prepaid balance.
+
+| Command | For | Costs |
+|---|---|---|
+| `/prospect <domain>` | Research a business before pitching them. Screenshot, page audit and firmographics, judged against `src/lib/audit.ts` and published as a brief. | ~$0.01 |
+| `/rank <domain> <keywords…>` | Where they actually show up in Google, charted via the **dataviz** skill. | ~$0.002/keyword |
+| `/audit-check <url>` | Engineering, not sales: cross-checks `src/lib/audit.ts` against an independent crawl of the same page. | ~$0.003 |
+
+`/prospect` and `/audit-check` both inherit the two refusals that `audit.ts`
+already enforces — absence is only reported when the page actually rendered, and
+a bot challenge is never analysed. They are repeated in the command files
+because they are claims about honesty rather than implementation details, and a
+command that quietly dropped them would produce a confident brief about a page
+nobody ever saw.
+
 
 ## The two moving parts
 
