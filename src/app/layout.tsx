@@ -39,36 +39,22 @@ const instrumentSerif = Instrument_Serif({
 });
 
 const SITE_URL = siteUrl();
-const TITLE = "Deacon — websites for local restaurants";
-const DESCRIPTION =
-  "I design and build websites for local restaurants — by hand, one at a time. Free homepage first, before you owe me a cent.";
 
+/**
+ * Only what is true of every route.
+ *
+ * Titles, descriptions, keywords, Open Graph and — critically — the canonical
+ * URL are declared per page via `metadataFor()` in src/lib/page-meta.tsx. A
+ * canonical hardcoded here would tell Google that every page is a duplicate of
+ * whichever one it named.
+ */
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: TITLE,
-  description: DESCRIPTION,
-  keywords: [
-    "restaurant website design",
-    "restaurant web designer",
-    "local restaurant website",
-    "menu website",
-    "Deacon",
-  ],
+  title: {
+    default: "Deacon — websites for local businesses",
+    template: "%s",
+  },
   authors: [{ name: "Deacon" }],
-  alternates: { canonical: "/" },
-  openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
-    url: SITE_URL,
-    siteName: "Deacon",
-    type: "website",
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: TITLE,
-    description: DESCRIPTION,
-  },
   robots: { index: true, follow: true },
 };
 
@@ -85,18 +71,6 @@ export const viewport: Viewport = {
  */
 const JS_FLAG = `document.documentElement.classList.add("dc-js")`;
 
-const STRUCTURED_DATA = {
-  "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  name: "Deacon",
-  description: DESCRIPTION,
-  url: SITE_URL,
-  email: "hello@itsdeacon.com",
-  areaServed: "United States",
-  priceRange: "$1,200",
-  serviceType: "Restaurant website design and development",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -107,10 +81,6 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }}
-        />
       </head>
       <body>{children}</body>
     </html>
