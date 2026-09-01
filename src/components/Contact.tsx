@@ -8,18 +8,26 @@ import styles from "./Contact.module.css";
 const INBOX = "hello@itsdeacon.com";
 
 type Fields = {
-  restaurant: string;
+  business: string;
   email: string;
   currentSite: string;
   notes: string;
 };
 
-const EMPTY: Fields = { restaurant: "", email: "", currentSite: "", notes: "" };
+const EMPTY: Fields = { business: "", email: "", currentSite: "", notes: "" };
 
 type Status = "idle" | "sending" | "sent" | "failed";
 
-export function Contact() {
-  const { table, setTable, figures } = useSiteState();
+/** The three sentences that are genuinely a pitch rather than a label. */
+export type ContactCopy = {
+  heading: string;
+  lede: string;
+  confirmation: string;
+};
+
+export function Contact({ copy }: { copy: ContactCopy }) {
+  const { spend, setSpend, figures, audience } = useSiteState();
+  const { units, form } = audience;
   const [fields, setFields] = useState<Fields>(EMPTY);
   const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<Status>("idle");
@@ -37,20 +45,20 @@ export function Contact() {
   /** Where the message goes if the API can't deliver it. */
   const mailtoHref = useMemo(() => {
     const body = [
-      `Restaurant: ${fields.restaurant || "—"}`,
+      `${form.nameLabel}: ${fields.business || "—"}`,
       `Reach me at: ${fields.email || "—"}`,
       `Current site: ${fields.currentSite || "—"}`,
-      `Average table: $${table || figures.price}`,
+      `Average ${units.one}: $${spend || figures.price}`,
       "",
       fields.notes,
     ].join("\n");
 
-    const subject = fields.restaurant
-      ? `Free mockup — ${fields.restaurant}`
+    const subject = fields.business
+      ? `Free mockup — ${fields.business}`
       : "Free mockup";
 
     return `mailto:${INBOX}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  }, [fields, table, figures.price]);
+  }, [fields, spend, figures.price, form.nameLabel, units.one]);
 
   const submit = useCallback(
     async (event: React.FormEvent) => {
@@ -65,7 +73,12 @@ export function Contact() {
         const response = await fetch("/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...fields, table, company: honeypot }),
+          body: JSON.stringify({
+            ...fields,
+            spend,
+            audience: audience.id,
+            company: honeypot,
+          }),
         });
         const data = (await response.json()) as {
           ok: boolean;
@@ -91,7 +104,7 @@ export function Contact() {
         );
       }
     },
-    [fields, honeypot, status, table],
+    [fields, honeypot, status, spend, audience.id],
   );
 
   return (
@@ -99,11 +112,8 @@ export function Contact() {
       <div className={styles.grid}>
         <div>
           <p className={styles.eyebrow}>Next step</p>
-          <h2 className={styles.heading}>Send me your restaurant.</h2>
-          <p className={styles.lede}>
-            Tell me the restaurant and I&rsquo;ll build the homepage first,
-            free, before you decide anything.
-          </p>
+          <h2 className={styles.heading}>{copy.heading}</h2>
+          <p className={styles.lede}>{copy.lede}</p>
 
           <div className={styles.contactRows}>
             <a href={`mailto:${INBOX}`} className={styles.contactRow}>
@@ -116,10 +126,7 @@ export function Contact() {
         {status === "sent" ? (
           <div className={styles.confirmation} role="status">
             <p className={styles.confirmationTitle}>Got it.</p>
-            <p className={styles.confirmationBody}>
-              I&rsquo;ll look your place up tonight and come back with a
-              homepage you can keep either way.
-            </p>
+            <p className={styles.confirmationBody}>{copy.confirmation}</p>
           </div>
         ) : (
           <form className={styles.form} onSubmit={submit} noValidate>
@@ -127,12 +134,12 @@ export function Contact() {
 
             <div className={styles.fields}>
               <Field
-                id="restaurant"
-                label="Restaurant name"
-                placeholder="Harbor & Vine"
-                value={fields.restaurant}
-                onChange={(value) => set("restaurant", value)}
-                error={fieldErrors.restaurant}
+                id="business"
+                label={form.nameLabel}
+                placeholder={form.namePlaceholder}
+                value={fields.business}
+                onChange={(value) => set("business", value)}
+                error={fieldErrors.business}
                 required
               />
 
@@ -140,7 +147,7 @@ export function Contact() {
                 id="email"
                 type="email"
                 label="Where to reach you"
-                placeholder="you@restaurant.com"
+                placeholder={form.emailPlaceholder}
                 autoComplete="email"
                 value={fields.email}
                 onChange={(value) => set("email", value)}
@@ -157,20 +164,20 @@ export function Contact() {
               />
 
               <div className={styles.field}>
-                <label htmlFor="table" className={styles.label}>
-                  What an average table spends
+                <label htmlFor="spend" className={styles.label}>
+                  {units.spendLabel}
                 </label>
                 <div className={styles.moneyField}>
                   <span className={styles.currency} aria-hidden="true">
                     $
                   </span>
                   <input
-                    id="table"
+                    id="spend"
                     type="text"
                     inputMode="numeric"
                     maxLength={3}
-                    value={table}
-                    onChange={(event) => setTable(event.target.value)}
+                    value={spend}
+                    onChange={(event) => setSpend(event.target.value)}
                     className={styles.moneyInput}
                   />
                 </div>
@@ -181,7 +188,7 @@ export function Contact() {
                   Carried over from your napkin math
                 </span>
                 <span>
-                  Two extra tables a week at that price is{" "}
+                  {units.cadence} at that price is{" "}
                   <b>{figures.monthly}</b> a month. The build clears by{" "}
                   <b>{figures.payback}</b>, then it&rsquo;s{" "}
                   <b>{figures.surplus}</b> a month, yours.
@@ -195,7 +202,7 @@ export function Contact() {
                 <textarea
                   id="notes"
                   rows={3}
-                  placeholder="Nobody can find our menu on a phone."
+                  placeholder={form.notesPlaceholder}
                   value={fields.notes}
                   onChange={(event) => set("notes", event.target.value)}
                   className={styles.textarea}

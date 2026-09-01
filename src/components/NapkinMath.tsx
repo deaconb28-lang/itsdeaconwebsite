@@ -3,8 +3,14 @@
 import { useSiteState } from "./SiteState";
 import styles from "./NapkinMath.module.css";
 
-export function NapkinMath() {
-  const { table, setTable, figures } = useSiteState();
+/**
+ * The arithmetic is the same for everyone; only the noun it is counted in and
+ * the story behind the two extra a week change, so the lede is passed in and
+ * everything else comes off the audience's units.
+ */
+export function NapkinMath({ lede }: { lede: string }) {
+  const { spend, setSpend, figures, audience } = useSiteState();
+  const { units } = audience;
 
   return (
     <section id="math" className={styles.section}>
@@ -12,38 +18,35 @@ export function NapkinMath() {
         <div>
           <p className={styles.eyebrow}>The back of the napkin</p>
           <h2 className={styles.heading}>
-            Two extra tables a week covers the whole thing.
+            {units.cadence} covers the whole thing.
           </h2>
-          <p className={styles.lede}>
-            This is what happens when two Friday walk-ins find your menu on
-            their phone and decide to come in.
-          </p>
+          <p className={styles.lede}>{lede}</p>
           <p className={styles.hint}>
-            <span aria-hidden="true">✎</span>$70 is a guess — type your own
-            table price and every line below moves.
+            <span aria-hidden="true">✎</span>${units.defaultSpend} is a guess —
+            type your own {units.one} price and every line below moves.
           </p>
         </div>
 
         <div className={styles.napkin}>
           <div className={styles.rows}>
             <div className={styles.inputRow}>
-              <span>two extra tables a week ×</span>
+              <span>{units.cadenceLower} ×</span>
 
               <span className={styles.field}>
-                <label htmlFor="napkin-table" className={styles.fieldLabel}>
-                  Your table — edit me
+                <label htmlFor="napkin-spend" className={styles.fieldLabel}>
+                  Your {units.one} — edit me
                 </label>
                 <span className={styles.currency} aria-hidden="true">
                   $
                 </span>
                 <input
-                  id="napkin-table"
+                  id="napkin-spend"
                   type="text"
                   inputMode="numeric"
                   maxLength={3}
-                  value={table}
-                  onChange={(event) => setTable(event.target.value)}
-                  title="Type your average table spend"
+                  value={spend}
+                  onChange={(event) => setSpend(event.target.value)}
+                  title={`Type your average ${units.one} spend`}
                   className={styles.input}
                 />
                 <span className={styles.pencil} aria-hidden="true">
@@ -74,7 +77,7 @@ export function NapkinMath() {
             </div>
 
             <div className={styles.row}>
-              the care plan ≈ <b className={styles.figure}>{figures.careTables}</b>
+              the care plan ≈ <b className={styles.figure}>{figures.care}</b>
             </div>
 
             <p className={styles.stamp}>

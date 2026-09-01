@@ -1,6 +1,17 @@
 import styles from "./Pricing.module.css";
 
-export function Pricing() {
+/**
+ * The bullets that describe what is actually on the site. The prices, the
+ * structure and the anchor are the same for everyone — only what a plan keeps
+ * current differs, because a menu and a service area are not the same thing.
+ */
+export type PricingFeatures = {
+  redesign: readonly string[];
+  care: readonly string[];
+  hosting: readonly string[];
+};
+
+export function Pricing({ features }: { features: PricingFeatures }) {
   return (
     <section id="pricing" className={styles.section}>
       <div className={styles.header}>
@@ -29,11 +40,9 @@ export function Pricing() {
           <p className={styles.cadence}>One time</p>
           <p className={styles.subtitle}>the site, done right</p>
           <div className={styles.features}>
-            <Feature>A whole new site — home, menu, your story, contact</Feature>
-            <Feature>One-tap calls, directions, booking or ordering</Feature>
-            <Feature>
-              Google Search &amp; Maps done right — you own every file
-            </Feature>
+            {features.redesign.map((line) => (
+              <Feature key={line}>{line}</Feature>
+            ))}
           </div>
           <a href="#contact" className={styles.ctaOutline}>
             Start here
@@ -54,8 +63,9 @@ export function Pricing() {
           <p className={styles.subtitleOnInk}>the site, plus us on call</p>
           <div className={`${styles.features} ${styles.featuresOnInk}`}>
             <Feature>Everything in the Full Redesign</Feature>
-            <Feature>Changes and specials — text me, done same-day</Feature>
-            <Feature>Menu, hours, and photos kept current</Feature>
+            {features.care.map((line) => (
+              <Feature key={line}>{line}</Feature>
+            ))}
           </div>
           <a href="#contact" className={styles.ctaAccentToCream}>
             Get your mockup
@@ -77,7 +87,9 @@ export function Pricing() {
           <div className={styles.features}>
             <Feature>Everything in Redesign + Care</Feature>
             <Feature>Hosting, SSL, and security patches — on me</Feature>
-            <Feature>Booking, ordering, and map connections kept running</Feature>
+            {features.hosting.map((line) => (
+              <Feature key={line}>{line}</Feature>
+            ))}
           </div>
           <p className={styles.valueNote}>
             Hosting, domain and SSL alone run <b>$30–50 a month</b> if you buy

@@ -12,7 +12,15 @@ import { QuietPart } from "@/components/QuietPart";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteStateProvider } from "@/components/SiteState";
 import { Work } from "@/components/Work";
+import { RESTAURANTS } from "@/lib/audience";
 import { metadataFor, StructuredData, type PageMeta } from "@/lib/page-meta";
+import {
+  CONTACT,
+  NAPKIN_LEDE,
+  PRICING,
+  PROCESS_NOTE,
+  PROCESS_STEPS,
+} from "./copy";
 
 const META: PageMeta = {
   path: "/restaurants",
@@ -38,7 +46,7 @@ export const metadata = metadataFor(META);
  */
 export default function Restaurants() {
   return (
-    <SiteStateProvider>
+    <SiteStateProvider audience={RESTAURANTS}>
       <StructuredData meta={META} />
       <Effects />
       <Nav />
@@ -47,12 +55,12 @@ export default function Restaurants() {
         <QuietPart />
         <Difference />
         <Work />
-        <Process />
-        <Pricing />
+        <Process steps={PROCESS_STEPS} note={PROCESS_NOTE} />
+        <Pricing features={PRICING} />
         <Lookup />
-        <NapkinMath />
+        <NapkinMath lede={NAPKIN_LEDE} />
         <About />
-        <Contact />
+        <Contact copy={CONTACT} />
       </main>
       <SiteFooter
         crossLink={{ href: "/small-business", label: "Not a restaurant?" }}

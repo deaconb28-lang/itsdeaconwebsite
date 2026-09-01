@@ -3,6 +3,7 @@ import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { audienceFrom, type Audience } from "@/lib/audience";
 import {
   findingsFrom,
   looksBlocked,
@@ -37,9 +38,11 @@ export async function POST(request: Request) {
   }
 
   let raw = "";
+  let audience = audienceFrom(undefined);
   try {
-    const body = (await request.json()) as { url?: unknown };
+    const body = (await request.json()) as { url?: unknown; audience?: unknown };
     raw = typeof body.url === "string" ? body.url : "";
+    audience = audienceFrom(body.audience);
   } catch {
     // Falls through to the validation error below.
   }
@@ -87,7 +90,7 @@ export async function POST(request: Request) {
   }
 
   const signals = readSignals(html, headers, url, loadMs, Buffer.byteLength(html));
-  const measured = rank(findingsFrom(signals));
+  const measured = rank(findingsFrom(signals, audience));
 
   // Nothing measurable is wrong. Say so — the honest zero is what makes the
   // rest of the section believable.
@@ -102,7 +105,7 @@ export async function POST(request: Request) {
     });
   }
 
-  const polished = await phrase(measured, prettyUrl(url));
+  const polished = await phrase(measured, prettyUrl(url), audience);
 
   return NextResponse.json({
     ok: true,
@@ -144,10 +147,14 @@ type Phrased = {
  * and anything missing keeps its rule-written text, so a hallucinated problem
  * cannot reach an owner being told what is wrong with their website.
  */
-async function phrase(measured: Finding[], pretty: string): Promise<Phrased> {
+async function phrase(
+  measured: Finding[],
+  pretty: string,
+  audience: Audience,
+): Promise<Phrased> {
   const fallback: Phrased = {
     findings: measured,
-    summary: defaultSummary(measured),
+    summary: defaultSummary(measured, audience),
     writtenBy: "rules",
   };
 
@@ -160,11 +167,11 @@ async function phrase(measured: Finding[], pretty: string): Promise<Phrased> {
       max_tokens: 4000,
       output_config: { effort: "low", format: zodOutputFormat(Written) },
       system:
-        "You write for Deacon, who builds websites for local restaurants. " +
+        `You write for Deacon, who builds websites for local ${audience.id === "restaurants" ? "restaurants" : "businesses — trades, shops, studios, services"}. ` +
         "Voice: first person, plain, warm, occasionally self-deprecating. " +
         "Short sentences. No marketing language, no exclamation marks, no jargon " +
-        "like 'leverage' or 'optimize'. Talk about diners and tables, not users " +
-        "and conversions.\n\n" +
+        `like 'leverage' or 'optimize'. Talk about ${audience.readers.toLowerCase()} and ${audience.units.many}, ` +
+        "not users and conversions.\n\n" +
         "You are given findings that were MEASURED on a real website. Rewrite " +
         "them so an owner understands what each one costs them. You may reorder " +
         "them and change the wording. You must not invent a finding, and you " +
@@ -208,7 +215,7 @@ async function phrase(measured: Finding[], pretty: string): Promise<Phrased> {
 
     return {
       findings,
-      summary: parsed.summary.trim() || defaultSummary(measured),
+      summary: parsed.summary.trim() || defaultSummary(measured, audience),
       writtenBy: "claude",
     };
   } catch (error) {
@@ -221,13 +228,13 @@ async function phrase(measured: Finding[], pretty: string): Promise<Phrased> {
   }
 }
 
-function defaultSummary(findings: Finding[]): string {
+function defaultSummary(findings: Finding[], audience: Audience): string {
   const high = findings.filter((f) => f.severity === "high").length;
   if (high >= 2) {
     return "There's real money leaking here, and none of it is a rebuild.";
   }
   if (findings.length >= 4) {
-    return "A handful of small things, each of them costing you tables quietly.";
+    return `A handful of small things, each of them costing you ${audience.units.many} quietly.`;
   }
   return "Not much wrong — and what there is, is the cheap kind to fix.";
 }

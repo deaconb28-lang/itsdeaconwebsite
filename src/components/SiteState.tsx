@@ -2,18 +2,15 @@
 
 import { createContext, useContext, useMemo, useState } from "react";
 
-import {
-  calcNapkin,
-  DEFAULT_TABLE_PRICE,
-  sanitiseTable,
-  type NapkinFigures,
-} from "@/lib/napkin";
+import type { Audience } from "@/lib/audience";
+import { calcNapkin, sanitiseSpend, type NapkinFigures } from "@/lib/napkin";
 
 type SiteState = {
-  /** Raw digits as typed. Empty means "use the default". */
-  table: string;
-  setTable: (value: string) => void;
+  /** Raw digits as typed. Empty means "use the audience's default". */
+  spend: string;
+  setSpend: (value: string) => void;
   figures: NapkinFigures;
+  audience: Audience;
 };
 
 const SiteStateContext = createContext<SiteState | null>(null);
@@ -21,17 +18,27 @@ const SiteStateContext = createContext<SiteState | null>(null);
 /**
  * Holds the one number the napkin calculator and the contact form share.
  * Typing in either field moves both, and the carry-over panel with them.
+ *
+ * The audience rides along because every consumer of the figures also needs
+ * the noun they are counted in.
  */
-export function SiteStateProvider({ children }: { children: React.ReactNode }) {
-  const [table, setTableRaw] = useState(String(DEFAULT_TABLE_PRICE));
+export function SiteStateProvider({
+  audience,
+  children,
+}: {
+  audience: Audience;
+  children: React.ReactNode;
+}) {
+  const [spend, setSpendRaw] = useState(String(audience.units.defaultSpend));
 
   const value = useMemo<SiteState>(
     () => ({
-      table,
-      setTable: (next: string) => setTableRaw(sanitiseTable(next)),
-      figures: calcNapkin(table),
+      spend,
+      setSpend: (next: string) => setSpendRaw(sanitiseSpend(next)),
+      figures: calcNapkin(spend, audience.units),
+      audience,
     }),
-    [table],
+    [spend, audience],
   );
 
   return (

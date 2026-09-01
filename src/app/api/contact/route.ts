@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { audienceFrom, type Audience } from "@/lib/audience";
 import { envOr } from "@/lib/env";
 import { sendMail } from "@/lib/mail";
 import { calcNapkin } from "@/lib/napkin";
@@ -30,19 +31,29 @@ const LIMIT = 5;
 const WINDOW_MS = 10 * 60 * 1000;
 
 const MAX_LENGTHS = {
-  restaurant: 200,
+  business: 200,
   email: 320,
   currentSite: 500,
-  table: 3,
+  spend: 3,
   notes: 4000,
 } as const;
 
+/**
+ * `restaurant` and `table` are the field names the single-page site posted.
+ * Vercel keeps serving old JS chunks for a while after a deploy, so a visitor
+ * who loaded the page before this change still posts them. Losing a real
+ * enquiry to a field rename is the one failure this route exists to prevent —
+ * accept both for a release, then drop the aliases.
+ */
 type ContactPayload = {
+  business?: unknown;
   restaurant?: unknown;
   email?: unknown;
   currentSite?: unknown;
+  spend?: unknown;
   table?: unknown;
   notes?: unknown;
+  audience?: unknown;
   /** Honeypot — a real person never fills this in. */
   company?: unknown;
 };
@@ -74,14 +85,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const restaurant = str(payload.restaurant).slice(0, MAX_LENGTHS.restaurant);
+  const audience = audienceFrom(payload.audience);
+
+  const business = (str(payload.business) || str(payload.restaurant)).slice(
+    0,
+    MAX_LENGTHS.business,
+  );
   const email = str(payload.email).slice(0, MAX_LENGTHS.email);
   const currentSite = str(payload.currentSite).slice(0, MAX_LENGTHS.currentSite);
-  const table = str(payload.table).replace(/[^0-9]/g, "").slice(0, MAX_LENGTHS.table);
+  const spend = (str(payload.spend) || str(payload.table))
+    .replace(/[^0-9]/g, "")
+    .slice(0, MAX_LENGTHS.spend);
   const notes = str(payload.notes).slice(0, MAX_LENGTHS.notes);
 
   const fieldErrors: Record<string, string> = {};
-  if (!restaurant) fieldErrors.restaurant = "Tell me the restaurant's name.";
+  if (!business) {
+    const message = `Tell me the ${audience.noun}'s name.`;
+    fieldErrors.business = message;
+    // Keyed for the old bundle too, or its error renders nowhere at all.
+    fieldErrors.restaurant = message;
+  }
   if (!email) {
     fieldErrors.email = "I need somewhere to send the homepage.";
   } else if (!isEmail(email)) {
@@ -92,16 +115,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, fieldErrors }, { status: 400 });
   }
 
-  const figures = calcNapkin(table);
-  const subject = `New mockup request — ${restaurant}`;
+  const figures = calcNapkin(spend, audience.units);
+  const subject = `New mockup request — ${business}`;
+  const enquiry: Enquiry = {
+    business,
+    email,
+    currentSite,
+    notes,
+    figures,
+    audience,
+  };
 
   const result = await sendMail({
     to: INBOX,
     from: SENDER,
     replyTo: email,
     subject,
-    text: renderText({ restaurant, email, currentSite, notes, figures }),
-    html: renderHtml({ restaurant, email, currentSite, notes, figures }),
+    text: renderText(enquiry),
+    html: renderHtml(enquiry),
   });
 
   if (result.ok) {
@@ -129,21 +160,30 @@ export async function POST(request: Request) {
 }
 
 type Enquiry = {
-  restaurant: string;
+  business: string;
   email: string;
   currentSite: string;
   notes: string;
   figures: ReturnType<typeof calcNapkin>;
+  audience: Audience;
 };
 
-function renderText({ restaurant, email, currentSite, notes, figures }: Enquiry) {
+function renderText({
+  business,
+  email,
+  currentSite,
+  notes,
+  figures,
+  audience,
+}: Enquiry) {
   return [
-    `Restaurant:   ${restaurant}`,
-    `Reach them:   ${email}`,
-    `Current site: ${currentSite || "—"}`,
+    `${pad(audience.form.nameLabel)}${business}`,
+    `${pad("Came from")}${audience.path}`,
+    `${pad("Reach them")}${email}`,
+    `${pad("Current site")}${currentSite || "—"}`,
     "",
     "Their napkin math",
-    `  Average table:  $${figures.price}`,
+    `  Average ${audience.units.one}: $${figures.price}`,
     `  Two a week:     ${figures.monthly} a month`,
     `  Build clears:   ${figures.payback}`,
     `  Then:           ${figures.surplus} a month`,
@@ -153,7 +193,19 @@ function renderText({ restaurant, email, currentSite, notes, figures }: Enquiry)
   ].join("\n");
 }
 
-function renderHtml({ restaurant, email, currentSite, notes, figures }: Enquiry) {
+/** Keeps the plain-text labels in one column however long they are. */
+function pad(label: string): string {
+  return `${label}:`.padEnd(15, " ");
+}
+
+function renderHtml({
+  business,
+  email,
+  currentSite,
+  notes,
+  figures,
+  audience,
+}: Enquiry) {
   const row = (label: string, value: string) =>
     `<tr>
        <td style="padding:6px 16px 6px 0;color:#5C6B64;font-size:13px;white-space:nowrap;vertical-align:top">${escapeHtml(label)}</td>
@@ -163,8 +215,8 @@ function renderHtml({ restaurant, email, currentSite, notes, figures }: Enquiry)
   return `<!doctype html>
 <html><body style="margin:0;padding:24px;background:#F8F1E3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
   <div style="max-width:560px;margin:0 auto;padding:28px;background:#fff;border:3px solid #13312C;border-radius:10px">
-    <p style="margin:0 0 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#5C6B64">New mockup request</p>
-    <h1 style="margin:0 0 22px;font-size:26px;line-height:1.15;color:#13312C">${escapeHtml(restaurant)}</h1>
+    <p style="margin:0 0 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#5C6B64">New mockup request &middot; ${escapeHtml(audience.path)}</p>
+    <h1 style="margin:0 0 22px;font-size:26px;line-height:1.15;color:#13312C">${escapeHtml(business)}</h1>
     <table style="border-collapse:collapse;width:100%">
       ${row("Reach them", `<a href="mailto:${escapeHtml(email)}" style="color:#E0571C">${escapeHtml(email)}</a>`)}
       ${row("Current site", currentSite ? linkify(currentSite) : "&mdash;")}
@@ -172,7 +224,7 @@ function renderHtml({ restaurant, email, currentSite, notes, figures }: Enquiry)
     <div style="margin:22px 0;padding:16px 18px;border-radius:8px;background:rgba(224,87,28,.1)">
       <p style="margin:0 0 8px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#E0571C">Their napkin math</p>
       <p style="margin:0;font-size:15px;line-height:1.6;color:#3F5049">
-        Average table <b style="color:#13312C">$${figures.price}</b> &middot;
+        Average ${escapeHtml(audience.units.one)} <b style="color:#13312C">$${figures.price}</b> &middot;
         two a week is <b style="color:#13312C">${escapeHtml(figures.monthly)}</b> a month &middot;
         build clears by <b style="color:#13312C">${escapeHtml(figures.payback)}</b>, then
         <b style="color:#13312C">${escapeHtml(figures.surplus)}</b> a month.

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { Finding } from "@/lib/audit";
 import type { PreviewResult } from "@/lib/preview";
 import { normaliseUrl } from "@/lib/url";
+import { useSiteState } from "./SiteState";
 import styles from "./Lookup.module.css";
 
 type Phase = "idle" | "checking" | "ready" | "error";
@@ -17,6 +18,7 @@ type Audit = {
 };
 
 export function Lookup() {
+  const { audience } = useSiteState();
   const [url, setUrl] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [preview, setPreview] = useState<PreviewResult | null>(null);
@@ -30,7 +32,9 @@ export function Lookup() {
       setPhase("error");
       setPreview(null);
       setAudit(null);
-      setError("That doesn't look like a web address. Try yourrestaurant.com.");
+      setError(
+        `That doesn't look like a web address. Try ${audience.lookupPlaceholder}.`,
+      );
       return;
     }
 
@@ -45,7 +49,7 @@ export function Lookup() {
     void fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: normalised }),
+      body: JSON.stringify({ url: normalised, audience: audience.id }),
     })
       .then(async (response) => {
         const data = (await response.json()) as
@@ -66,7 +70,7 @@ export function Lookup() {
       const response = await fetch("/api/preview", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: normalised }),
+        body: JSON.stringify({ url: normalised, audience: audience.id }),
       });
       const data = (await response.json()) as
         | { ok: true; result: PreviewResult }
@@ -84,7 +88,7 @@ export function Lookup() {
       setPhase("error");
       setError("That didn't load. Try again in a moment.");
     }
-  }, [url]);
+  }, [url, audience.id, audience.lookupPlaceholder]);
 
   return (
     <section id="lookup" className={styles.section}>
@@ -95,7 +99,7 @@ export function Lookup() {
           <h3 className={styles.heading}>
             See your own site
             <br />
-            the way a diner does.
+            the way a {audience.reader} does.
           </h3>
 
           <form
@@ -115,7 +119,7 @@ export function Lookup() {
               autoComplete="url"
               value={url}
               onChange={(event) => setUrl(event.target.value)}
-              placeholder="yourrestaurant.com"
+              placeholder={audience.lookupPlaceholder}
               className={styles.input}
             />
             <button
@@ -136,6 +140,7 @@ export function Lookup() {
             phase={phase}
             auditing={auditing}
             audit={audit}
+            costs={audience.units.many}
           />
         </div>
       </div>
@@ -147,7 +152,8 @@ export function Lookup() {
  * What is actually wrong with the site.
  *
  * Every finding here was measured on the page by /api/analyze — a missing
- * viewport tag, a PDF menu, a load time, a stale copyright. Claude rewrites
+ * viewport tag, a PDF where a page should be, a load time, a stale copyright.
+ * Claude rewrites
  * the wording when a key is configured but can never add a finding, so
  * nothing on this list is a guess about someone's business.
  */
@@ -155,10 +161,13 @@ function Report({
   phase,
   auditing,
   audit,
+  costs,
 }: {
   phase: Phase;
   auditing: boolean;
   audit: Audit | null;
+  /** What a bad site loses them, in their own noun: "tables" | "customers". */
+  costs: string;
 }) {
   if (phase === "idle" || (phase === "error" && !audit)) {
     return (
@@ -166,7 +175,7 @@ function Report({
         <p className={styles.reportLabel}>What I&rsquo;d fix</p>
         <p className={styles.reportIdle}>
           Paste your address and I&rsquo;ll read the page the way a phone does,
-          then tell you what&rsquo;s costing you tables.
+          then tell you what&rsquo;s costing you {costs}.
         </p>
       </div>
     );
@@ -237,7 +246,7 @@ function Report({
 
 /**
  * A laptop with a phone leaning on it. Showing both at once answers the
- * question the section actually asks — what a diner sees, on either thing —
+ * question the section actually asks — what a visitor sees, on either thing —
  * without a toggle to operate, and the phone simply drops out when it can't
  * be rendered truthfully rather than being faked from a desktop capture.
  */

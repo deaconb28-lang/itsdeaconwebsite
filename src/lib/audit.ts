@@ -1,5 +1,5 @@
 /**
- * What is actually wrong with a restaurant's website.
+ * What is actually wrong with a local business's website.
  *
  * Every finding here comes from something measured on the page — a header, a
  * tag, a byte count, a timing. Nothing is inferred and nothing is guessed,
@@ -7,6 +7,8 @@
  * truth. Claude is used later to *phrase* these findings, never to decide
  * that one exists.
  */
+
+import type { Audience } from "./audience";
 
 export type Severity = "high" | "medium" | "low";
 
@@ -24,7 +26,13 @@ export type Signals = {
   htmlBytes: number;
   https: boolean;
   hasViewport: boolean;
+  /** A PDF the page calls a menu. */
   menuPdf: string | null;
+  /**
+   * A PDF carrying something a visitor came for — a price list, a rate card, a
+   * brochure. Same failure as a PDF menu, one audience wider.
+   */
+  keyPdf: string | null;
   hasTelLink: boolean;
   /** A phone number appears in the text, whether or not it is a link. */
   hasPhoneNumber: boolean;
@@ -41,6 +49,8 @@ export type Signals = {
   hasDescription: boolean;
   hasOrderingLink: boolean;
   hasBookingLink: boolean;
+  /** A quote, estimate or appointment request — a trade's version of booking. */
+  hasContactAction: boolean;
   builder: string | null;
   antique: boolean;
 };
@@ -51,6 +61,11 @@ const ORDERING =
   /doordash|ubereats|grubhub|toasttab|chownow|slicelife|seamless|postmates|olo\.com|order[-_ ]?online|\/order\b|start[-_ ]?order/i;
 const BOOKING =
   /opentable|resy\.com|sevenrooms|tock\.com|yelp\.com\/reservations|bookatable|reservation|book[-_ ]?a[-_ ]?table|\/book\b/i;
+// What a business that isn't a restaurant offers instead of a table booking.
+// Deliberately not counted for restaurants: a contact page is not a way to
+// order dinner, and the finding would stop being true.
+const CONTACT_ACTION =
+  /calendly|acuityscheduling|housecallpro|jobber|servicetitan|get[-_ ]?a?[-_ ]?quote|request[-_ ]?(?:an?[-_ ])?(?:quote|estimate|appointment|callback)|free[-_ ]?estimate|book[-_ ]?(?:now|online|a[-_ ]?(?:visit|call|appointment))|schedule[-_ ]?(?:a[-_ ])?(?:service|visit|appointment)|\/quote\b|\/estimate\b|\/booking?\b|\/schedule\b|\/appointments?\b/i;
 const PHONE = /(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}/;
 const BUILDERS: Array<[RegExp, string]> = [
   [/wix\.com|wixstatic/i, "Wix"],
@@ -90,10 +105,12 @@ export function readSignals(
     if (newest <= thisYear - 2) staleYear = newest;
   }
 
-  const menuPdf =
-    html.match(/href=["']([^"']*menu[^"']*\.pdf[^"']*)["']/i)?.[1] ??
-    html.match(/href=["']([^"']*\.pdf[^"']*)["'][^>]*>[^<]{0,40}menu/i)?.[1] ??
-    null;
+  const menuPdf = linkedPdf(html, /menu/i);
+  // Word-bounded on purpose: an unanchored "rate" matches "corporate", and a
+  // finding that tells an owner something untrue is worse than one missed.
+  const keyPdf =
+    menuPdf ??
+    linkedPdf(html, /\b(?:menu|prices?|pricing|rates?|brochure|catalogue?|services)\b/i);
 
   const builder =
     BUILDERS.find(([re]) => re.test(html) || re.test(headers.get("server") ?? ""))?.[1] ?? null;
@@ -104,6 +121,7 @@ export function readSignals(
     https: url.startsWith("https://"),
     hasViewport: /<meta[^>]+name=["']viewport["']/i.test(html),
     menuPdf,
+    keyPdf,
     hasTelLink: /href=["']tel:/i.test(html),
     hasPhoneNumber: PHONE.test(visible),
     clientRendered,
@@ -115,13 +133,42 @@ export function readSignals(
     hasDescription: /<meta[^>]+name=["']description["'][^>]*content=["']\s*\S/i.test(html),
     hasOrderingLink: ORDERING.test(html),
     hasBookingLink: BOOKING.test(html),
+    hasContactAction: CONTACT_ACTION.test(html),
     builder,
     antique: /<(?:marquee|blink|font\b|center\b)/i.test(html),
   };
 }
 
-/** Turns measurements into findings. Deterministic — no model involved. */
-export function findingsFrom(signals: Signals): Finding[] {
+/**
+ * A PDF linked either by a matching filename or by matching link text.
+ * Either way it is the thing a visitor clicked expecting a web page.
+ */
+function linkedPdf(html: string, word: RegExp): string | null {
+  const source = word.source;
+  return (
+    html.match(
+      new RegExp(`href=["']([^"']*(?:${source})[^"']*\\.pdf[^"']*)["']`, "i"),
+    )?.[1] ??
+    html.match(
+      new RegExp(
+        `href=["']([^"']*\\.pdf[^"']*)["'][^>]*>[^<]{0,40}(?:${source})`,
+        "i",
+      ),
+    )?.[1] ??
+    null
+  );
+}
+
+/**
+ * Turns measurements into findings. Deterministic — no model involved.
+ *
+ * The audience changes two things and only two: the words a finding is written
+ * in, and whether a quote form counts as a way to act. Every id stays the same
+ * for both, because /api/analyze validates the model's rewrite by matching ids
+ * against this set — an id that varies would silently disable that guard.
+ */
+export function findingsFrom(signals: Signals, audience: Audience): Finding[] {
+  const restaurants = audience.id === "restaurants";
   const found: Finding[] = [];
   const add = (id: string, title: string, detail: string, severity: Severity) =>
     found.push({ id, title, detail, severity });
@@ -135,11 +182,11 @@ export function findingsFrom(signals: Signals): Finding[] {
     );
   }
 
-  if (signals.menuPdf) {
+  if (restaurants ? signals.menuPdf : signals.keyPdf) {
     add(
       "menu-pdf",
-      "The menu is a PDF",
-      "The menu links to a PDF file. On a phone that downloads, opens in a separate viewer, and can't be searched by Google.",
+      restaurants ? "The menu is a PDF" : "What people came for is a PDF",
+      `${restaurants ? "The menu" : "One of your main links"} points at a PDF file. On a phone that downloads, opens in a separate viewer, and can't be searched by Google.`,
       "high",
     );
   }
@@ -157,7 +204,7 @@ export function findingsFrom(signals: Signals): Finding[] {
     add(
       "slow",
       "It takes a moment to load",
-      `The page took ${(signals.loadMs / 1000).toFixed(1)} seconds to answer. Diners leave well before that on a phone signal.`,
+      `The page took ${(signals.loadMs / 1000).toFixed(1)} seconds to answer. ${audience.readers} leave well before that on a phone signal.`,
       signals.loadMs > 5000 ? "high" : "medium",
     );
   }
@@ -177,16 +224,23 @@ export function findingsFrom(signals: Signals): Finding[] {
     add(
       "stale",
       `The footer still says ${signals.staleYear}`,
-      "A copyright a couple of years out of date is the first thing that makes a diner wonder whether you're still open.",
+      `A copyright a couple of years out of date is the first thing that makes a ${audience.reader} wonder whether you're still ${restaurants ? "open" : "trading"}.`,
       "medium",
     );
   }
 
-  if (!signals.hasOrderingLink && !signals.hasBookingLink && !signals.clientRendered) {
+  const canAct =
+    signals.hasOrderingLink ||
+    signals.hasBookingLink ||
+    (!restaurants && signals.hasContactAction);
+
+  if (!canAct && !signals.clientRendered) {
     add(
       "no-action",
-      "Nothing to book or order",
-      "No ordering or reservation link anywhere on the page. Whoever's ready to commit has to go and find another way.",
+      restaurants ? "Nothing to book or order" : "No way to actually hire you",
+      restaurants
+        ? "No ordering or reservation link anywhere on the page. Whoever's ready to commit has to go and find another way."
+        : "Nothing on the page asks for the job — no quote form, no booking, no estimate request. Whoever's ready to commit has to go and find another way.",
       "medium",
     );
   }
