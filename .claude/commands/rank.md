@@ -4,16 +4,20 @@ argument-hint: <domain> <keyword> [more keywords...]
 allowed-tools: Bash(treg:*), Read, Skill, Artifact
 ---
 
-Find where **$1** ranks for the remaining arguments as search terms, and chart
+Find where **$0** ranks for the remaining arguments as search terms, and chart
 it. If only a domain was given, propose 4–6 terms a real customer would type —
 service plus place, not brand names, because someone who already knows the brand
 is not the visitor this site's whole argument is about — and confirm them before
 spending anything.
 
+> Arguments here are **zero-indexed**: `$0` is the first. A `$` immediately
+> before a digit is treated as a placeholder, which is why prices below are
+> written without one.
+
 ## Before you spend anything
 
-Run `treg balance`. Each keyword is one call at roughly **$0.002**, so state the
-total for the set you are about to run *before* running it. Budget: **~$0.02**.
+Run `treg balance`. Each keyword is one call at roughly **0.002 USD**, so state the
+total for the set you are about to run *before* running it. Budget: **about 2 cents**.
 Report actual spend at the end.
 
 ## Pull
@@ -21,13 +25,20 @@ Report actual spend at the end.
 One call per keyword:
 
 ```bash
-treg call treg.google.serp.organic --method POST --data '{"q":"<keyword>","country":"us","limit":20}'
+treg call treg.google.serp.organic --method POST --data '{"q":"<keyword>","country":"us","limit":20}' \
+  --header 'X-Treg-Route-Max-Cost: 0.004'
 ```
 
 This is a **routed** endpoint: treg picks the provider and names it in
 `_treg.served_by`. Say which one served, since results differ by provider.
 
-Then find $1's position in each result set. Results carry **two** positions and
+The cap matters. A routed endpoint quotes its **first** provider's price, not a
+ceiling — on a miss treg walks the waterfall and bills whoever answers, with a
+default limit of 1 USD per call. Without a cap, one keyword can cost several
+times the estimate. Report spend by diffing `treg balance`, not by adding up
+list prices.
+
+Then find $0's position in each result set. Results carry **two** positions and
 they are not the same number: `rank_group` is the organic position, while
 `rank_absolute` counts ads and SERP features too. Chart `rank_group` and say so
 — mixing the two across keywords produces a chart that is quietly wrong, which

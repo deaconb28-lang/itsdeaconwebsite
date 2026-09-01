@@ -5,7 +5,11 @@ allowed-tools: Bash, Read, Glob, Grep, Edit, Skill
 ---
 
 `src/lib/audit.ts` measures a page and turns those measurements into findings.
-Nothing verifies it against a second opinion. This command does that for **$1**.
+Nothing verifies it against a second opinion. This command does that for **$0**.
+
+> Arguments here are **zero-indexed**: `$0` is the first. A `$` immediately
+> before a digit is treated as a placeholder, which is why prices below are
+> written without one.
 
 ## What this is for
 
@@ -19,10 +23,10 @@ same page?**
 Independent measurement:
 
 ```bash
-treg call dataforseo.web.page.audit --method POST --data '[{"url":"$1","enable_javascript":true,"enable_browser_rendering":true}]'
+treg call dataforseo.web.page.audit --method POST --data '[{"url":"$0","enable_javascript":true,"enable_browser_rendering":true}]'
 ```
 
-Costs about **$0.003** with rendering on (more than the $0.00015 default — worth
+Costs about **0.003 USD** with rendering on (more than the 0.00015 default — worth
 it, because half of `audit.ts` is about what a page shows once JS has run).
 Check `treg balance` first and report the spend.
 

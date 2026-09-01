@@ -145,6 +145,20 @@ anything — the calls draw on a real prepaid balance.
 | `/rank <domain> <keywords…>` | Where they actually show up in Google, charted via the **dataviz** skill. | ~$0.002/keyword |
 | `/audit-check <url>` | Engineering, not sales: cross-checks `src/lib/audit.ts` against an independent crawl of the same page. | ~$0.003 |
 
+Two things were learned by running `/prospect` for real, and both are written
+into the command files:
+
+- **Command arguments are zero-indexed** — `$0` is the first, not `$1`. Worse,
+  a `$` immediately before a digit is itself a substitution target, so a budget
+  written as a plain dollar amount gets silently rewritten with an argument in
+  the middle of it. Prices in these files are therefore written without a
+  dollar sign, which looks odd and is deliberate.
+- **A routed endpoint's quoted price is its first provider's, not a cap.** On a
+  miss treg walks down the waterfall and bills whoever answers, with a default
+  ceiling of 1 USD per call. An enrich quoted at 0.0019 settled at 0.0098. Every
+  routed call in these commands now passes `X-Treg-Route-Max-Cost`, and spend is
+  reported by diffing `treg balance` rather than by adding up list prices.
+
 `/prospect` and `/audit-check` both inherit the two refusals that `audit.ts`
 already enforces — absence is only reported when the page actually rendered, and
 a bot challenge is never analysed. They are repeated in the command files
