@@ -132,7 +132,7 @@
 
 .menuNote {
   margin: 0;
-  font-family: var(--font-serif);
+  font-family: var(--hv-serif);
   font-style: italic;
   font-size: 15px;
   line-height: 1.35;
@@ -197,7 +197,7 @@
 
 .cardHeadlineItalic {
   margin: 2px 0 0;
-  font-family: var(--font-serif);
+  font-family: var(--hv-serif);
   font-style: italic;
   font-weight: 400;
   font-size: clamp(21px, 3.5vw, 40px);

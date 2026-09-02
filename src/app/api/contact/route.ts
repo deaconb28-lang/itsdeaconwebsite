@@ -213,25 +213,25 @@ function renderHtml({
   const row = (label: string, value: string) =>
     `<tr>
        <td style="padding:6px 16px 6px 0;color:#5C6B64;font-size:13px;white-space:nowrap;vertical-align:top">${escapeHtml(label)}</td>
-       <td style="padding:6px 0;color:#13312C;font-size:15px">${value}</td>
+       <td style="padding:6px 0;color:#0E3A2C;font-size:15px">${value}</td>
      </tr>`;
 
   return `<!doctype html>
-<html><body style="margin:0;padding:24px;background:#F8F1E3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
-  <div style="max-width:560px;margin:0 auto;padding:28px;background:#fff;border:3px solid #13312C;border-radius:10px">
+<html><body style="margin:0;padding:24px;background:#F0EDE2;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <div style="max-width:560px;margin:0 auto;padding:28px;background:#fff;border:3px solid #0E3A2C">
     <p style="margin:0 0 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#5C6B64">New mockup request &middot; ${escapeHtml(audience.path)}</p>
-    <h1 style="margin:0 0 22px;font-size:26px;line-height:1.15;color:#13312C">${escapeHtml(business)}</h1>
+    <h1 style="margin:0 0 22px;font-size:26px;line-height:1.15;color:#0E3A2C">${escapeHtml(business)}</h1>
     <table style="border-collapse:collapse;width:100%">
-      ${row("Reach them", `<a href="mailto:${escapeHtml(email)}" style="color:#E0571C">${escapeHtml(email)}</a>`)}
+      ${row("Reach them", `<a href="mailto:${escapeHtml(email)}" style="color:#7A2B33">${escapeHtml(email)}</a>`)}
       ${row("Current site", currentSite ? linkify(currentSite) : "&mdash;")}
     </table>
     <div style="margin:22px 0;padding:16px 18px;border-radius:8px;background:rgba(224,87,28,.1)">
-      <p style="margin:0 0 8px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#E0571C">Their napkin math</p>
+      <p style="margin:0 0 8px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#7A2B33">Their napkin math</p>
       <p style="margin:0;font-size:15px;line-height:1.6;color:#3F5049">
-        Average ${escapeHtml(audience.units.one)} <b style="color:#13312C">$${figures.price}</b> &middot;
-        two a week is <b style="color:#13312C">${escapeHtml(figures.monthly)}</b> a month &middot;
-        build clears by <b style="color:#13312C">${escapeHtml(figures.payback)}</b>, then
-        <b style="color:#13312C">${escapeHtml(figures.surplus)}</b> a month.
+        Average ${escapeHtml(audience.units.one)} <b style="color:#0E3A2C">$${figures.price}</b> &middot;
+        two a week is <b style="color:#0E3A2C">${escapeHtml(figures.monthly)}</b> a month &middot;
+        build clears by <b style="color:#0E3A2C">${escapeHtml(figures.payback)}</b>, then
+        <b style="color:#0E3A2C">${escapeHtml(figures.surplus)}</b> a month.
       </p>
     </div>
     <p style="margin:0 0 8px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#5C6B64">Anything I should know</p>
@@ -246,7 +246,7 @@ function linkify(value: string): string {
     return safe;
   }
   const href = /^https?:\/\//i.test(value) ? value : `https://${value}`;
-  return `<a href="${escapeHtml(href)}" style="color:#E0571C">${safe}</a>`;
+  return `<a href="${escapeHtml(href)}" style="color:#7A2B33">${safe}</a>`;
 }
 
 function str(value: unknown): string {

@@ -73,8 +73,7 @@
 .submit {
   padding: 15px 28px;
   border: none;
-  border-radius: 999px;
-  background: var(--ink);
+    background: var(--ink);
   color: var(--cream);
   font-size: 15px;
   font-weight: 600;
@@ -121,11 +120,9 @@
 
 .laptop {
   border: 3px solid var(--ink);
-  border-radius: 10px;
   overflow: hidden;
   background: var(--ink);
   /* The flat offset shadow is the brand's, not a blur. */
-  box-shadow: 14px 14px 0 var(--ink-12);
 }
 
 .chrome {
@@ -179,7 +176,6 @@
   width: calc(var(--screen-w) * 1px + 10px);
   padding: 5px;
   border: 3px solid var(--ink);
-  border-radius: 18px;
   background: var(--ink);
   box-shadow: -8px 8px 0 var(--ink-12);
 }
@@ -193,7 +189,6 @@
 .phoneScreen {
   position: relative;
   aspect-ratio: 375 / 667;
-  border-radius: 12px;
   overflow: hidden;
   background: var(--cream);
 }
@@ -287,8 +282,7 @@
 .skelLine {
   display: block;
   height: 7px;
-  border-radius: 999px;
-  background: var(--ink-06);
+    background: var(--ink-06);
   animation: dc-shimmer 1.4s ease-in-out infinite;
 }
 
@@ -439,8 +433,7 @@
   gap: 12px;
   margin-top: clamp(20px, 2.4vw, 28px);
   padding: 18px 30px;
-  border-radius: 999px;
-  background: var(--ink);
+    background: var(--ink);
   color: var(--cream);
   font-size: 16px;
   font-weight: 600;

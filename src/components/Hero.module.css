@@ -20,8 +20,7 @@
   gap: 9px;
   padding: 8px 15px;
   border: 2px solid var(--ink);
-  border-radius: 999px;
-  font-family: var(--font-mono);
+    font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -106,8 +105,7 @@
   align-items: center;
   gap: 12px;
   padding: 19px 30px;
-  border-radius: 999px;
-  font-size: 16px;
+    font-size: 16px;
   font-weight: 600;
   transition: background 0.2s, color 0.2s;
 }
@@ -160,10 +158,7 @@
   max-width: 360px;
   padding: 26px 26px 22px;
   border: 3px solid var(--ink);
-  border-radius: 14px;
   background: var(--panel);
-  box-shadow: 14px 14px 0 var(--ink-12);
-  animation: dc-float 7s ease-in-out infinite;
 }
 
 .star {
@@ -254,8 +249,7 @@
   margin-top: 12px;
   padding: 8px;
   text-align: center;
-  border-radius: 999px;
-  background: var(--ac);
+    background: var(--ac);
   color: var(--ink);
   font-size: 11px;
   font-weight: 600;
@@ -298,8 +292,7 @@
 .chip {
   padding: 6px;
   border: 1px solid var(--ink-3);
-  border-radius: 999px;
-}
+  }
 
 .cardFooter {
   margin-top: 20px;

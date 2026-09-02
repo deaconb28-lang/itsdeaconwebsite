@@ -7,9 +7,16 @@ local businesses.
 
 | Route | What it is |
 |---|---|
-| `/` | A door, not a page. Two cards, one viewport, nothing to scroll. |
+| `/` | A painted fascia. The trades are ruled rows on a directory board, one viewport, nothing to scroll. |
 | `/restaurants` | The original pitch, moved here verbatim. |
 | `/small-business` | The same argument, made to someone who gets *found* rather than recommended. |
+
+`/` was two side-by-side cards, which is the pattern Upwork, PayPal, Loom,
+Sketch and — fatally — Wix all use to segment a signup. A shop that letters by
+hand cannot open on the same screen as the website builder it argues against,
+so the trades became ruled rows on a board: a device from the subject's own
+world rather than a SaaS onboarding step. The 01/02 numbering went with the
+cards, since it implied a sequence and these are alternatives.
 
 Each pitch is one page and one argument, and **the section order *is* the
 pitch**: a visitor sees the price before they are invited to look up their own
@@ -181,8 +188,36 @@ src/
     rate-limit.ts         in-memory fixed window
 ```
 
-Design tokens live once, in `globals.css`. The accent is a single custom
-property (`--ac`), so the site can be re-themed from one line.
+## The look
+
+A painted shopfront: a bottle-green fascia, cream lettering, gold leaf on the
+words that matter. That is the trade Deacon's own clients already understand,
+and it is what a one-person shop that letters by hand looks like.
+
+It replaced a warm-cream-and-terracotta palette set in Bricolage Grotesque and
+Instrument Serif — which, whatever its merits, is the single most common
+signature of an AI-generated design, down to the accent sitting a few degrees
+off `#D97757`. A site selling handmade work could not afford to look
+generated.
+
+**One rule governs the accent, and it is a material fact rather than a
+preference: gold leaf needs a dark ground.** `#D8A62B` on cream is 1.9:1 and
+unusable; on the green it is 5.5:1. So `--ac` is *not* fixed — it is oxblood
+by default and redefined to gold by anything that paints itself dark:
+
+```css
+.someDarkSection { background: var(--ink); --ac: var(--gold); }
+```
+
+**Set `--ac` whenever you set a dark background**, section or card. Forgetting
+it is silent and it is the failure this system is most likely to have: three
+elements shipped at 1.34:1 during the redesign for exactly that reason.
+
+Type is three faces and no more. Big Shoulders is drawn from Chicago's civic
+and commercial lettering — the condensed gothic a signpainter reaches for when
+a fascia is wider than it is tall. Public Sans is the US government's
+typeface, the right register for a page whose argument is that it will tell
+you the truth. The mono carries measurements only.
 
 ## Things worth knowing before changing it
 
@@ -203,8 +238,11 @@ property (`--ac`), so the site can be re-themed from one line.
   would be *less* honest than none — it is the exact cliché the "before" pane
   is making fun of. Its stock photo is rendered as the grey box with a filename
   that it actually is.
-- **The heavy border is the brand.** 3px is structural, 2px secondary. Don't
-  soften either to 1px.
+- **The keyline is the brand.** A painted sign has square corners and a
+  drawn border, so brand panels have neither a radius nor a shadow. The one
+  exception is genuine curvature — a phone frame, a dot — which stays round
+  because the real object is. Don't reintroduce pill buttons or the hard
+  offset shadow; both were removed on purpose.
 - **No-JS must stay readable.** The scroll-reveal hidden state is only applied
   once an inline script confirms JS is running.
 - `prefers-reduced-motion` stops the loops and the diner wave, and shows

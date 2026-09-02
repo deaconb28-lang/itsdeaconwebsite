@@ -81,7 +81,6 @@
   flex: 1;
   min-height: 0;
   border: 3px solid var(--ink);
-  border-radius: 10px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -143,7 +142,7 @@
   background: var(--ac);
   cursor: ew-resize;
   touch-action: none;
-  box-shadow: 0 0 0 1px rgba(19, 49, 44, 0.4);
+  box-shadow: 0 0 0 1px rgba(14, 58, 44, 0.4);
   z-index: 6;
 }
 
@@ -156,8 +155,7 @@
   align-items: center;
   gap: 6px;
   padding: 11px 18px;
-  border-radius: 999px;
-  background: var(--ac);
+    background: var(--ac);
   border: 3px solid var(--ink);
   color: var(--ink);
   font-family: var(--font-mono);

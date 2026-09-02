@@ -55,7 +55,7 @@ export function QuietPart() {
                 >
                   <DinerFigure
                     variant={talkedOut ? "solid" : "outline"}
-                    color="var(--ink)"
+                    color="var(--cream)"
                   />
                 </div>
               );
@@ -65,13 +65,13 @@ export function QuietPart() {
           <div className={styles.legend}>
             <span className={styles.legendItem}>
               <span className={styles.legendIcon}>
-                <DinerFigure variant="solid" color="var(--ink)" />
+                <DinerFigure variant="solid" color="var(--cream)" />
               </span>
               Talked out of going
             </span>
             <span className={`${styles.legendItem} ${styles.legendFaded}`}>
               <span className={styles.legendIcon}>
-                <DinerFigure variant="outline" color="var(--ink)" />
+                <DinerFigure variant="outline" color="var(--cream)" />
               </span>
               Still came in
             </span>

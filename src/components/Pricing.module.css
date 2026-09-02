@@ -32,7 +32,6 @@
   flex-wrap: wrap;
   padding: 14px 20px;
   border: 2px solid var(--ink);
-  border-radius: 10px;
   background: var(--panel);
 }
 
@@ -85,7 +84,6 @@
   display: flex;
   flex-direction: column;
   padding: 30px;
-  border-radius: 10px;
   transition: background 0.25s;
 }
 
@@ -98,6 +96,8 @@
 }
 
 .solid {
+  /* A dark panel in a light section: the accent flips here too. */
+  --ac: var(--gold);
   border: 3px solid var(--ink);
   background: var(--ink);
   color: var(--cream);
@@ -122,8 +122,7 @@
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  border-radius: 999px;
-}
+  }
 
 .badgeSolid {
   background: var(--ac);
@@ -239,7 +238,6 @@
 .valueNote {
   margin: 20px 0 0;
   padding: 12px 14px;
-  border-radius: 8px;
   background: var(--ink-07);
   font-size: 14px;
   line-height: 1.5;
@@ -258,8 +256,7 @@
   margin-top: 26px;
   text-align: center;
   padding: 15px;
-  border-radius: 999px;
-  font-weight: 600;
+    font-weight: 600;
   font-size: 15px;
   transition: background 0.2s, color 0.2s;
 }
@@ -286,7 +283,8 @@
 .ctaAccentToInk {
   margin-top: 20px;
   background: var(--ac);
-  color: var(--ink);
+  /* Oxblood is a dark ground: ink on it is 1.3:1, cream is 7.6:1. */
+  color: var(--cream);
 }
 
 .ctaAccentToInk:hover {

@@ -1,40 +1,40 @@
 import type { Metadata, Viewport } from "next";
 import {
-  Bricolage_Grotesque,
-  DM_Mono,
-  Instrument_Sans,
-  Instrument_Serif,
+  Big_Shoulders,
+  Public_Sans,
+  Spline_Sans_Mono,
 } from "next/font/google";
 import { siteUrl } from "@/lib/env";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
+/**
+ * A signwriter's three faces, and no more.
+ *
+ * Big Shoulders is drawn from Chicago's civic and commercial lettering — the
+ * condensed gothic a signpainter reaches for when a fascia is wider than it is
+ * tall. Public Sans is the US government's typeface, which is the right
+ * register for a page whose argument is that it will tell you the truth. The
+ * mono carries measurements only.
+ */
+const bigShoulders = Big_Shoulders({
   subsets: ["latin"],
-  weight: ["500", "700", "800"],
-  variable: "--font-bricolage",
+  weight: ["500", "600", "700", "800", "900"],
+  variable: "--font-display-src",
   display: "swap",
 });
 
-const instrumentSans = Instrument_Sans({
+const publicSans = Public_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
-  variable: "--font-instrument-sans",
+  variable: "--font-body-src",
   display: "swap",
 });
 
-const dmMono = DM_Mono({
+const splineMono = Spline_Sans_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
-  variable: "--font-dm-mono",
-  display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
+  variable: "--font-mono-src",
   display: "swap",
 });
 
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F8F1E3",
+  themeColor: "#0E3A2C",
   width: "device-width",
   initialScale: 1,
 };
@@ -77,7 +77,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${instrumentSans.variable} ${dmMono.variable} ${instrumentSerif.variable}`}
+      className={`${bigShoulders.variable} ${publicSans.variable} ${splineMono.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />

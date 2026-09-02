@@ -19,27 +19,32 @@ const META: PageMeta = {
 
 export const metadata = metadataFor(META);
 
-const PATHS = [
+const TRADES = [
   {
     href: "/restaurants",
-    kicker: "01",
-    label: "I run a restaurant",
-    detail: "Menus, hours, bookings, and the phone that never stops.",
+    label: "Restaurants",
+    detail: "Menus, hours, bookings, and the phone that never stops",
   },
   {
     href: "/small-business",
-    kicker: "02",
-    label: "I run a small business",
-    detail: "Trades, shops, studios, services — anywhere people search first.",
+    label: "Small businesses",
+    detail: "Trades, shops, studios, services — anywhere people search first",
   },
 ] as const;
 
 /**
- * A door, not a page.
+ * A fascia, not a page.
  *
- * Both pitches are long and specific, and neither works for the other reader.
- * Rather than water one down, this asks the only question that matters and
- * gets out of the way — one viewport, nothing to scroll.
+ * This was two cards side by side, which is the pattern Upwork, PayPal, Loom,
+ * Sketch and — fatally — Wix all use to segment a signup. A shop that letters
+ * by hand cannot open on the same screen as the website builder it is arguing
+ * against.
+ *
+ * So the trades are ruled rows on a painted directory board instead: label,
+ * rule, what's behind the door. That device comes from the subject's own world
+ * — a price list, a door plate, a board outside a shop — rather than from a
+ * SaaS onboarding flow. The numbering went with the cards; 01/02 implied a
+ * sequence, and these are alternatives, so the digits encoded nothing.
  */
 export default function Chooser() {
   return (
@@ -68,13 +73,13 @@ export default function Chooser() {
           By hand, one at a time. Which are you?
         </p>
 
-        <nav className={styles.paths} aria-label="Choose your pitch">
-          {PATHS.map((path) => (
-            <Link key={path.href} href={path.href} className={styles.path}>
-              <span className={styles.pathKicker}>{path.kicker}</span>
-              <span className={styles.pathLabel}>{path.label}</span>
-              <span className={styles.pathDetail}>{path.detail}</span>
-              <span className={styles.pathArrow} aria-hidden="true">
+        <nav className={styles.board} aria-label="Choose your trade">
+          {TRADES.map((trade) => (
+            <Link key={trade.href} href={trade.href} className={styles.row}>
+              <span className={styles.rowLabel}>{trade.label}</span>
+              <span className={styles.rowRule} aria-hidden="true" />
+              <span className={styles.rowDetail}>{trade.detail}</span>
+              <span className={styles.rowArrow} aria-hidden="true">
                 →
               </span>
             </Link>

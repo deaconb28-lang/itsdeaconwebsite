@@ -1,16 +1,57 @@
-/* The search-results fragment. The column around it comes from
-   Hero.module.css — only the card itself is new here. */
+/* The small-business hero runs on the fascia green, so the page picks up
+   where the front door left off. Everything structural still comes from
+   Hero.module.css — these are only the inversions that a dark ground needs,
+   plus the search-results card itself. */
+
+.heroDark {
+  background: var(--ink);
+  color: var(--cream);
+  --ac: var(--gold);
+  --muted: var(--cream-7);
+  --muted-2: var(--cream-6);
+  --faint: var(--cream-45);
+  --ink-12: var(--cream-2);
+  --ink-18: var(--cream-25);
+}
+
+/* The pill, the rules and the outline button are all drawn in ink by the
+   shared module; on this ground they have to be drawn in cream. */
+.heroDark [class*="pill"] {
+  border-color: var(--cream-45);
+}
+
+.heroDark [class*="primary"] {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.heroDark [class*="primary"]:hover {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.heroDark [class*="secondary"] {
+  border-color: var(--cream-45);
+  color: var(--cream);
+}
+
+.heroDark [class*="secondary"]:hover {
+  background: var(--cream);
+  color: var(--ink);
+}
 
 .card {
   position: relative;
   width: 100%;
   max-width: 380px;
   padding: 16px 18px 18px;
-  border: 3px solid var(--ink);
-  border-radius: 14px;
+  border: 3px solid var(--gold);
   background: var(--panel);
-  box-shadow: 14px 14px 0 var(--ink-12);
-  animation: dc-float 7s ease-in-out infinite;
+  color: var(--ink);
+  --ac: var(--oxblood);
+  --muted: #3c4f47;
+  --muted-2: #55685f;
+  --faint: #5a6d64;
 }
 
 .searchBar {
@@ -19,8 +60,7 @@
   gap: 9px;
   padding: 9px 14px;
   border: 2px solid var(--ink);
-  border-radius: 999px;
-  font-size: 13px;
+    font-size: 13px;
   color: var(--muted);
 }
 
@@ -64,8 +104,7 @@
   top: 11px;
   right: 0;
   padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--ac);
+    background: var(--ac);
   color: var(--cream);
   font-family: var(--font-mono);
   font-size: 8px;
@@ -136,8 +175,7 @@
 .chip {
   padding: 3px 9px;
   border: 1px solid var(--ink-18);
-  border-radius: 999px;
-  font-family: var(--font-mono);
+    font-family: var(--font-mono);
   font-size: 8.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;

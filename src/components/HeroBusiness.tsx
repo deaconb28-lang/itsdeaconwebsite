@@ -18,7 +18,7 @@ import styles from "./HeroBusiness.module.css";
  */
 export function HeroBusiness() {
   return (
-    <header id="top" className={hero.hero}>
+    <header id="top" className={`${hero.hero} ${styles.heroDark}`}>
       <div>
         <div className={hero.availability}>
           <span className={hero.pill}>

@@ -3,8 +3,11 @@
   top: 0;
   z-index: 80;
   padding: 14px 24px;
-  /* Content dissolves into the page rather than hitting a hard bar edge. */
-  background: linear-gradient(var(--cream) 62%, rgba(248, 241, 227, 0));
+  /* No ground of its own. The hero behind it may be cream or fascia green,
+     and a cream gradient laid over the green cut a hard band across the top
+     of the page. The capsule is opaque, so it is the only chrome needed. */
+  background: transparent;
+  pointer-events: none;
 }
 
 .capsule {
@@ -15,10 +18,8 @@
   gap: 10px;
   padding: 9px 10px 9px 18px;
   border: 2px solid var(--ink);
-  border-radius: 26px;
-  background: rgba(248, 241, 227, 0.92);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 6px 22px var(--ink-12);
+  background: var(--cream);
+  pointer-events: auto;
 }
 
 .brand {
@@ -88,14 +89,13 @@
 
 .link {
   padding: 8px 10px;
-  border-radius: 999px;
-  color: var(--muted);
+    color: var(--muted);
   white-space: nowrap;
   transition: background 0.2s, color 0.2s;
 }
 
 .link:hover {
-  background: rgba(19, 49, 44, 0.08);
+  background: rgba(14, 58, 44, 0.08);
   color: var(--ink);
 }
 
@@ -112,8 +112,7 @@
   align-items: center;
   gap: 9px;
   padding: 11px 20px;
-  border-radius: 999px;
-  background: var(--ink);
+    background: var(--ink);
   color: var(--cream);
   font-size: 14px;
   font-weight: 600;
@@ -130,11 +129,11 @@
 }
 
 .track {
+  pointer-events: auto;
   height: 2px;
   margin: 12px 4px 0;
   background: var(--ink-12);
-  border-radius: 999px;
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .bar {

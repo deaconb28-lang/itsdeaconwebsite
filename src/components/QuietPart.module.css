@@ -1,6 +1,8 @@
 .section {
-  background: var(--ac);
-  color: var(--ink);
+  background: var(--oxblood);
+  color: var(--cream);
+  /* Gold reads on this ground; oxblood would not. */
+  --ac: var(--gold);
   padding: var(--pad-y) var(--pad-x);
 }
 
@@ -27,7 +29,7 @@
   font-size: clamp(96px, 15vw, 240px);
   line-height: 0.82;
   letter-spacing: -0.05em;
-  color: var(--ink);
+  color: var(--cream);
 }
 
 .percent {
@@ -45,7 +47,7 @@
 }
 
 .highlight {
-  background: var(--ink-14);
+  background: var(--cream-2);
   padding: 0 0.12em;
 }
 
