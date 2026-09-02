@@ -7,7 +7,7 @@ local businesses.
 
 | Route | What it is |
 |---|---|
-| `/` | A painted fascia. The trades are ruled rows on a directory board, one viewport, nothing to scroll. |
+| `/` | The door. Black and white, one viewport, and a single mass of mercury that pools under whichever trade you reach for. |
 | `/restaurants` | The original pitch, moved here verbatim. |
 | `/small-business` | The same argument, made to someone who gets *found* rather than recommended. |
 
@@ -188,6 +188,16 @@ src/
     rate-limit.ts         in-memory fixed window
 ```
 
+**The door does not use the shopfront palette, on purpose.** `/` is black,
+white and one moving thing; the two pitch pages behind it are painted. The
+mercury is not decoration and not a background — it is the company. Deacon is
+one person taking three projects a month, so his attention is a single volume
+that cannot be in two places; reach for a trade and the whole mass flows over
+and pools under it. The merging is an SVG goo filter (blur, then crank alpha
+contrast) and the pooling is driven by `:has()`, so the page ships no
+JavaScript and stays a server component. Archivo is loaded in `page.tsx`
+rather than the root layout, so only that route pays for it.
+
 ## The look
 
 A painted shopfront: a bottle-green fascia, cream lettering, gold leaf on the
@@ -233,6 +243,12 @@ you the truth. The mono carries measurements only.
   about *neglect*: a 2016 drag-and-drop template nobody has opened since 2019,
   which looks fine at a glance and falls apart when you read it. Repeating the
   2004 gag would have been the same joke twice.
+- **Ridgeline is hi-vis yellow on near-black**, because that is what the trade
+  literally wears. It was cyan on navy, which read as a SaaS dashboard — and a
+  plumber is not one. Its hero is the phone number at display size, not the
+  booking widget: when the heating fails at 2am nobody wants an availability
+  picker, they want somebody to pick up. The booking panel stays, demoted to
+  the polite option.
 - **Ridgeline's panes are deliberately image-free.** A plumber has no
   equivalent of the food shot, and a stock photograph of a smiling tradesperson
   would be *less* honest than none — it is the exact cliché the "before" pane

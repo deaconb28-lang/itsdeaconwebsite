@@ -88,12 +88,12 @@
   /* Sample site — Ridgeline Plumbing & Heating. Also deliberately separate
      from the brand, and from Harbor & Vine: two demos that shared a palette
      would read as one template with the colours swapped. */
-  --rl-ink: #0e1922;
-  --rl-deep: #08111a;
-  --rl-paper: #f1efea;
-  --rl-signal: #19c2cf;
-  --rl-steel: #55636e;
-  --rl-line: rgba(241, 239, 234, 0.16);
+  --rl-ink: #12100c;
+  --rl-deep: #0a0906;
+  --rl-paper: #f4f2ec;
+  --rl-signal: #d7f205; /* hi-vis — what the trade actually wears */
+  --rl-steel: #6d6a5f;
+  --rl-line: rgba(244, 242, 236, 0.16);
 
   /* Shape. A painted sign has square corners and a keyline, not a pill. */
   --pad-y: clamp(60px, 7.4vw, 96px);

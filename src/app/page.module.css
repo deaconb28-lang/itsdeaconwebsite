@@ -1,215 +1,312 @@
-/* The fascia. One viewport, no scrolling — see the comment in page.tsx.
+/* The door. Black, white, and one moving thing — see page.tsx.
 
-   This is the only page that is dark ground by default, because it is the
-   painted board the whole site hangs off. Gold is legible here; oxblood is
-   not, so --ac is gold for everything inside. */
+   This page deliberately does not use the shopfront tokens. The rooms behind
+   it are painted; the door is not. Everything here is drawn from four values
+   and one typeface, because the mercury is the only thing meant to be
+   remembered and every other decision gets out of its way. */
 
 .page {
+  --void: #000;
+  --milk: #fff;
+  --ash: #8a8a8a;
+  --edge: rgba(255, 255, 255, 0.16);
+
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: clamp(20px, 3.4vh, 40px);
-  padding: clamp(20px, 3.4vw, 40px) var(--pad-x);
-  background: var(--ink);
-  color: var(--cream);
-  --ac: var(--gold);
+  gap: clamp(24px, 4vh, 48px);
+  padding: clamp(18px, 3vw, 34px) clamp(18px, 4vw, 54px);
+  background: var(--void);
+  color: var(--milk);
+  font-family: var(--font-door), system-ui, sans-serif;
 }
 
-/* --- top rule ------------------------------------------------------------- */
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* --- top line ------------------------------------------------------------- */
 
 .head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  padding-bottom: clamp(16px, 2vw, 22px);
-  border-bottom: var(--keyline) solid var(--cream-25);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 22px;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
+  font-family: var(--font-door), sans-serif;
+  font-weight: 900;
+  font-size: 17px;
+  letter-spacing: 0.04em;
 }
 
-.mark {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  background: var(--gold);
-  color: var(--ink);
+.status {
+  color: var(--ash);
 }
 
-.clocheIcon {
-  width: 17px;
-  height: 17px;
-  display: block;
-}
+/* --- the middle ----------------------------------------------------------- */
 
-.availability {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--cream-6);
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  background: var(--gold);
-  animation: dc-pulse 1.6s ease-in-out infinite;
-}
-
-/* --- the ask -------------------------------------------------------------- */
-
-.middle {
+.stage {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  flex: 1;
-  min-height: 0;
+  gap: clamp(22px, 4vh, 48px);
 }
 
-/* Signage gothic is condensed, so it takes a bigger cap height than a normal
-   grotesque before it reads as painted rather than set. */
 .headline {
   margin: 0;
-  max-width: 20ch;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(44px, 8vw, 120px);
-  line-height: 0.86;
-  letter-spacing: -0.005em;
-  text-transform: uppercase;
+  max-width: 24ch;
+  font-size: clamp(21px, 2.2vw, 32px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--milk);
+  text-wrap: balance;
 }
 
-.accent {
-  color: var(--gold);
+/* --- the choice, and the mass that follows it ----------------------------- */
+
+.choice {
+  position: relative;
+  isolation: isolate;
+  /* Room beneath the trades for the pool they stand in. */
+  padding-bottom: clamp(64px, 8vw, 104px);
+}
+
+/* The company. One volume of attention, sitting behind both trades until you
+   reach for one. */
+.mercury {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  bottom: 0;
+  width: min(560px, 74%);
+  height: clamp(130px, 15vw, 190px);
+  translate: -50% 0;
+  filter: url(#mercury);
+  transition: left 0.85s cubic-bezier(0.32, 0.9, 0.3, 1),
+    width 0.85s cubic-bezier(0.32, 0.9, 0.3, 1);
+}
+
+.drop {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--milk);
+}
+
+.d1 {
+  width: 32%;
+  aspect-ratio: 1;
+  left: 1%;
+  top: 30%;
+  animation: drift-a 13s ease-in-out infinite;
+}
+
+.d2 {
+  width: 30%;
+  aspect-ratio: 1;
+  left: 21%;
+  top: 10%;
+  animation: drift-b 17s ease-in-out infinite;
+}
+
+.d3 {
+  width: 31%;
+  aspect-ratio: 1;
+  left: 41%;
+  top: 33%;
+  animation: drift-c 15s ease-in-out infinite;
+}
+
+.d4 {
+  width: 28%;
+  aspect-ratio: 1;
+  left: 60%;
+  top: 12%;
+  animation: drift-b 19s ease-in-out infinite reverse;
+}
+
+.d5 {
+  width: 26%;
+  aspect-ratio: 1;
+  left: 76%;
+  top: 34%;
+  animation: drift-a 21s ease-in-out infinite reverse;
+}
+
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(5%, -7%);
+  }
+}
+
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-6%, 6%);
+  }
+}
+
+@keyframes drift-c {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(4%, 8%);
+  }
+}
+
+/* Reaching for a trade pulls the whole mass over and tightens it, because it
+   can only be in one place. :has() keeps this a server component. */
+.choice:has(.tradeLeft:hover) .mercury,
+.choice:has(.tradeLeft:focus-visible) .mercury {
+  left: 23%;
+  width: min(400px, 46%);
+}
+
+.choice:has(.tradeRight:hover) .mercury,
+.choice:has(.tradeRight:focus-visible) .mercury {
+  left: 74%;
+  width: min(460px, 52%);
+}
+
+.trades {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: clamp(10px, 2vw, 30px);
+}
+
+.tradeLeft,
+.tradeRight {
+  color: var(--milk);
+  font-weight: 900;
+  font-size: clamp(30px, 6.4vw, 96px);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  /* The words stand in the pool. Difference keeps every letter legible where
+     it breaks the surface, and is what makes it read as liquid metal rather
+     than a shape parked behind some text. */
+  mix-blend-mode: difference;
+  transition: opacity 0.4s ease;
+}
+
+.slash {
+  font-weight: 400;
+  font-size: clamp(26px, 5vw, 76px);
+  color: var(--ash);
+  mix-blend-mode: difference;
+}
+
+/* The one you are not reaching for steps back. */
+.choice:has(.tradeLeft:hover) .tradeRight,
+.choice:has(.tradeRight:hover) .tradeLeft {
+  opacity: 0.42;
 }
 
 .lede {
-  margin: clamp(16px, 2vh, 24px) 0 0;
-  font-size: clamp(17px, 1.6vw, 20px);
-  line-height: 1.5;
-  color: var(--cream-7);
+  margin: 0;
+  font-size: clamp(14px, 1.2vw, 17px);
+  color: var(--ash);
 }
 
-/* --- the board ------------------------------------------------------------
-   Two ruled rows, the way a shop lists what is behind the door. On hover the
-   row fills with gold — the one flourish on the page, and the reason nothing
-   else here is decorated. */
-
-.board {
-  margin-top: clamp(18px, 2.6vh, 32px);
-  border-top: var(--keyline) solid var(--cream-25);
-}
-
-.row {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  align-items: baseline;
-  gap: clamp(12px, 2vw, 26px);
-  padding: clamp(13px, 1.9vh, 22px) clamp(8px, 1.4vw, 18px);
-  border-bottom: var(--keyline) solid var(--cream-25);
-  color: var(--cream);
-  transition: background 0.18s var(--ease), color 0.18s var(--ease),
-    padding-left 0.22s var(--ease);
-}
-
-.row:hover,
-.row:focus-visible {
-  background: var(--gold);
-  color: var(--ink);
-  padding-left: clamp(16px, 2.4vw, 30px);
-}
-
-.rowLabel {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(28px, 4.4vw, 62px);
-  line-height: 0.95;
-  letter-spacing: 0.005em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-/* The rule that runs from the trade to its description, like a price list. */
-.rowRule {
-  height: 1px;
-  background: currentColor;
-  opacity: 0.28;
-}
-
-.rowDetail {
-  max-width: 34ch;
-  font-size: clamp(13px, 1.1vw, 15px);
-  line-height: 1.45;
-  color: inherit;
-  opacity: 0.72;
-}
-
-.rowArrow {
-  font-size: clamp(18px, 1.8vw, 24px);
-  opacity: 0.55;
-  transition: opacity 0.18s var(--ease);
-}
-
-.row:hover .rowArrow,
-.row:focus-visible .rowArrow {
-  opacity: 1;
-}
-
-/* Below the board's comfortable width the detail drops under the label rather
-   than squeezing the trade name, which must never wrap. */
-@media (max-width: 720px) {
-  .row {
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    row-gap: 6px;
-  }
-
-  .rowRule {
-    display: none;
-  }
-
-  .rowDetail {
-    grid-column: 1 / -1;
-  }
-}
-
-/* --- bottom rule ---------------------------------------------------------- */
+/* --- bottom line ---------------------------------------------------------- */
 
 .foot {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
   padding-top: clamp(14px, 2vw, 20px);
+  border-top: 1px solid var(--edge);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--cream-6);
+  color: var(--ash);
 }
 
 .email {
-  color: var(--cream-6);
-  transition: color 0.2s;
+  color: var(--milk);
+  transition: opacity 0.2s;
 }
 
 .email:hover {
-  color: var(--gold);
+  opacity: 0.6;
+}
+
+/* Below the point where two trades fit on one line they stack, and the mass
+   sits behind the pair rather than travelling between them. */
+@media (max-width: 720px) {
+  .trades {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .slash {
+    display: none;
+  }
+
+  .choice {
+    padding-bottom: 46px;
+  }
+
+  /* Stacked, the pool has to clear two lines rather than sit beside one, so it
+     gets shallower and stays under the pair. */
+  .mercury {
+    width: 88%;
+    height: 84px;
+  }
+
+  .mercury {
+    transition: translate 0.85s cubic-bezier(0.32, 0.9, 0.3, 1);
+  }
+
+  .choice:has(.tradeLeft:hover) .mercury,
+  .choice:has(.tradeLeft:focus-visible) .mercury {
+    left: 50%;
+    translate: -50% -44%;
+    width: 92%;
+  }
+
+  .choice:has(.tradeRight:hover) .mercury,
+  .choice:has(.tradeRight:focus-visible) .mercury {
+    left: 50%;
+    translate: -50% 0;
+    width: 92%;
+  }
+}
+
+/* The drift is ambient and the pooling is a response to a deliberate action,
+   so the drift goes and the pooling stays — just without the travel. */
+@media (prefers-reduced-motion: reduce) {
+  .drop {
+    animation: none !important;
+  }
+
+  .mercury {
+    transition: none;
+  }
 }

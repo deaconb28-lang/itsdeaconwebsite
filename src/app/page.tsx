@@ -1,7 +1,20 @@
+import { Archivo } from "next/font/google";
 import Link from "next/link";
 
 import { metadataFor, StructuredData, type PageMeta } from "@/lib/page-meta";
 import styles from "./page.module.css";
+
+/**
+ * Loaded here rather than in the root layout so only this route pays for it.
+ * The two pitch pages keep the shopfront's signage gothic; the door has its
+ * own voice, and its own weight budget.
+ */
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
+  variable: "--font-door",
+  display: "swap",
+});
 
 const META: PageMeta = {
   path: "/",
@@ -19,91 +32,95 @@ const META: PageMeta = {
 
 export const metadata = metadataFor(META);
 
-const TRADES = [
-  {
-    href: "/restaurants",
-    label: "Restaurants",
-    detail: "Menus, hours, bookings, and the phone that never stops",
-  },
-  {
-    href: "/small-business",
-    label: "Small businesses",
-    detail: "Trades, shops, studios, services — anywhere people search first",
-  },
-] as const;
-
 /**
- * A fascia, not a page.
+ * The door. Black, white, and one moving thing.
  *
- * This was two cards side by side, which is the pattern Upwork, PayPal, Loom,
- * Sketch and — fatally — Wix all use to segment a signup. A shop that letters
- * by hand cannot open on the same screen as the website builder it is arguing
- * against.
+ * The moving thing is not decoration and it is not a background: it is the
+ * company. Deacon is one person who takes three projects a month, so his
+ * attention is a single volume that cannot be in two places. It is drawn as a
+ * mass of mercury sitting behind the two trades, and when you reach for one
+ * the whole mass flows over and pools under it. Reach for the other and it
+ * leaves. That is the argument the page exists to make, made physical.
  *
- * So the trades are ruled rows on a painted directory board instead: label,
- * rule, what's behind the door. That device comes from the subject's own world
- * — a price list, a door plate, a board outside a shop — rather than from a
- * SaaS onboarding flow. The numbering went with the cards; 01/02 implied a
- * sequence, and these are alternatives, so the digits encoded nothing.
+ * The merging is an SVG goo filter — blur the drops, then crank alpha
+ * contrast so their soft edges snap back into one surface with a liquid neck
+ * between them. No library, no canvas, no JavaScript: the pooling is driven by
+ * :has() on the stage, so this page stays a server component.
  */
 export default function Chooser() {
   return (
-    <main className={styles.page}>
+    <main className={`${archivo.variable} ${styles.page}`}>
       <StructuredData meta={META} />
+      <GooFilter />
 
       <header className={styles.head}>
-        <span className={styles.brand}>
-          <span className={styles.mark}>
-            <Cloche />
-          </span>
-          Deacon
-        </span>
-        <span className={styles.availability}>
-          <span className={styles.dot} aria-hidden="true" />
-          Open for new projects
+        <span className={styles.brand}>Deacon</span>
+        <span className={styles.status}>
+          Open &middot; three projects a month
         </span>
       </header>
 
-      <div className={styles.middle}>
+      <div className={styles.stage}>
         <h1 className={styles.headline}>
-          I build websites for{" "}
-          <span className={styles.accent}>local businesses.</span>
+          I build websites for local businesses, by hand, one at a time.
         </h1>
-        <p className={styles.lede}>
-          By hand, one at a time. Which are you?
-        </p>
 
-        <nav className={styles.board} aria-label="Choose your trade">
-          {TRADES.map((trade) => (
-            <Link key={trade.href} href={trade.href} className={styles.row}>
-              <span className={styles.rowLabel}>{trade.label}</span>
-              <span className={styles.rowRule} aria-hidden="true" />
-              <span className={styles.rowDetail}>{trade.detail}</span>
-              <span className={styles.rowArrow} aria-hidden="true">
-                →
-              </span>
+        <div className={styles.choice}>
+          {/* Decorative: the trades below carry the meaning. */}
+          <div className={styles.mercury} aria-hidden="true">
+            <span className={`${styles.drop} ${styles.d1}`} />
+            <span className={`${styles.drop} ${styles.d2}`} />
+            <span className={`${styles.drop} ${styles.d3}`} />
+            <span className={`${styles.drop} ${styles.d4}`} />
+            <span className={`${styles.drop} ${styles.d5}`} />
+          </div>
+
+          <nav className={styles.trades} aria-label="Choose your trade">
+            <Link href="/restaurants" className={styles.tradeLeft}>
+              Restaurants
             </Link>
-          ))}
-        </nav>
+            <span className={styles.slash} aria-hidden="true">
+              /
+            </span>
+            <Link href="/small-business" className={styles.tradeRight}>
+              Small business
+            </Link>
+          </nav>
+        </div>
+
+        <p className={styles.lede}>
+          Free homepage first, before you owe me a cent.
+        </p>
       </div>
 
       <footer className={styles.foot}>
-        <span>Three projects a month — that&rsquo;s the whole company</span>
         <a href="mailto:hello@itsdeacon.com" className={styles.email}>
           hello@itsdeacon.com
         </a>
+        <span>Salem, Oregon</span>
       </footer>
     </main>
   );
 }
 
-/** The brand mark: a domed serving cover. */
-function Cloche() {
+/**
+ * Blur the drops, then push alpha through a steep curve. Soft overlapping
+ * edges land back above the cutoff together, which is what makes two circles
+ * read as one surface joined by a neck rather than two circles touching.
+ */
+function GooFilter() {
   return (
-    <svg viewBox="0 0 24 24" className={styles.clocheIcon} aria-hidden="true">
-      <circle cx="12" cy="4.6" r="1.5" fill="currentColor" />
-      <path d="M2.8 16.4a9.2 9.2 0 0 1 18.4 0Z" fill="currentColor" />
-      <rect x="1" y="18" width="22" height="2.6" rx="1.3" fill="currentColor" />
+    <svg className={styles.defs} aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="mercury">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur" />
+          <feColorMatrix
+            in="blur"
+            type="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -12"
+          />
+        </filter>
+      </defs>
     </svg>
   );
 }
