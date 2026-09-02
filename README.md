@@ -250,12 +250,25 @@ anything it forgets keeps its measured wording; if the counts don't match, the
 whole rewrite is thrown away. Without the key, or if the call fails, the
 measured wording ships as-is.
 
-Two things this deliberately refuses to do, because the section's whole
+Three things this deliberately refuses to do, because the section's whole
 argument is that it shows an owner the truth:
 
 - **Absence is only reported when the page actually rendered.** A JavaScript
   shell that hasn't run tells you nothing about whether ordering exists, so
   those findings are suppressed rather than guessed at.
+- **A load time is never reported from a single request.** It is the one
+  measurement here that is not a property of the page: the same unchanged site
+  answered in 8.3 seconds and in 485ms within a day of itself. The route takes
+  a second sample, but only when the first was slow enough to matter, and
+  reports the faster of the two — the claim most favourable to the owner that is
+  still true. Unconfirmed, the finding does not fire. A wrong "your site is
+  slow" is the most discrediting thing this can say, because the owner opens
+  their own site, watches it appear instantly, and stops believing the rest.
+- **A truncated read never reports an absence.** `readCapped` stops at 600 KB,
+  and a page that ended looks identical to a page we stopped reading once the
+  bytes are a string. Since the tel: link, the ordering link and the copyright
+  line all live at the bottom, a cut-off read is treated like a JavaScript
+  shell: recorded, never used as evidence of absence.
 - **A bot challenge is never analysed.** Hosts behind a shield answer a
   datacenter request with a CAPTCHA page that parses perfectly well. Without
   the check in `looksBlocked()` the audit would describe *that* page — telling

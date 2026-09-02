@@ -9,6 +9,7 @@ import {
   looksBlocked,
   rank,
   readSignals,
+  SLOW_MS,
   type Finding,
 } from "@/lib/audit";
 import { env } from "@/lib/env";
@@ -55,26 +56,29 @@ export async function POST(request: Request) {
     );
   }
 
-  let html = "";
-  let headers = new Headers();
-  let loadMs = 0;
-  let status = 0;
-  try {
-    const started = Date.now();
-    const response = await safeFetch(url, {
-      method: "GET",
-      headers: { "User-Agent": BROWSER_UA, Accept: "text/html,*/*" },
-      timeoutMs: 12_000,
-    });
-    headers = response.headers;
-    status = response.status;
-    html = await readCapped(response);
-    loadMs = Date.now() - started;
-  } catch {
+  const first = await fetchPage(url);
+  if (!first) {
     return NextResponse.json(
       { ok: false, error: "Nothing came back from that address." },
       { status: 502 },
     );
+  }
+  const { html, headers, status, truncated } = first;
+
+  // A second sample, but only when the first one was slow enough to produce a
+  // finding. A fast page needs no confirming — the finding will not fire either
+  // way — so the owner's server is spared the extra request in the common case,
+  // and the visitor is spared the wait.
+  let loadMs = first.loadMs;
+  let loadConfirmed = false;
+  if (loadMs > SLOW_MS) {
+    const second = await fetchPage(url);
+    if (second) {
+      // The faster of the two: the claim most favourable to them that is still
+      // true. If the second request fails we stay unconfirmed and say nothing.
+      loadMs = Math.min(loadMs, second.loadMs);
+      loadConfirmed = true;
+    }
   }
 
   if (looksBlocked(html, headers, status)) {
@@ -89,7 +93,10 @@ export async function POST(request: Request) {
     });
   }
 
-  const signals = readSignals(html, headers, url, loadMs, Buffer.byteLength(html));
+  const signals = readSignals(html, headers, url, loadMs, Buffer.byteLength(html), {
+    loadConfirmed,
+    truncated,
+  });
   const measured = rank(findingsFrom(signals, audience));
 
   // Nothing measurable is wrong. Say so — the honest zero is what makes the
@@ -239,14 +246,55 @@ function defaultSummary(findings: Finding[], audience: Audience): string {
   return "Not much wrong — and what there is, is the cheap kind to fix.";
 }
 
-async function readCapped(response: Response): Promise<string> {
-  if (!response.body) return "";
+type Fetched = {
+  html: string;
+  headers: Headers;
+  status: number;
+  loadMs: number;
+  truncated: boolean;
+};
+
+/** One timed read of the page, or null if it could not be read at all. */
+async function fetchPage(url: string): Promise<Fetched | null> {
+  try {
+    const started = Date.now();
+    const response = await safeFetch(url, {
+      method: "GET",
+      headers: { "User-Agent": BROWSER_UA, Accept: "text/html,*/*" },
+      timeoutMs: 12_000,
+    });
+    const { html, truncated } = await readCapped(response);
+    return {
+      html,
+      headers: response.headers,
+      status: response.status,
+      loadMs: Date.now() - started,
+      truncated,
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function readCapped(
+  response: Response,
+): Promise<{ html: string; truncated: boolean }> {
+  if (!response.body) return { html: "", truncated: false };
   const reader = response.body.getReader();
   const chunks: Uint8Array[] = [];
   let total = 0;
+  // `truncated` stays true only if the loop stopped on the cap rather than on
+  // the end of the document. Whoever reads these signals has to know the
+  // difference: a page that ended and a page we stopped reading look identical
+  // once the bytes are in a string, and half of what this file measures is the
+  // absence of something that lives at the bottom of the page.
+  let truncated = true;
   while (total < MAX_HTML_BYTES) {
     const { done, value } = await reader.read();
-    if (done) break;
+    if (done) {
+      truncated = false;
+      break;
+    }
     chunks.push(value);
     total += value.byteLength;
   }
@@ -258,5 +306,8 @@ async function readCapped(response: Response): Promise<string> {
     merged.set(chunk, offset);
     offset += chunk.byteLength;
   }
-  return new TextDecoder("utf-8", { fatal: false }).decode(merged);
+  return {
+    html: new TextDecoder("utf-8", { fatal: false }).decode(merged),
+    truncated,
+  };
 }

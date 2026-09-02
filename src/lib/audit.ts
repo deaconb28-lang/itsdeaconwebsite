@@ -12,6 +12,13 @@ import type { Audience } from "./audience";
 
 export type Severity = "high" | "medium" | "low";
 
+/**
+ * Above this, a page is slow enough to be worth telling an owner about.
+ * Exported because the route needs it: it only spends a second request
+ * confirming a reading that would actually produce a finding.
+ */
+export const SLOW_MS = 2500;
+
 export type Finding = {
   /** Stable key, so the model can reorder findings but never invent one. */
   id: string;
@@ -23,6 +30,26 @@ export type Finding = {
 
 export type Signals = {
   loadMs: number;
+  /**
+   * Whether `loadMs` was corroborated by a second request.
+   *
+   * One fetch measures the network between here and the host at least as much
+   * as it measures the site. The same unchanged page has answered in 485ms and
+   * in 8.3 seconds within a day — quoting the 8.3 would have told an owner
+   * their site is broken when it answers in half a second. An unconfirmed
+   * reading is still recorded, because the number is useful; it just never
+   * becomes a finding.
+   */
+  loadConfirmed: boolean;
+  /**
+   * The body was cut off before the end of the document.
+   *
+   * Absence proves nothing then, for the same reason `clientRendered` means it
+   * proves nothing: a tel: link, an ordering link and the copyright line all
+   * live at the bottom of a page, which is exactly the part a truncated read
+   * does not have.
+   */
+  truncated: boolean;
   htmlBytes: number;
   https: boolean;
   hasViewport: boolean;
@@ -81,6 +108,13 @@ export function readSignals(
   url: string,
   loadMs: number,
   htmlBytes: number,
+  /**
+   * How much the caller trusts what it handed over. Both default to the
+   * pessimistic answer: a caller that says nothing gets no timing finding and
+   * no absence findings, because silence is the only safe default when the
+   * alternative is telling an owner something untrue about their business.
+   */
+  quality: { loadConfirmed?: boolean; truncated?: boolean } = {},
 ): Signals {
   const lower = html.toLowerCase();
   const thisYear = new Date().getUTCFullYear();
@@ -117,6 +151,8 @@ export function readSignals(
 
   return {
     loadMs,
+    loadConfirmed: quality.loadConfirmed ?? false,
+    truncated: quality.truncated ?? false,
     htmlBytes,
     https: url.startsWith("https://"),
     hasViewport: /<meta[^>]+name=["']viewport["']/i.test(html),
@@ -200,7 +236,13 @@ export function findingsFrom(signals: Signals, audience: Audience): Finding[] {
     );
   }
 
-  if (signals.loadMs > 2500) {
+  // Deliberately silent on an unconfirmed reading. A single timing is the one
+  // measurement here that is not a property of the page at all, and a wrong
+  // "your site is slow" is the most discrediting thing this can say: the owner
+  // opens their own site, sees it appear instantly, and stops believing the
+  // rest. `loadMs` is the faster of the samples taken, so the number quoted is
+  // the one most favourable to them that is still true.
+  if (signals.loadConfirmed && signals.loadMs > SLOW_MS) {
     add(
       "slow",
       "It takes a moment to load",
@@ -211,7 +253,12 @@ export function findingsFrom(signals: Signals, audience: Audience): Finding[] {
 
   // Only worth saying when a number is actually printed on the page: that is
   // the case where a diner can see it and still cannot tap it.
-  if (!signals.hasTelLink && signals.hasPhoneNumber && !signals.clientRendered) {
+  if (
+    !signals.hasTelLink &&
+    signals.hasPhoneNumber &&
+    !signals.clientRendered &&
+    !signals.truncated
+  ) {
     add(
       "no-tap-call",
       "The phone number isn't tappable",
@@ -220,7 +267,7 @@ export function findingsFrom(signals: Signals, audience: Audience): Finding[] {
     );
   }
 
-  if (signals.staleYear !== null) {
+  if (signals.staleYear !== null && !signals.truncated) {
     add(
       "stale",
       `The footer still says ${signals.staleYear}`,
@@ -234,7 +281,7 @@ export function findingsFrom(signals: Signals, audience: Audience): Finding[] {
     signals.hasBookingLink ||
     (!restaurants && signals.hasContactAction);
 
-  if (!canAct && !signals.clientRendered) {
+  if (!canAct && !signals.clientRendered && !signals.truncated) {
     add(
       "no-action",
       restaurants ? "Nothing to book or order" : "No way to actually hire you",
