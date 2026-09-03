@@ -1,3 +1,4 @@
+import type { Viewport } from "next";
 import { Archivo } from "next/font/google";
 import Link from "next/link";
 
@@ -31,6 +32,13 @@ const META: PageMeta = {
 };
 
 export const metadata = metadataFor(META);
+
+/**
+ * The root layout paints the browser chrome in the shopfront's green, which is
+ * right above a painted page and wrong above this one. Next merges a route's
+ * viewport over the layout's, so only the door goes black.
+ */
+export const viewport: Viewport = { themeColor: "#000000" };
 
 /**
  * The door. Black, white, and one moving thing.
