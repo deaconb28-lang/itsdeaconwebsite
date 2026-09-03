@@ -96,8 +96,11 @@
 }
 
 .solid {
-  /* A dark panel in a light section: the accent flips here too. */
+  /* A dark panel in a light section. It has to declare the WHOLE ground, not
+     just the accent: --ac alone left --ground inheriting #fff from the light
+     section, so every fill-with-accent inside went white on white. */
   --ac: #fff;
+  --ground: #000;
   border: 3px solid var(--ink);
   background: var(--ink);
   color: var(--cream);
@@ -125,8 +128,8 @@
   }
 
 .badgeSolid {
-  background: var(--ac);
-  color: var(--ground);
+  background: var(--brand);
+  color: var(--on-brand);
 }
 
 .badgeOutline {

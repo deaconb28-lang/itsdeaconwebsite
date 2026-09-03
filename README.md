@@ -190,9 +190,24 @@ src/
 
 ## The look
 
-Black, white, and one grey. There is no brand colour: emphasis is carried by
-inversion, scale and weight instead of hue, and the homepage sets the register
-the rest of the site follows.
+Black, white, one grey — and one colour per room.
+
+**Colour says which room you are in, and nothing else.** Type stays black and
+white everywhere; colour lives only in structure — a filled headline phrase, a
+bar, a badge, the figures a statistic is actually about. That is what keeps the
+starkness while giving each pitch an identity.
+
+The assignment is a rule rather than a preference: **each page's colour sits
+near the complement of its own demo pane**, so Deacon's identity can never
+muddle with the client's. Harbor & Vine is terracotta, so `/restaurants` is
+blue `#2B4BFF`. Ridgeline is hi-vis yellow-green, so `/small-business` is
+cherry `#E5124B`. Both take white text at 4.5:1 and both stay visible as a mark
+on `#000` and `#fff` — a narrow set, on a site with two grounds.
+
+On the door the mercury is white at rest and takes the room's colour as you
+reach for a trade: the liquid turns into the page you are about to open.
+
+Pages declare their room with `data-brand`; `--brand` resolves from there.
 
 **Two rules, both constraints rather than preferences.**
 
@@ -202,8 +217,13 @@ the rest of the site follows.
    inside a dark section). Because the accent equals the foreground, **anything
    that fills with `--ac` must put `--ground` on top, never `--ink`** — on a
    light section those are the same colour and the text vanishes. Ten places
-   shipped that way during the conversion and the contrast audit caught all of
-   them; it is the mistake this system invites.
+   shipped that way during the conversion.
+
+   **A panel that flips the ground must declare the whole set, not just
+   `--ac`.** `.solid` in `Pricing.module.css` set the accent and left `--ground`
+   inheriting `#fff` from the light section around it, which made its badge and
+   its call to action white on white. Set `--ac` and `--ground` together, or use
+   `data-ground`.
 2. **`#767676` is the only grey that clears 4.5:1 against both `#000` and
    `#fff`.** Anything lighter fails on white, anything darker fails on black.
    Copy on a ground that could be either uses `--muted-2`; only copy that is

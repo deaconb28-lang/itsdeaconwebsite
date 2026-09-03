@@ -90,21 +90,27 @@
   translate: -50% 0;
   color: var(--milk);
   transition: left 0.85s cubic-bezier(0.32, 0.9, 0.3, 1),
-    width 0.85s cubic-bezier(0.32, 0.9, 0.3, 1);
+    width 0.85s cubic-bezier(0.32, 0.9, 0.3, 1),
+    color 0.5s var(--ease);
 }
 
 /* Reaching for a trade pulls the whole mass over and tightens it, because it
-   can only be in one place. :has() keeps this a server component. */
+   can only be in one place. :has() keeps this a server component.
+
+   It also takes on that room's colour — the liquid turns into the page you
+   are about to open. At rest it is white, because nothing has been chosen. */
 .choice:has(.tradeLeft:hover) .mercury,
 .choice:has(.tradeLeft:focus-visible) .mercury {
   left: 23%;
   width: min(400px, 46%);
+  color: var(--brand-restaurants);
 }
 
 .choice:has(.tradeRight:hover) .mercury,
 .choice:has(.tradeRight:focus-visible) .mercury {
   left: 74%;
   width: min(460px, 52%);
+  color: var(--brand-business);
 }
 
 .trades {
@@ -121,9 +127,10 @@
   font-size: clamp(30px, 6.4vw, 96px);
   line-height: 0.92;
   letter-spacing: -0.045em;
-  /* The words stand in the pool. Difference keeps every letter legible where
-     it breaks the surface, and is what makes it read as liquid metal rather
-     than a shape parked behind some text. */
+  /* The words stand in the pool. Difference keeps every letter legible
+     wherever it breaks the surface — over white it reads black, over the
+     room's colour it reads as that colour's complement, and both stay
+     readable because the pool is always far from the type's own value. */
   mix-blend-mode: difference;
   transition: opacity 0.4s ease;
 }

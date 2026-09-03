@@ -47,7 +47,10 @@
 }
 
 .highlight {
-  background: var(--cream-2);
+  background: var(--brand);
+  color: var(--on-brand);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
   padding: 0 0.12em;
 }
 
@@ -77,6 +80,12 @@
   gap: clamp(4px, 0.7vw, 9px) clamp(3px, 0.55vw, 7px);
 }
 
+/* The 68 the statistic is actually about. Colouring only them turns a grid of
+   figures into a picture of the claim. */
+.diner {
+  color: var(--brand);
+}
+
 .diner svg,
 .dinerFaded svg {
   display: block;
@@ -85,6 +94,7 @@
 }
 
 .dinerFaded {
+  color: var(--cream);
   opacity: 0.4;
 }
 
@@ -106,6 +116,7 @@
 }
 
 .legendIcon {
+  color: var(--brand);
   width: 11px;
 }
 

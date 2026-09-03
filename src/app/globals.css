@@ -44,6 +44,23 @@
   --ac: #000;
   --ground: #fff;
 
+  /* Colour says which room you are in, and nothing else.
+     Type stays black and white everywhere; colour lives in the structure —
+     a filled headline phrase, a bar, a badge, a mark. That is what keeps the
+     starkness while giving each pitch an identity.
+
+     The assignment is a rule, not a preference: each page's colour is near
+     the complement of its own demo pane, so Deacon's identity can never
+     muddle with the client's. Harbor & Vine is terracotta, so restaurants
+     are blue. Ridgeline is hi-vis yellow-green, so small business is cherry.
+
+     Both take white text at 4.5:1 and both stay visible as a mark on #000
+     and #fff, which is the narrow set that survives a site with two grounds. */
+  --brand-restaurants: #2b4bff;
+  --brand-business: #e5124b;
+  --brand: var(--ac);
+  --on-brand: #fff;
+
   /* Alpha derivations on white */
   --ink-04: rgba(0, 0, 0, 0.04);
   --ink-06: rgba(0, 0, 0, 0.06);
@@ -113,6 +130,15 @@
   --font-display: var(--font-display-src), "Archivo", system-ui, sans-serif;
   --font-body: var(--font-body-src), "Archivo", system-ui, sans-serif;
   --font-mono: var(--font-mono-src), "Spline Sans Mono", ui-monospace, monospace;
+}
+
+/* Each pitch declares its room, and the colour follows. */
+[data-brand="restaurants"] {
+  --brand: var(--brand-restaurants);
+}
+
+[data-brand="small-business"] {
+  --brand: var(--brand-business);
 }
 
 /* A light island inside a dark section — the napkin, a card — resets it. */

@@ -31,7 +31,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--ac);
+  background: var(--brand);
   animation: dc-pulse 1.6s ease-in-out infinite;
 }
 
@@ -82,9 +82,10 @@
 }
 
 .accent {
-  /* No hue left to carry emphasis, so the phrase inverts into a block. */
-  background: var(--ac);
-  color: var(--ground);
+  /* The phrase is a filled block. Colour lives in the fill; the type on it
+     stays plain white, which is what keeps this stark rather than loud. */
+  background: var(--brand);
+  color: var(--on-brand);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   padding: 0 0.14em;

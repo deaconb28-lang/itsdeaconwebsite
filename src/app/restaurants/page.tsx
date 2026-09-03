@@ -47,6 +47,8 @@ export const metadata = metadataFor(META);
 export default function Restaurants() {
   return (
     <SiteStateProvider audience={RESTAURANTS}>
+      {/* The room, and therefore the colour. */}
+      <div data-brand="restaurants">
       <StructuredData meta={META} />
       <Effects />
       <Nav />
@@ -65,6 +67,7 @@ export default function Restaurants() {
       <SiteFooter
         crossLink={{ href: "/small-business", label: "Not a restaurant?" }}
       />
+      </div>
     </SiteStateProvider>
   );
 }
