@@ -48,10 +48,10 @@
   border: 3px solid var(--cream);
   background: var(--panel);
   color: var(--ink);
-  --ac: #000;
-  --muted: #3c4f47;
-  --muted-2: #55685f;
-  --faint: #5a6d64;
+  /* A light island in a dark hero. It carried three hand-written greys from
+     the old palette, all green-tinted and all passing contrast — which is
+     why the audit never flagged them. data-ground="light" resets the whole
+     set from one place instead. */
 }
 
 .searchBar {

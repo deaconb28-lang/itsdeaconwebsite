@@ -69,7 +69,7 @@ export function HeroBusiness() {
 /** Three local results, as somebody looking for you actually sees them. */
 function SearchResults() {
   return (
-    <div className={styles.card}>
+    <div data-ground="light" className={styles.card}>
       <div className={styles.searchBar}>
         <span className={styles.glass} aria-hidden="true">
           ⌕
