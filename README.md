@@ -7,7 +7,7 @@ local businesses.
 
 | Route | What it is |
 |---|---|
-| `/` | The door. Black and white, one viewport, and a single mass of mercury that pools under whichever trade you reach for. |
+| `/` | The door. One viewport, and a single mass of mercury that pools under whichever trade you reach for. |
 | `/restaurants` | The original pitch, moved here verbatim. |
 | `/small-business` | The same argument, made to someone who gets *found* rather than recommended. |
 
@@ -188,46 +188,52 @@ src/
     rate-limit.ts         in-memory fixed window
 ```
 
-**The door does not use the shopfront palette, on purpose.** `/` is black,
-white and one moving thing; the two pitch pages behind it are painted. The
-mercury is not decoration and not a background — it is the company. Deacon is
-one person taking three projects a month, so his attention is a single volume
-that cannot be in two places; reach for a trade and the whole mass flows over
-and pools under it. The merging is an SVG goo filter (blur, then crank alpha
-contrast) and the pooling is driven by `:has()`, so the page ships no
-JavaScript and stays a server component. Archivo is loaded in `page.tsx`
-rather than the root layout, so only that route pays for it.
-
 ## The look
 
-A painted shopfront: a bottle-green fascia, cream lettering, gold leaf on the
-words that matter. That is the trade Deacon's own clients already understand,
-and it is what a one-person shop that letters by hand looks like.
+Black, white, and one grey. There is no brand colour: emphasis is carried by
+inversion, scale and weight instead of hue, and the homepage sets the register
+the rest of the site follows.
 
-It replaced a warm-cream-and-terracotta palette set in Bricolage Grotesque and
-Instrument Serif — which, whatever its merits, is the single most common
-signature of an AI-generated design, down to the accent sitting a few degrees
-off `#D97757`. A site selling handmade work could not afford to look
-generated.
+**Two rules, both constraints rather than preferences.**
 
-**One rule governs the accent, and it is a material fact rather than a
-preference: gold leaf needs a dark ground.** `#D8A62B` on cream is 1.9:1 and
-unusable; on the green it is 5.5:1. So `--ac` is *not* fixed — it is oxblood
-by default and redefined to gold by anything that paints itself dark:
+1. **`--ac` is the full inverse of its ground** — black on light, white on dark
+   — so it is redefined per section, not fixed. Sections declare themselves
+   with `data-ground="dark"` (or `"light"`, for an island like the napkin
+   inside a dark section). Because the accent equals the foreground, **anything
+   that fills with `--ac` must put `--ground` on top, never `--ink`** — on a
+   light section those are the same colour and the text vanishes. Ten places
+   shipped that way during the conversion and the contrast audit caught all of
+   them; it is the mistake this system invites.
+2. **`#767676` is the only grey that clears 4.5:1 against both `#000` and
+   `#fff`.** Anything lighter fails on white, anything darker fails on black.
+   Copy on a ground that could be either uses `--muted-2`; only copy that is
+   definitely on light may use the darker `--muted`.
 
-```css
-.someDarkSection { background: var(--ink); --ac: var(--gold); }
-```
+Accent phrases are filled blocks rather than coloured text. A block's height is
+its line box, so any headline containing one needs `line-height` at or above
+about 1.05 — below that the blocks overlap the line above.
 
-**Set `--ac` whenever you set a dark background**, section or card. Forgetting
-it is silent and it is the failure this system is most likely to have: three
-elements shipped at 1.34:1 during the redesign for exactly that reason.
+Type is two faces. Archivo carries display and body both, because a monochrome
+page has no hue to separate them and mixing families as well as weights fights
+the one-material feeling. The mono carries measurements and labels only.
 
-Type is three faces and no more. Big Shoulders is drawn from Chicago's civic
-and commercial lettering — the condensed gothic a signpainter reaches for when
-a fascia is wider than it is tall. Public Sans is the US government's
-typeface, the right register for a page whose argument is that it will tell
-you the truth. The mono carries measurements only.
+**The only colour on the site belongs to the clients.** Harbor & Vine is
+terracotta and Ridgeline is hi-vis, and against black and white they detonate —
+which is the point. Those are other people's businesses and they are supposed
+to look like themselves, not like Deacon.
+
+### The mercury
+
+The homepage's liquid (`src/components/Mercury.tsx`) is the company: one person
+taking three projects a month is a single volume of attention that cannot be in
+two places, so the mass pools under whichever trade you reach for and leaves
+the other. The merging is an SVG goo filter — blur, then crank alpha contrast —
+and the pooling runs on `:has()`, so the page ships no JavaScript.
+
+**It appears there and nowhere else.** It was tried behind About's "It's just
+me. On purpose." — the same argument in words — and cut: it sat over the lede
+and made the section harder to read. Repeating the one thing a site is
+remembered for is how a signature becomes wallpaper.
 
 ## Things worth knowing before changing it
 
@@ -254,8 +260,8 @@ you the truth. The mono carries measurements only.
   would be *less* honest than none — it is the exact cliché the "before" pane
   is making fun of. Its stock photo is rendered as the grey box with a filename
   that it actually is.
-- **The keyline is the brand.** A painted sign has square corners and a
-  drawn border, so brand panels have neither a radius nor a shadow. The one
+- **The keyline is the brand.** Panels have a drawn border and neither a
+  radius nor a shadow. The one
   exception is genuine curvature — a phone frame, a dot — which stays round
   because the real object is. Don't reintroduce pill buttons or the hard
   offset shadow; both were removed on purpose.

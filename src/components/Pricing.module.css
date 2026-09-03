@@ -97,7 +97,7 @@
 
 .solid {
   /* A dark panel in a light section: the accent flips here too. */
-  --ac: var(--gold);
+  --ac: #fff;
   border: 3px solid var(--ink);
   background: var(--ink);
   color: var(--cream);
@@ -126,7 +126,7 @@
 
 .badgeSolid {
   background: var(--ac);
-  color: var(--ink);
+  color: var(--ground);
 }
 
 .badgeOutline {
@@ -272,7 +272,7 @@
 
 .ctaAccentToCream {
   background: var(--ac);
-  color: var(--ink);
+  color: var(--ground);
 }
 
 .ctaAccentToCream:hover {

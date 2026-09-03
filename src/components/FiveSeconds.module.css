@@ -1,7 +1,7 @@
 .section {
-  background: var(--oxblood);
+  background: var(--ink);
   color: var(--cream);
-  --ac: var(--gold);
+  --ac: #fff;
   padding: var(--pad-y) var(--pad-x);
 }
 
@@ -113,7 +113,7 @@
   display: block;
   height: 100%;
   min-width: 3px;
-  background: var(--gold);
+  background: var(--cream);
 }
 
 /* Marks halfway on the 57% track, so "more than half" is visible, not asserted. */

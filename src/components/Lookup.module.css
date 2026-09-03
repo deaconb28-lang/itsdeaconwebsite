@@ -84,7 +84,7 @@
 
 .submit:hover:not(:disabled) {
   background: var(--ac);
-  color: var(--ink);
+  color: var(--ground);
 }
 
 .submit:disabled {
@@ -442,5 +442,5 @@
 
 .fix:hover {
   background: var(--ac);
-  color: var(--ink);
+  color: var(--ground);
 }

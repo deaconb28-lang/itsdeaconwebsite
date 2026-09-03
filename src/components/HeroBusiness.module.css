@@ -6,7 +6,7 @@
 .heroDark {
   background: var(--ink);
   color: var(--cream);
-  --ac: var(--gold);
+  --ac: #fff;
   --muted: var(--cream-7);
   --muted-2: var(--cream-6);
   --faint: var(--cream-45);
@@ -21,7 +21,7 @@
 }
 
 .heroDark [class*="primary"] {
-  background: var(--gold);
+  background: var(--cream);
   color: var(--ink);
 }
 
@@ -45,10 +45,10 @@
   width: 100%;
   max-width: 380px;
   padding: 16px 18px 18px;
-  border: 3px solid var(--gold);
+  border: 3px solid var(--cream);
   background: var(--panel);
   color: var(--ink);
-  --ac: var(--oxblood);
+  --ac: #000;
   --muted: #3c4f47;
   --muted-2: #55685f;
   --faint: #5a6d64;

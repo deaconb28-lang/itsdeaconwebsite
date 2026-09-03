@@ -20,7 +20,7 @@ const SUPPORTING = [
 
 export function QuietPart() {
   return (
-    <section id="why" className={styles.section}>
+    <section id="why" data-ground="dark" className={styles.section}>
       <div className={styles.grid}>
         <div>
           <p className={styles.eyebrow}>The quiet part</p>

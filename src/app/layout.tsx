@@ -1,31 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Big_Shoulders,
-  Public_Sans,
-  Spline_Sans_Mono,
-} from "next/font/google";
+import { Archivo, Spline_Sans_Mono } from "next/font/google";
 import { siteUrl } from "@/lib/env";
 import "./globals.css";
 
 /**
- * A signwriter's three faces, and no more.
+ * Two faces, and no more.
  *
- * Big Shoulders is drawn from Chicago's civic and commercial lettering — the
- * condensed gothic a signpainter reaches for when a fascia is wider than it is
- * tall. Public Sans is the US government's typeface, which is the right
- * register for a page whose argument is that it will tell you the truth. The
- * mono carries measurements only.
+ * Archivo carries both roles — 900 for display, 400/500 for reading — because
+ * a monochrome page has no hue to separate them and mixing families as well as
+ * weights would fight the one-material feeling the homepage set. The mono
+ * carries measurements and labels only.
  */
-const bigShoulders = Big_Shoulders({
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "900"],
+  style: ["normal", "italic"],
   variable: "--font-display-src",
   display: "swap",
 });
 
-const publicSans = Public_Sans({
+const archivoBody = Archivo({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   variable: "--font-body-src",
   display: "swap",
@@ -59,7 +55,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0E3A2C",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
 };
@@ -77,7 +73,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bigShoulders.variable} ${publicSans.variable} ${splineMono.variable}`}
+      className={`${archivo.variable} ${archivoBody.variable} ${splineMono.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />

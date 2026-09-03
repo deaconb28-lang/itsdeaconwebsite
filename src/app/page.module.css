@@ -19,14 +19,7 @@
   padding: clamp(18px, 3vw, 34px) clamp(18px, 4vw, 54px);
   background: var(--void);
   color: var(--milk);
-  font-family: var(--font-door), system-ui, sans-serif;
-}
-
-.defs {
-  position: absolute;
-  width: 0;
-  height: 0;
-  pointer-events: none;
+  font-family: var(--font-display);
 }
 
 /* --- top line ------------------------------------------------------------- */
@@ -44,7 +37,7 @@
 }
 
 .brand {
-  font-family: var(--font-door), sans-serif;
+  font-family: var(--font-display);
   font-weight: 900;
   font-size: 17px;
   letter-spacing: 0.04em;
@@ -95,85 +88,9 @@
   width: min(560px, 74%);
   height: clamp(130px, 15vw, 190px);
   translate: -50% 0;
-  filter: url(#mercury);
+  color: var(--milk);
   transition: left 0.85s cubic-bezier(0.32, 0.9, 0.3, 1),
     width 0.85s cubic-bezier(0.32, 0.9, 0.3, 1);
-}
-
-.drop {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--milk);
-}
-
-.d1 {
-  width: 32%;
-  aspect-ratio: 1;
-  left: 1%;
-  top: 30%;
-  animation: drift-a 13s ease-in-out infinite;
-}
-
-.d2 {
-  width: 30%;
-  aspect-ratio: 1;
-  left: 21%;
-  top: 10%;
-  animation: drift-b 17s ease-in-out infinite;
-}
-
-.d3 {
-  width: 31%;
-  aspect-ratio: 1;
-  left: 41%;
-  top: 33%;
-  animation: drift-c 15s ease-in-out infinite;
-}
-
-.d4 {
-  width: 28%;
-  aspect-ratio: 1;
-  left: 60%;
-  top: 12%;
-  animation: drift-b 19s ease-in-out infinite reverse;
-}
-
-.d5 {
-  width: 26%;
-  aspect-ratio: 1;
-  left: 76%;
-  top: 34%;
-  animation: drift-a 21s ease-in-out infinite reverse;
-}
-
-@keyframes drift-a {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(5%, -7%);
-  }
-}
-
-@keyframes drift-b {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(-6%, 6%);
-  }
-}
-
-@keyframes drift-c {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(4%, 8%);
-  }
 }
 
 /* Reaching for a trade pulls the whole mass over and tightens it, because it
@@ -302,10 +219,6 @@
 /* The drift is ambient and the pooling is a response to a deliberate action,
    so the drift goes and the pooling stays — just without the travel. */
 @media (prefers-reduced-motion: reduce) {
-  .drop {
-    animation: none !important;
-  }
-
   .mercury {
     transition: none;
   }

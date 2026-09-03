@@ -53,7 +53,7 @@ const MOMENTS = [
 
 export function FiveSeconds() {
   return (
-    <section id="why" className={styles.section}>
+    <section id="why" data-ground="dark" className={styles.section}>
       <div className={styles.head}>
         <p className={styles.eyebrow}>Before you get to speak</p>
         <h2 className={styles.heading}>

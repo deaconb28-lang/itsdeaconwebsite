@@ -51,7 +51,7 @@ const WORK = [
 
 export function Work() {
   return (
-    <section id="work" className={styles.section}>
+    <section id="work" data-ground="dark" className={styles.section}>
       <div className={styles.header}>
         <div>
           <p className={styles.eyebrow}>You&rsquo;ve seen my work</p>

@@ -1,82 +1,91 @@
 /* ==========================================================================
    Design tokens — the single source of truth for the Deacon marketing site.
 
-   The world is a painted shopfront: a bottle-green fascia, cream lettering,
-   gold leaf on the words that matter. That is not decoration — it is the trade
-   Deacon's own clients already understand, and it is what a one-person shop
-   that letters by hand actually looks like.
+   Black, white, and one grey. The homepage set the register and the rest of
+   the site follows it: there is no brand colour, and emphasis is carried by
+   inversion, scale and weight instead of hue.
 
-   ONE RULE governs the accent, and it is a material fact rather than a
-   preference: gold leaf needs a dark ground to read. #D8A62B on cream is
-   1.9:1 and unusable; on the green it is 5.5:1. So gold is the accent on
-   dark, oxblood is the accent on light, and `--ac` is redefined per section
-   rather than fixed here. Set `--ac` when you set a background — never
-   hardcode gold on a light panel.
+   TWO RULES, both of which are constraints rather than preferences:
+
+   1. `--ac` is the full inverse of its ground — black on light, white on dark
+      — so it is redefined per section rather than fixed. Set it whenever you
+      set a background. Because the accent equals the foreground, a panel that
+      fills with `--ac` must NOT put `--ink` on top of it; use `--cream`. That
+      combination is invisible and it is the mistake this system invites.
+
+   2. #767676 is the only grey that clears 4.5:1 against both #000 and #fff.
+      Anything lighter fails on white, anything darker fails on black. So
+      secondary text on a ground that could be either uses --muted-2, and only
+      copy that is definitely on a light ground may use the darker --muted.
+
+   The one exception to all of it: the two demo panes keep their own colour.
+   Harbor & Vine is terracotta and Ridgeline is hi-vis, which makes the
+   before/after the only colour anywhere on the site — those are other
+   people's businesses, and they are supposed to look like themselves.
    ========================================================================== */
 
 :root {
-  /* The fascia */
-  --ink: #0e3a2c;
-  --deep: #082019;
-  --cream: #f0ede2;
-  --panel: #fdfcf7;
+  /* Ground and figure */
+  --ink: #000;
+  --deep: #000;
+  --cream: #fff;
+  --panel: #fff;
 
-  /* The lettering. Gold on dark only; oxblood on light only. */
-  --gold: #d8a62b;
-  --oxblood: #7a2b33;
-  --brass: #a8823c;
-
-  /* Default context is a light ground, so the accent is oxblood. Any dark
-     section overrides --ac to gold on its own root. */
-  --ac: var(--oxblood);
-
-  --muted: #3c4f47;
-  --muted-2: #55685f;
-  --faint: #5a6d64;
+  /* The single grey. Legible on both grounds — see rule 2. */
+  --muted: #5a5a5a;
+  --muted-2: #767676;
+  --faint: #767676;
   --green: #2e9e5b;
 
-  /* Alpha derivations on cream */
-  --ink-04: rgba(14, 58, 44, 0.04);
-  --ink-06: rgba(14, 58, 44, 0.06);
-  --ink-07: rgba(14, 58, 44, 0.07);
-  --ink-12: rgba(14, 58, 44, 0.12);
-  --ink-14: rgba(14, 58, 44, 0.14);
-  --ink-18: rgba(14, 58, 44, 0.18);
-  --ink-2: rgba(14, 58, 44, 0.2);
-  --ink-22: rgba(14, 58, 44, 0.22);
-  --ink-25: rgba(14, 58, 44, 0.25);
-  --ink-3: rgba(14, 58, 44, 0.3);
-  --ink-35: rgba(14, 58, 44, 0.35);
-  --ink-5: rgba(14, 58, 44, 0.5);
+  /* Default context is a light ground, so the accent is black and the
+     ground it sits on is white. Anything that FILLS with --ac must put
+     --ground on top, never --ink: on a light section those are the same
+     colour and the text disappears. */
+  --ac: #000;
+  --ground: #fff;
 
-  /* Alpha derivations on the fascia */
-  --cream-04: rgba(240, 237, 226, 0.04);
-  --cream-1: rgba(240, 237, 226, 0.1);
-  --cream-2: rgba(240, 237, 226, 0.2);
-  --cream-22: rgba(240, 237, 226, 0.22);
-  --cream-25: rgba(240, 237, 226, 0.25);
-  --cream-28: rgba(240, 237, 226, 0.28);
-  --cream-3: rgba(240, 237, 226, 0.3);
-  --cream-35: rgba(240, 237, 226, 0.35);
-  --cream-45: rgba(240, 237, 226, 0.45);
-  --cream-5: rgba(240, 237, 226, 0.5);
-  --cream-55: rgba(240, 237, 226, 0.55);
-  --cream-6: rgba(240, 237, 226, 0.6);
-  --cream-65: rgba(240, 237, 226, 0.65);
-  --cream-7: rgba(240, 237, 226, 0.7);
-  --cream-75: rgba(240, 237, 226, 0.75);
-  --cream-78: rgba(240, 237, 226, 0.78);
-  --cream-8: rgba(240, 237, 226, 0.8);
-  --cream-82: rgba(240, 237, 226, 0.82);
+  /* Alpha derivations on white */
+  --ink-04: rgba(0, 0, 0, 0.04);
+  --ink-06: rgba(0, 0, 0, 0.06);
+  --ink-07: rgba(0, 0, 0, 0.07);
+  --ink-12: rgba(0, 0, 0, 0.12);
+  --ink-14: rgba(0, 0, 0, 0.14);
+  --ink-18: rgba(0, 0, 0, 0.18);
+  --ink-2: rgba(0, 0, 0, 0.2);
+  --ink-22: rgba(0, 0, 0, 0.22);
+  --ink-25: rgba(0, 0, 0, 0.25);
+  --ink-3: rgba(0, 0, 0, 0.3);
+  --ink-35: rgba(0, 0, 0, 0.35);
+  --ink-5: rgba(0, 0, 0, 0.5);
 
-  /* Accent tints — resolved against whichever accent is in scope. */
-  --ac-07: rgba(122, 43, 51, 0.07);
-  --ac-1: rgba(122, 43, 51, 0.1);
-  --ac-13: rgba(122, 43, 51, 0.13);
-  --ac-16: rgba(122, 43, 51, 0.16);
-  --ac-55: rgba(122, 43, 51, 0.55);
+  /* Alpha derivations on black */
+  --cream-04: rgba(255, 255, 255, 0.04);
+  --cream-1: rgba(255, 255, 255, 0.1);
+  --cream-2: rgba(255, 255, 255, 0.2);
+  --cream-22: rgba(255, 255, 255, 0.22);
+  --cream-25: rgba(255, 255, 255, 0.25);
+  --cream-28: rgba(255, 255, 255, 0.28);
+  --cream-3: rgba(255, 255, 255, 0.3);
+  --cream-35: rgba(255, 255, 255, 0.35);
+  --cream-45: rgba(255, 255, 255, 0.45);
+  --cream-5: rgba(255, 255, 255, 0.5);
+  --cream-55: rgba(255, 255, 255, 0.55);
+  --cream-6: rgba(255, 255, 255, 0.6);
+  --cream-65: rgba(255, 255, 255, 0.65);
+  --cream-7: rgba(255, 255, 255, 0.7);
+  --cream-75: rgba(255, 255, 255, 0.75);
+  --cream-78: rgba(255, 255, 255, 0.78);
+  --cream-8: rgba(255, 255, 255, 0.8);
+  --cream-82: rgba(255, 255, 255, 0.82);
 
-  /* Sample site — Harbor & Vine. Deliberately separate from the brand. */
+  /* Accent tints resolve against whichever accent is in scope. */
+  --ac-07: rgba(0, 0, 0, 0.07);
+  --ac-1: rgba(0, 0, 0, 0.1);
+  --ac-13: rgba(0, 0, 0, 0.13);
+  --ac-16: rgba(0, 0, 0, 0.16);
+  --ac-55: rgba(0, 0, 0, 0.55);
+
+  /* Sample site — Harbor & Vine. Keeps its own colour on purpose. */
   --hv-cream: #f6f1e6;
   --hv-black: #22201c;
   --hv-deep: #1a1714;
@@ -85,32 +94,55 @@
   --hv-offwhite: #f9f5ec;
   --hv-serif: Georgia, "Times New Roman", serif;
 
-  /* Sample site — Ridgeline Plumbing & Heating. Also deliberately separate
-     from the brand, and from Harbor & Vine: two demos that shared a palette
-     would read as one template with the colours swapped. */
+  /* Sample site — Ridgeline Plumbing & Heating. Hi-vis on near-black,
+     because that is what the trade literally wears. */
   --rl-ink: #12100c;
   --rl-deep: #0a0906;
   --rl-paper: #f4f2ec;
-  --rl-signal: #d7f205; /* hi-vis — what the trade actually wears */
+  --rl-signal: #d7f205;
   --rl-steel: #6d6a5f;
   --rl-line: rgba(244, 242, 236, 0.16);
 
-  /* Shape. A painted sign has square corners and a keyline, not a pill. */
+  /* Shape. Nothing on this site is a pill. */
   --pad-y: clamp(60px, 7.4vw, 96px);
   --pad-x: clamp(18px, 3.6vw, 36px);
   --ease: cubic-bezier(0.16, 0.8, 0.24, 1);
   --keyline: 2px;
 
   /* Type */
-  --font-display: var(--font-display-src), "Big Shoulders", "Haettenschweiler", sans-serif;
-  --font-body: var(--font-body-src), "Public Sans", system-ui, sans-serif;
+  --font-display: var(--font-display-src), "Archivo", system-ui, sans-serif;
+  --font-body: var(--font-body-src), "Archivo", system-ui, sans-serif;
   --font-mono: var(--font-mono-src), "Spline Sans Mono", ui-monospace, monospace;
+}
+
+/* A light island inside a dark section — the napkin, a card — resets it. */
+[data-ground="light"] {
+  --ac: #000;
+  --ground: #fff;
+  --muted: #5a5a5a;
+  --muted-2: #767676;
+  --faint: #767676;
+}
+
+/* A dark section declares itself and everything inside it inverts. */
+[data-ground="dark"] {
+  --ac: #fff;
+  --ground: #000;
+  --muted: var(--cream-7);
+  --muted-2: var(--cream-6);
+  --faint: var(--cream-45);
+  --ac-07: rgba(255, 255, 255, 0.07);
+  --ac-1: rgba(255, 255, 255, 0.1);
+  --ac-13: rgba(255, 255, 255, 0.13);
+  --ac-16: rgba(255, 255, 255, 0.16);
+  --ac-55: rgba(255, 255, 255, 0.55);
 }
 
 /* A dark section declares itself, and everything inside it gets gold. */
 .onDark,
 [data-ground="dark"] {
-  --ac: var(--gold);
+  --ac: #fff;
+  --ground: #000;
   --ac-07: rgba(216, 166, 43, 0.09);
   --ac-1: rgba(216, 166, 43, 0.12);
   --ac-13: rgba(216, 166, 43, 0.16);

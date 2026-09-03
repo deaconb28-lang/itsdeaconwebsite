@@ -29,7 +29,7 @@ export function SiteFooter({
 } = {}) {
   return (
     <>
-      <div className={styles.marqueeBar}>
+      <div data-ground="dark" className={styles.marqueeBar}>
         <div className={styles.marquee}>
           <Phrases phrases={phrases} />
           {/* A second copy makes the -50% loop seamless. */}
@@ -37,7 +37,7 @@ export function SiteFooter({
         </div>
       </div>
 
-      <footer className={styles.footer}>
+      <footer data-ground="dark" className={styles.footer}>
         <span>Deacon — itsdeacon.com</span>
         <div className={styles.links}>
           <a href="#work" className={styles.link}>

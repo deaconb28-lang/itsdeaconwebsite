@@ -17,12 +17,19 @@
   font-family: var(--font-display);
   font-weight: 800;
   font-size: clamp(36px, 5.6vw, 88px);
-  line-height: 0.94;
+  /* Accent phrases are filled blocks now, and a block's height is the line
+     box — below about 1.05 they overlap the line above. */
+  line-height: 1.06;
   letter-spacing: -0.035em;
 }
 
 .accent {
-  color: var(--ac);
+  /* No hue left to carry emphasis, so the phrase inverts into a block. */
+  background: var(--ac);
+  color: var(--ground);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0 0.14em;
 }
 
 .lede {

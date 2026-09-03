@@ -13,7 +13,7 @@ export function NapkinMath({ lede }: { lede: string }) {
   const { units } = audience;
 
   return (
-    <section id="math" className={styles.section}>
+    <section id="math" data-ground="dark" className={styles.section}>
       <div className={styles.grid}>
         <div>
           <p className={styles.eyebrow}>The back of the napkin</p>
@@ -27,7 +27,7 @@ export function NapkinMath({ lede }: { lede: string }) {
           </p>
         </div>
 
-        <div className={styles.napkin}>
+        <div data-ground="light" className={styles.napkin}>
           <div className={styles.rows}>
             <div className={styles.inputRow}>
               <span>{units.cadenceLower} ×</span>

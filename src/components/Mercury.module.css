@@ -1,0 +1,100 @@
+/* The liquid itself. Position and size belong to whoever places it. */
+
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.mass {
+  position: absolute;
+  inset: 0;
+  filter: url(#mercury);
+}
+
+.drop {
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Evenly overlapped across the row, so it reads as one body of liquid at any
+   width rather than pinching into separate lobes. */
+.d1 {
+  width: 32%;
+  aspect-ratio: 1;
+  left: 1%;
+  top: 30%;
+  animation: mercury-a 13s ease-in-out infinite;
+}
+
+.d2 {
+  width: 30%;
+  aspect-ratio: 1;
+  left: 21%;
+  top: 10%;
+  animation: mercury-b 17s ease-in-out infinite;
+}
+
+.d3 {
+  width: 31%;
+  aspect-ratio: 1;
+  left: 41%;
+  top: 33%;
+  animation: mercury-c 15s ease-in-out infinite;
+}
+
+.d4 {
+  width: 28%;
+  aspect-ratio: 1;
+  left: 60%;
+  top: 12%;
+  animation: mercury-b 19s ease-in-out infinite reverse;
+}
+
+.d5 {
+  width: 26%;
+  aspect-ratio: 1;
+  left: 76%;
+  top: 34%;
+  animation: mercury-a 21s ease-in-out infinite reverse;
+}
+
+@keyframes mercury-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(5%, -7%);
+  }
+}
+
+@keyframes mercury-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-6%, 6%);
+  }
+}
+
+@keyframes mercury-c {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(4%, 8%);
+  }
+}
+
+/* The drift is ambient, so it goes. Anything the caller drives from a
+   deliberate action — the homepage's pooling — is its own business. */
+@media (prefers-reduced-motion: reduce) {
+  .drop {
+    animation: none !important;
+  }
+}

@@ -1,7 +1,7 @@
 .section {
-  background: var(--oxblood);
+  background: var(--ink);
   color: var(--cream);
-  --ac: var(--gold);
+  --ac: #fff;
   padding: var(--pad-y) var(--pad-x);
 }
 
@@ -59,7 +59,7 @@
   border: var(--keyline) solid var(--ink);
   background: var(--cream);
   color: var(--ink);
-  --ac: var(--oxblood);
+  --ac: #000;
 }
 
 .rows {
@@ -169,7 +169,7 @@
 }
 
 .cta:hover {
-  background: var(--oxblood);
+  background: var(--ink);
   color: var(--cream);
 }
 

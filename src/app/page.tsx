@@ -1,21 +1,8 @@
-import type { Viewport } from "next";
-import { Archivo } from "next/font/google";
 import Link from "next/link";
 
+import { GooFilter, MercuryMass } from "@/components/Mercury";
 import { metadataFor, StructuredData, type PageMeta } from "@/lib/page-meta";
 import styles from "./page.module.css";
-
-/**
- * Loaded here rather than in the root layout so only this route pays for it.
- * The two pitch pages keep the shopfront's signage gothic; the door has its
- * own voice, and its own weight budget.
- */
-const archivo = Archivo({
-  subsets: ["latin"],
-  weight: ["400", "500", "700", "900"],
-  variable: "--font-door",
-  display: "swap",
-});
 
 const META: PageMeta = {
   path: "/",
@@ -34,13 +21,6 @@ const META: PageMeta = {
 export const metadata = metadataFor(META);
 
 /**
- * The root layout paints the browser chrome in the shopfront's green, which is
- * right above a painted page and wrong above this one. Next merges a route's
- * viewport over the layout's, so only the door goes black.
- */
-export const viewport: Viewport = { themeColor: "#000000" };
-
-/**
  * The door. Black, white, and one moving thing.
  *
  * The moving thing is not decoration and it is not a background: it is the
@@ -57,7 +37,7 @@ export const viewport: Viewport = { themeColor: "#000000" };
  */
 export default function Chooser() {
   return (
-    <main className={`${archivo.variable} ${styles.page}`}>
+    <main className={styles.page}>
       <StructuredData meta={META} />
       <GooFilter />
 
@@ -75,12 +55,8 @@ export default function Chooser() {
 
         <div className={styles.choice}>
           {/* Decorative: the trades below carry the meaning. */}
-          <div className={styles.mercury} aria-hidden="true">
-            <span className={`${styles.drop} ${styles.d1}`} />
-            <span className={`${styles.drop} ${styles.d2}`} />
-            <span className={`${styles.drop} ${styles.d3}`} />
-            <span className={`${styles.drop} ${styles.d4}`} />
-            <span className={`${styles.drop} ${styles.d5}`} />
+          <div className={styles.mercury}>
+            <MercuryMass />
           </div>
 
           <nav className={styles.trades} aria-label="Choose your trade">
@@ -111,24 +87,3 @@ export default function Chooser() {
   );
 }
 
-/**
- * Blur the drops, then push alpha through a steep curve. Soft overlapping
- * edges land back above the cutoff together, which is what makes two circles
- * read as one surface joined by a neck rather than two circles touching.
- */
-function GooFilter() {
-  return (
-    <svg className={styles.defs} aria-hidden="true" focusable="false">
-      <defs>
-        <filter id="mercury">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur" />
-          <feColorMatrix
-            in="blur"
-            type="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -12"
-          />
-        </filter>
-      </defs>
-    </svg>
-  );
-}
