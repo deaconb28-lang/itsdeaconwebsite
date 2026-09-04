@@ -16,7 +16,6 @@ export function NapkinMath({ lede }: { lede: string }) {
     <section id="math" data-ground="dark" className={styles.section}>
       <div className={styles.grid}>
         <div>
-          <p className={styles.eyebrow}>The back of the napkin</p>
           <h2 className={styles.heading}>
             {units.cadence} covers the whole thing.
           </h2>

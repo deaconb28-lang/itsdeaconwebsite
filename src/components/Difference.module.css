@@ -3,20 +3,11 @@
   padding: var(--pad-y) var(--pad-x) 0;
 }
 
-.eyebrow {
-  margin: 0 0 20px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ac);
-}
-
 .heading {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(36px, 5.6vw, 88px);
+  font-size: var(--say);
   /* Accent phrases are filled blocks now, and a block's height is the line
      box — below about 1.05 they overlap the line above. */
   line-height: 1.06;
@@ -100,7 +91,7 @@
   align-items: center;
   gap: 12px;
   padding: 9px 14px;
-  background: #efeadc;
+  background: var(--ink-07);
   border-bottom: 2px solid var(--ink);
   flex-shrink: 0;
 }
@@ -114,7 +105,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #c9c2ae;
+  background: var(--ink-22);
 }
 
 .address {

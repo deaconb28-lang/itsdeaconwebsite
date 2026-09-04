@@ -53,10 +53,7 @@ export function Work() {
   return (
     <section id="work" data-ground="dark" className={styles.section}>
       <div className={styles.header}>
-        <div>
-          <p className={styles.eyebrow}>You&rsquo;ve seen my work</p>
-          <h2 className={styles.heading}>Examples</h2>
-        </div>
+        <h2 className={styles.heading}>You&rsquo;ve seen my work.</h2>
         <p className={styles.note}>
           Designed, built and launched end to end — no agency, no template.
         </p>

@@ -23,7 +23,6 @@ export function QuietPart() {
     <section id="why" data-ground="dark" className={styles.section}>
       <div className={styles.grid}>
         <div>
-          <p className={styles.eyebrow}>The quiet part</p>
           <p className={styles.bigStat}>
             <span data-count-to={String(TALKED_OUT)}>{TALKED_OUT}</span>
             <span className={styles.percent}>%</span>

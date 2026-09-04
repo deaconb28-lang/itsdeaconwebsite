@@ -23,8 +23,6 @@ export function About() {
     <section id="about" data-ground="dark" className={styles.section}>
       <div className={styles.grid}>
         <div>
-          <p className={styles.eyebrow}>Who you&rsquo;re hiring</p>
-
           <h2 className={styles.heading}>
             It&rsquo;s just me. <span className={styles.accent}>On purpose.</span>
           </h2>

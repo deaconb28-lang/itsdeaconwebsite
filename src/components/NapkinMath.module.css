@@ -12,20 +12,11 @@
   align-items: center;
 }
 
-.eyebrow {
-  margin: 0 0 20px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0.75;
-}
-
 .heading {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(34px, 4.6vw, 72px);
+  font-size: var(--show);
   line-height: 0.94;
   letter-spacing: -0.035em;
 }

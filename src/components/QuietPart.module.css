@@ -1,7 +1,6 @@
 .section {
   background: var(--ink);
   color: var(--cream);
-  /* Gold reads on this ground; oxblood would not. */
   --ac: #fff;
   padding: var(--pad-y) var(--pad-x);
 }
@@ -11,15 +10,6 @@
   grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
   gap: 64px;
   align-items: center;
-}
-
-.eyebrow {
-  margin: 0 0 18px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0.75;
 }
 
 .bigStat {

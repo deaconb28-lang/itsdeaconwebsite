@@ -8,7 +8,6 @@ export function DifferenceBusiness() {
   return (
     <>
       <section id="difference" className={styles.intro}>
-        <p className={styles.eyebrow}>The difference</p>
         <h2 className={styles.heading}>
           Same business.
           <br />

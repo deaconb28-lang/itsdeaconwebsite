@@ -111,7 +111,6 @@ export function Contact({ copy }: { copy: ContactCopy }) {
     <section id="contact" className={styles.section}>
       <div className={styles.grid}>
         <div>
-          <p className={styles.eyebrow}>Next step</p>
           <h2 className={styles.heading}>{copy.heading}</h2>
           <p className={styles.lede}>{copy.lede}</p>
 

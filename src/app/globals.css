@@ -130,6 +130,24 @@
   --font-display: var(--font-display-src), "Archivo", system-ui, sans-serif;
   --font-body: var(--font-body-src), "Archivo", system-ui, sans-serif;
   --font-mono: var(--font-mono-src), "Spline Sans Mono", ui-monospace, monospace;
+
+  /* Three sizes, and only three. Every section used to open at 56-82px, which
+     means size stopped carrying information: if everything shouts, the visitor
+     has no way to tell the proof from the plumbing. So the scale is assigned by
+     the job a section does, not by how much its author liked the sentence.
+
+     --say   the argument — the promise, the proof, the price, the ask
+     --show  the supporting work — how it goes, who you're hiring, examples,
+             and the napkin, whose claim earns a heading but whose calculator
+             is the real content
+     --run   the instruments — the lookup. Here the UI is the content and a
+             display heading over a form is just noise.
+
+     The hero sits above all three on purpose; nothing else on the page may
+     out-shout the first thing you read. */
+  --say: clamp(34px, 4.6vw, 66px);
+  --show: clamp(26px, 3.2vw, 46px);
+  --run: clamp(22px, 2.3vw, 32px);
 }
 
 /* Each pitch declares its room, and the colour follows. */

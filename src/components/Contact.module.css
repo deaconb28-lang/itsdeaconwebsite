@@ -10,20 +10,11 @@
   align-items: start;
 }
 
-.eyebrow {
-  margin: 0 0 20px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ac);
-}
-
 .heading {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(40px, 6.4vw, 110px);
+  font-size: var(--say);
   line-height: 0.9;
   letter-spacing: -0.04em;
 }

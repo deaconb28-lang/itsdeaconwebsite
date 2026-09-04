@@ -3,12 +3,41 @@
 import { useCallback, useEffect, useState } from "react";
 
 import type { Finding } from "@/lib/audit";
+import type { Audience } from "@/lib/audience";
 import type { PreviewResult } from "@/lib/preview";
 import { normaliseUrl } from "@/lib/url";
 import { useSiteState } from "./SiteState";
 import styles from "./Lookup.module.css";
 
 type Phase = "idle" | "checking" | "ready" | "error";
+
+/**
+ * The eleven things /api/analyze actually measures, in the order it reports
+ * them. This is the section's resting state: a tool should show you its gauge
+ * face before you pull the lever, and every line here is a check that exists
+ * in src/lib/audit.ts — not a list of things a website could theoretically
+ * have wrong. If a check is added or dropped there, it changes here.
+ */
+function checksFor(audience: Audience): readonly string[] {
+  const restaurants = audience.id === "restaurants";
+  return [
+    "Whether it was built for phones",
+    restaurants
+      ? "A menu that is really a PDF"
+      : "A main link that is really a PDF",
+    "A padlock in the address bar",
+    "How long it takes to appear",
+    "Whether the phone number is tappable",
+    "A copyright year gone stale",
+    restaurants
+      ? "Somewhere to book or order"
+      : "A way to actually hire you",
+    "How heavy the page is",
+    "Table layouts and long-dead tags",
+    "A title and description for Google",
+    "How many images load before it settles",
+  ];
+}
 
 type Audit = {
   findings: Finding[];
@@ -90,11 +119,16 @@ export function Lookup() {
     }
   }, [url, audience.id, audience.lookupPlaceholder]);
 
+  /* A frame drawn around nothing is not an empty state, it is a hole: the
+     section used to reserve 800px for a screenshot that had not been asked
+     for yet. Nothing is drawn until there is something to draw, and until
+     then the space says what the check actually looks at. */
+  const showStage = phase === "checking" || phase === "ready";
+  const showReport = showStage || auditing || audit !== null;
+
   return (
     <section id="lookup" className={styles.section}>
       <div className={styles.inner}>
-        <p className={styles.eyebrow}>Look yourself up</p>
-
         <div className={styles.head}>
           <h3 className={styles.heading}>
             See your own site
@@ -133,18 +167,43 @@ export function Lookup() {
           </form>
         </div>
 
-        <div className={styles.body}>
-          <Stage phase={phase} preview={preview} />
-
-          <Report
-            phase={phase}
-            auditing={auditing}
-            audit={audit}
-            costs={audience.units.many}
-          />
-        </div>
+        {showReport ? (
+          <div className={showStage ? styles.body : styles.bodyReportOnly}>
+            {showStage && <Stage phase={phase} preview={preview} />}
+            <Report auditing={auditing} audit={audit} />
+          </div>
+        ) : (
+          <Checklist audience={audience} />
+        )}
       </div>
     </section>
+  );
+}
+
+/**
+ * The resting state. Eleven short lines in three columns read as an
+ * instrument's face — nothing here pretends to be a screenshot, and the
+ * section is a third of the height it was when it framed one.
+ */
+function Checklist({ audience }: { audience: Audience }) {
+  const checks = checksFor(audience);
+
+  return (
+    <div className={styles.checklist}>
+      <p className={styles.checklistLede}>
+        I read the page the way a phone does and look for eleven things.
+      </p>
+      <ul className={styles.checks}>
+        {checks.map((check, index) => (
+          <li key={check} className={styles.check}>
+            <span className={styles.checkNum} aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            {check}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -158,29 +217,12 @@ export function Lookup() {
  * nothing on this list is a guess about someone's business.
  */
 function Report({
-  phase,
   auditing,
   audit,
-  costs,
 }: {
-  phase: Phase;
   auditing: boolean;
   audit: Audit | null;
-  /** What a bad site loses them, in their own noun: "tables" | "customers". */
-  costs: string;
 }) {
-  if (phase === "idle" || (phase === "error" && !audit)) {
-    return (
-      <div className={styles.report}>
-        <p className={styles.reportLabel}>What I&rsquo;d fix</p>
-        <p className={styles.reportIdle}>
-          Paste your address and I&rsquo;ll read the page the way a phone does,
-          then tell you what&rsquo;s costing you {costs}.
-        </p>
-      </div>
-    );
-  }
-
   if (auditing || !audit) {
     return (
       <div className={styles.report}>
@@ -272,7 +314,7 @@ function Stage({
           {phase === "ready" && preview ? (
             <Capture url={preview.url} pretty={preview.pretty} device="desktop" />
           ) : (
-            <Placeholder phase={phase} />
+            <Skeleton />
           )}
         </div>
       </div>
@@ -300,17 +342,8 @@ function Stage({
           ? showPhone
             ? `${preview.pretty} — 1280px and 375px`
             : `${preview.pretty} — 1280px`
-          : "A laptop and a phone, side by side"}
+          : "Reading the page"}
       </p>
-    </div>
-  );
-}
-
-function Placeholder({ phase }: { phase: Phase }) {
-  if (phase === "checking") return <Skeleton />;
-  return (
-    <div className={styles.placeholder}>
-      <p className={styles.placeholderText}>Paste your address above.</p>
     </div>
   );
 }

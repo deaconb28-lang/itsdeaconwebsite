@@ -26,7 +26,6 @@ export function Process({
     <section id="process" className={styles.section}>
       <div className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>How it goes</p>
           <h2 className={styles.heading}>
             <span className={styles.accent}>Your homepage first.</span>
             <br />

@@ -55,7 +55,6 @@ export function FiveSeconds() {
   return (
     <section id="why" data-ground="dark" className={styles.section}>
       <div className={styles.head}>
-        <p className={styles.eyebrow}>Before you get to speak</p>
         <h2 className={styles.heading}>
           They have already decided.{" "}
           <span className={styles.highlight}>You just weren&rsquo;t there.</span>
