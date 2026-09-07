@@ -1,106 +1,104 @@
 /* ==========================================================================
    Design tokens — the single source of truth for the Deacon marketing site.
 
-   Black, white, and one grey. The homepage set the register and the rest of
-   the site follows it: there is no brand colour, and emphasis is carried by
-   inversion, scale and weight instead of hue.
+   Cream, deep teal, and one orange. The teal carries the type and the
+   structure; the orange is the only hue on the site that is Deacon's, and it
+   arrives in single strokes — a filled phrase inside a headline, a tick, a
+   price suffix, a CTA. Everything else is ground.
 
-   TWO RULES, both of which are constraints rather than preferences:
+   THREE RULES, all constraints rather than preferences:
 
-   1. `--ac` is the full inverse of its ground — black on light, white on dark
-      — so it is redefined per section rather than fixed. Set it whenever you
-      set a background. Because the accent equals the foreground, a panel that
-      fills with `--ac` must NOT put `--ink` on top of it; use `--cream`. That
-      combination is invisible and it is the mistake this system invites.
+   1. `--ac` is the full inverse of its ground — teal on cream, cream on teal.
+      It is the FIGURE colour, not the orange, and it is redefined per section
+      rather than fixed, so set it whenever you set a background. Because the
+      accent equals the foreground, a panel that fills with `--ac` must put
+      `--ground` on top, never `--ink`: on a light section those are the same
+      colour and the text disappears. That is the mistake this system invites.
 
-   2. #767676 is the only grey that clears 4.5:1 against both #000 and #fff.
-      Anything lighter fails on white, anything darker fails on black. So
-      secondary text on a ground that could be either uses --muted-2, and only
-      copy that is definitely on a light ground may use the darker --muted.
+   2. The orange has two jobs and two values, because #e0571c is only 3.37:1
+      on cream and takes white at 3.78:1 — both large-text-only.
+
+        --brand       #e0571c   display type at 24px+ bold, and fills that
+                                carry no text: headline blocks, bars, the
+                                mercury.
+        --brand-deep  #b8420f   orange at body size on cream (4.89:1), and
+                                any filled control with a white label (5.49:1).
+
+      Side by side they read as one orange. The original palette had only the
+      bright one, which is why its pill CTAs and its small orange labels sat
+      below AA.
+
+   3. `--faint` is the one value that cannot be shared between grounds.
+      #9aa8a1 is 5.65:1 on the teal and 2.20:1 on the cream, so it stays the
+      dark-ground value and the light ground borrows --muted-2's #5c6b64.
 
    The one exception to all of it: the two demo panes keep their own colour.
-   Harbor & Vine is terracotta and Ridgeline is hi-vis, which makes the
-   before/after the only colour anywhere on the site — those are other
+   Harbor & Vine is terracotta and Ridgeline is hi-vis — those are other
    people's businesses, and they are supposed to look like themselves.
    ========================================================================== */
 
 :root {
   /* Ground and figure */
-  --ink: #000;
-  --deep: #000;
-  --cream: #fff;
+  --ink: #13312c;
+  --cream: #f8f1e3;
   --panel: #fff;
 
-  /* The single grey. Legible on both grounds — see rule 2. */
-  --muted: #5a5a5a;
-  --muted-2: #767676;
-  --faint: #767676;
-  --green: #2e9e5b;
+  /* Greys, all tuned against the cream. See rule 3 for --faint. */
+  --muted: #3f5049;
+  --muted-2: #5c6b64;
+  --faint: #5c6b64;
 
-  /* Default context is a light ground, so the accent is black and the
-     ground it sits on is white. Anything that FILLS with --ac must put
-     --ground on top, never --ink: on a light section those are the same
-     colour and the text disappears. */
-  --ac: #000;
-  --ground: #fff;
+  /* Default context is a light ground, so the figure is the teal and the
+     ground behind it is the cream. See rule 1. */
+  --ac: #13312c;
+  --ground: #f8f1e3;
 
-  /* Colour says which room you are in, and nothing else.
-     Type stays black and white everywhere; colour lives in the structure —
-     a filled headline phrase, a bar, a badge, a mark. That is what keeps the
-     starkness while giving each pitch an identity.
-
-     The assignment is a rule, not a preference: each page's colour is near
-     the complement of its own demo pane, so Deacon's identity can never
-     muddle with the client's. Harbor & Vine is terracotta, so restaurants
-     are blue. Ridgeline is hi-vis yellow-green, so small business is cherry.
-
-     Both take white text at 4.5:1 and both stay visible as a mark on #000
-     and #fff, which is the narrow set that survives a site with two grounds. */
-  --brand-restaurants: #2b4bff;
-  --brand-business: #e5124b;
-  --brand: var(--ac);
+  /* Deacon's one colour. See rule 2. */
+  --brand: #e0571c;
+  --brand-deep: #b8420f;
   --on-brand: #fff;
 
-  /* Alpha derivations on white */
-  --ink-04: rgba(0, 0, 0, 0.04);
-  --ink-06: rgba(0, 0, 0, 0.06);
-  --ink-07: rgba(0, 0, 0, 0.07);
-  --ink-12: rgba(0, 0, 0, 0.12);
-  --ink-14: rgba(0, 0, 0, 0.14);
-  --ink-18: rgba(0, 0, 0, 0.18);
-  --ink-2: rgba(0, 0, 0, 0.2);
-  --ink-22: rgba(0, 0, 0, 0.22);
-  --ink-25: rgba(0, 0, 0, 0.25);
-  --ink-3: rgba(0, 0, 0, 0.3);
-  --ink-35: rgba(0, 0, 0, 0.35);
-  --ink-5: rgba(0, 0, 0, 0.5);
+  /* Alpha derivations on the cream */
+  --ink-04: rgba(19, 49, 44, 0.04);
+  --ink-06: rgba(19, 49, 44, 0.06);
+  --ink-07: rgba(19, 49, 44, 0.07);
+  --ink-12: rgba(19, 49, 44, 0.12);
+  --ink-14: rgba(19, 49, 44, 0.14);
+  --ink-18: rgba(19, 49, 44, 0.18);
+  --ink-2: rgba(19, 49, 44, 0.2);
+  --ink-22: rgba(19, 49, 44, 0.22);
+  --ink-25: rgba(19, 49, 44, 0.25);
+  --ink-3: rgba(19, 49, 44, 0.3);
+  --ink-35: rgba(19, 49, 44, 0.35);
+  --ink-5: rgba(19, 49, 44, 0.5);
 
-  /* Alpha derivations on black */
-  --cream-04: rgba(255, 255, 255, 0.04);
-  --cream-1: rgba(255, 255, 255, 0.1);
-  --cream-2: rgba(255, 255, 255, 0.2);
-  --cream-22: rgba(255, 255, 255, 0.22);
-  --cream-25: rgba(255, 255, 255, 0.25);
-  --cream-28: rgba(255, 255, 255, 0.28);
-  --cream-3: rgba(255, 255, 255, 0.3);
-  --cream-35: rgba(255, 255, 255, 0.35);
-  --cream-45: rgba(255, 255, 255, 0.45);
-  --cream-5: rgba(255, 255, 255, 0.5);
-  --cream-55: rgba(255, 255, 255, 0.55);
-  --cream-6: rgba(255, 255, 255, 0.6);
-  --cream-65: rgba(255, 255, 255, 0.65);
-  --cream-7: rgba(255, 255, 255, 0.7);
-  --cream-75: rgba(255, 255, 255, 0.75);
-  --cream-78: rgba(255, 255, 255, 0.78);
-  --cream-8: rgba(255, 255, 255, 0.8);
-  --cream-82: rgba(255, 255, 255, 0.82);
+  /* Alpha derivations on the teal */
+  --cream-04: rgba(248, 241, 227, 0.04);
+  --cream-1: rgba(248, 241, 227, 0.1);
+  --cream-2: rgba(248, 241, 227, 0.2);
+  --cream-22: rgba(248, 241, 227, 0.22);
+  --cream-25: rgba(248, 241, 227, 0.25);
+  --cream-28: rgba(248, 241, 227, 0.28);
+  --cream-3: rgba(248, 241, 227, 0.3);
+  --cream-35: rgba(248, 241, 227, 0.35);
+  --cream-45: rgba(248, 241, 227, 0.45);
+  --cream-5: rgba(248, 241, 227, 0.5);
+  --cream-55: rgba(248, 241, 227, 0.55);
+  --cream-6: rgba(248, 241, 227, 0.6);
+  --cream-65: rgba(248, 241, 227, 0.65);
+  --cream-7: rgba(248, 241, 227, 0.7);
+  --cream-75: rgba(248, 241, 227, 0.75);
+  --cream-78: rgba(248, 241, 227, 0.78);
+  --cream-8: rgba(248, 241, 227, 0.8);
+  --cream-82: rgba(248, 241, 227, 0.82);
 
-  /* Accent tints resolve against whichever accent is in scope. */
-  --ac-07: rgba(0, 0, 0, 0.07);
-  --ac-1: rgba(0, 0, 0, 0.1);
-  --ac-13: rgba(0, 0, 0, 0.13);
-  --ac-16: rgba(0, 0, 0, 0.16);
-  --ac-55: rgba(0, 0, 0, 0.55);
+  /* Accent tints. These do not track --ac on their own — each ground block
+     redeclares them, which is why a light island inside a dark section has
+     to reset the whole family and not just --ac. */
+  --ac-07: rgba(19, 49, 44, 0.07);
+  --ac-1: rgba(19, 49, 44, 0.1);
+  --ac-13: rgba(19, 49, 44, 0.13);
+  --ac-55: rgba(19, 49, 44, 0.55);
 
   /* Sample site — Harbor & Vine. Keeps its own colour on purpose. */
   --hv-cream: #f6f1e6;
@@ -117,10 +115,15 @@
   --rl-deep: #0a0906;
   --rl-paper: #f4f2ec;
   --rl-signal: #d7f205;
-  --rl-steel: #6d6a5f;
   --rl-line: rgba(244, 242, 236, 0.16);
 
-  /* Shape. Nothing on this site is a pill. */
+  /* Shape. Four radii and no others — a radius should say what kind of thing
+     it is wrapping, so pick the role and let the token carry the number. */
+  --r-panel: 12px;
+  --r-field: 8px;
+  --r-chip: 4px;
+  --r-pill: 999px;
+
   --pad-y: clamp(60px, 7.4vw, 96px);
   --pad-x: clamp(18px, 3.6vw, 36px);
   --ease: cubic-bezier(0.16, 0.8, 0.24, 1);
@@ -150,55 +153,32 @@
   --run: clamp(22px, 2.3vw, 32px);
 }
 
-/* Each pitch declares its room, and the colour follows. */
-[data-brand="restaurants"] {
-  --brand: var(--brand-restaurants);
-}
-
-[data-brand="small-business"] {
-  --brand: var(--brand-business);
-}
-
-/* A light island inside a dark section — the napkin, a card — resets it. */
+/* A light island inside a dark section — the napkin, a card — resets it.
+   The tints have to come back too, or the island inherits cream-on-cream
+   tints and loses them entirely. */
 [data-ground="light"] {
-  --ac: #000;
-  --ground: #fff;
-  --muted: #5a5a5a;
-  --muted-2: #767676;
-  --faint: #767676;
-  /* The tints have to come back too. A light island inside a dark section
-     would otherwise inherit white-on-white tints and lose them entirely. */
-  --ac-07: rgba(0, 0, 0, 0.07);
-  --ac-1: rgba(0, 0, 0, 0.1);
-  --ac-13: rgba(0, 0, 0, 0.13);
-  --ac-16: rgba(0, 0, 0, 0.16);
-  --ac-55: rgba(0, 0, 0, 0.55);
+  --ac: #13312c;
+  --ground: #f8f1e3;
+  --muted: #3f5049;
+  --muted-2: #5c6b64;
+  --faint: #5c6b64;
+  --ac-07: rgba(19, 49, 44, 0.07);
+  --ac-1: rgba(19, 49, 44, 0.1);
+  --ac-13: rgba(19, 49, 44, 0.13);
+  --ac-55: rgba(19, 49, 44, 0.55);
 }
 
 /* A dark section declares itself and everything inside it inverts. */
 [data-ground="dark"] {
-  --ac: #fff;
-  --ground: #000;
-  --muted: var(--cream-7);
-  --muted-2: var(--cream-6);
-  --faint: var(--cream-45);
-  --ac-07: rgba(255, 255, 255, 0.07);
-  --ac-1: rgba(255, 255, 255, 0.1);
-  --ac-13: rgba(255, 255, 255, 0.13);
-  --ac-16: rgba(255, 255, 255, 0.16);
-  --ac-55: rgba(255, 255, 255, 0.55);
-}
-
-/* A dark section declares itself, and everything inside it gets gold. */
-.onDark,
-[data-ground="dark"] {
-  --ac: #fff;
-  --ground: #000;
-  --ac-07: rgba(216, 166, 43, 0.09);
-  --ac-1: rgba(216, 166, 43, 0.12);
-  --ac-13: rgba(216, 166, 43, 0.16);
-  --ac-16: rgba(216, 166, 43, 0.2);
-  --ac-55: rgba(216, 166, 43, 0.55);
+  --ac: #f8f1e3;
+  --ground: #13312c;
+  --muted: var(--cream-8);
+  --muted-2: var(--cream-7);
+  --faint: #9aa8a1;
+  --ac-07: rgba(248, 241, 227, 0.07);
+  --ac-1: rgba(248, 241, 227, 0.1);
+  --ac-13: rgba(248, 241, 227, 0.13);
+  --ac-55: rgba(248, 241, 227, 0.55);
 }
 
 *,
@@ -338,7 +318,7 @@ html.dc-js [data-reveal].dc-in [data-grow] {
   }
   50% {
     opacity: 0.35;
-    box-shadow: 0 0 0 5px rgba(216, 166, 43, 0);
+    box-shadow: 0 0 0 5px transparent;
   }
 }
 

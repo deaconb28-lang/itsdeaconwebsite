@@ -1,7 +1,6 @@
 .section {
   background: var(--ink);
   color: var(--cream);
-  --ac: #fff;
   padding: var(--pad-y) var(--pad-x);
 }
 
@@ -96,6 +95,7 @@
 /* The number, drawn. The track is the whole of the thing being measured — one
    second, or everybody who lands — and the fill is the figure. */
 .track {
+  border-radius: var(--r-pill);
   position: relative;
   height: 22px;
   border: var(--keyline) solid var(--cream-45);
@@ -103,6 +103,7 @@
 }
 
 .fill {
+  border-radius: var(--r-pill);
   display: block;
   height: 100%;
   min-width: 3px;

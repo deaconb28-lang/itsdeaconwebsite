@@ -77,6 +77,7 @@
 }
 
 .frame {
+  border-radius: var(--r-panel);
   flex: 1;
   min-height: 0;
   border: 3px solid var(--ink);
@@ -141,11 +142,12 @@
   background: var(--ac);
   cursor: ew-resize;
   touch-action: none;
-  box-shadow: 0 0 0 1px rgba(14, 58, 44, 0.4);
+  box-shadow: 0 0 0 1px var(--ink-35);
   z-index: 6;
 }
 
 .handlePill {
+  border-radius: var(--r-pill);
   position: absolute;
   top: 50%;
   left: 50%;

@@ -61,6 +61,7 @@
 }
 
 .submit {
+  border-radius: var(--r-pill);
   padding: 15px 28px;
   border: none;
   background: var(--ink);
@@ -109,6 +110,8 @@
 }
 
 .laptop {
+  box-shadow: 14px 14px 0 var(--ink-12);
+  border-radius: var(--r-panel);
   border: 3px solid var(--ink);
   overflow: hidden;
   background: var(--ink);
@@ -155,6 +158,7 @@
 
 /* The phone leans on the laptop's bottom-right corner and hangs below it. */
 .phone {
+  border-radius: 18px;
   /* Unitless, because it drives both the shell's width and the scale applied
      to the 375px live frame inside it. Keeping one number means the frame can
      never end up cropped or letterboxed against its own shell. */
@@ -177,6 +181,7 @@
 }
 
 .phoneScreen {
+  border-radius: var(--r-panel);
   position: relative;
   aspect-ratio: 375 / 667;
   overflow: hidden;
@@ -250,6 +255,7 @@
 }
 
 .skelLine {
+  border-radius: var(--r-pill);
   display: block;
   height: 7px;
   background: var(--ink-06);
@@ -351,7 +357,8 @@
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.12em;
-  color: var(--brand);
+  /* 10px orange — the deep one, see rule 2 in globals.css. */
+  color: var(--brand-deep);
   font-variant-numeric: tabular-nums;
 }
 
@@ -442,6 +449,7 @@
 }
 
 .fix {
+  border-radius: var(--r-pill);
   display: inline-flex;
   align-items: center;
   gap: 12px;

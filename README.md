@@ -190,57 +190,69 @@ src/
 
 ## The look
 
-Black, white, one grey — and one colour per room.
+Cream, deep teal, and one orange.
 
-**Colour says which room you are in, and nothing else.** Type stays black and
-white everywhere; colour lives only in structure — a filled headline phrase, a
-bar, a badge, the figures a statistic is actually about. That is what keeps the
-starkness while giving each pitch an identity.
+`--ink` `#13312C` is a deep blue-green teal and carries the type and the
+structure. `--cream` `#F8F1E3` is the ground. The orange is the only hue on the
+site that is Deacon's, and it arrives in single strokes — a filled phrase
+inside a headline, a tick, a price suffix, a CTA.
 
-The assignment is a rule rather than a preference: **each page's colour sits
-near the complement of its own demo pane**, so Deacon's identity can never
-muddle with the client's. Harbor & Vine is terracotta, so `/restaurants` is
-blue `#2B4BFF`. Ridgeline is hi-vis yellow-green, so `/small-business` is
-cherry `#E5124B`. Both take white text at 4.5:1 and both stay visible as a mark
-on `#000` and `#fff` — a narrow set, on a site with two grounds.
+**Three rules, all constraints rather than preferences.**
 
-On the door the mercury is white at rest and takes the room's colour as you
-reach for a trade: the liquid turns into the page you are about to open.
-
-Pages declare their room with `data-brand`; `--brand` resolves from there.
-
-**Two rules, both constraints rather than preferences.**
-
-1. **`--ac` is the full inverse of its ground** — black on light, white on dark
-   — so it is redefined per section, not fixed. Sections declare themselves
-   with `data-ground="dark"` (or `"light"`, for an island like the napkin
-   inside a dark section). Because the accent equals the foreground, **anything
-   that fills with `--ac` must put `--ground` on top, never `--ink`** — on a
-   light section those are the same colour and the text vanishes. Ten places
-   shipped that way during the conversion.
+1. **`--ac` is the full inverse of its ground** — teal on cream, cream on teal.
+   It is the *figure* colour, not the orange, and it is redefined per section
+   rather than fixed. Sections declare themselves with `data-ground="dark"` (or
+   `"light"`, for an island like the napkin inside a dark section). Because the
+   accent equals the foreground, **anything that fills with `--ac` must put
+   `--ground` on top, never `--ink`** — on a light section those are the same
+   colour and the text vanishes. Ten places shipped that way once.
 
    **A panel that flips the ground must declare the whole set, not just
    `--ac`.** `.solid` in `Pricing.module.css` set the accent and left `--ground`
-   inheriting `#fff` from the light section around it, which made its badge and
-   its call to action white on white. Set `--ac` and `--ground` together, or use
-   `data-ground`.
-2. **`#767676` is the only grey that clears 4.5:1 against both `#000` and
-   `#fff`.** Anything lighter fails on white, anything darker fails on black.
-   Copy on a ground that could be either uses `--muted-2`; only copy that is
-   definitely on light may use the darker `--muted`.
+   inheriting from the light section around it, which made its badge and its
+   call to action invisible. Prefer `data-ground` on the element; only reach
+   for the CSS flip where there is no element to put it on.
+
+2. **The orange has two jobs and two values.** `#E0571C` is only 3.37:1 on the
+   cream and takes white at 3.78:1 — both large-text-only. So `--brand`
+   `#E0571C` is for display type at 24px+ bold and for fills that carry no
+   text; `--brand-deep` `#B8420F` is for orange at body size on cream (4.89:1)
+   and for any filled control with a white label (5.49:1). Side by side they
+   read as one orange. The original palette had only the bright one, which is
+   why its pill CTAs and its small orange labels sat below AA.
+
+3. **`--faint` cannot be shared between grounds.** `#9AA8A1` is 5.65:1 on the
+   teal and 2.20:1 on the cream, so it is the dark-ground value only and the
+   light ground borrows `--muted-2`'s `#5C6B64`.
 
 Accent phrases are filled blocks rather than coloured text. A block's height is
 its line box, so any headline containing one needs `line-height` at or above
 about 1.05 — below that the blocks overlap the line above.
 
-Type is two faces. Archivo carries display and body both, because a monochrome
-page has no hue to separate them and mixing families as well as weights fights
-the one-material feeling. The mono carries measurements and labels only.
+**Shape is four radii and no others.** `--r-panel` 12px for cards and frames,
+`--r-field` 8px for inputs and small controls, `--r-chip` 4px for the tiny
+stuff, `--r-pill` 999px for CTAs. Pick the role and let the token carry the
+number. The brand's shadow is a hard offset — `14px 14px 0 var(--ink-12)` on
+the hero card and the lookup's laptop, `16px 16px 0 var(--ink-18)` on the
+napkin — never a blur, except the nav capsule, which floats.
 
-**The only colour on the site belongs to the clients.** Harbor & Vine is
-terracotta and Ridgeline is hi-vis, and against black and white they detonate —
-which is the point. Those are other people's businesses and they are supposed
-to look like themselves, not like Deacon.
+Type is two faces. Archivo carries display and body both; mixing families as
+well as weights fights the one-material feeling. The mono carries measurements
+and labels only. **Do not reach for Bricolage Grotesque, Instrument Sans,
+Instrument Serif or Inter** — that pairing is the most common signature of a
+generated design and it was removed on purpose.
+
+**Section headings get their size from the job they do**, not from how much
+their author liked the sentence: `--say` for the argument, `--show` for the
+supporting work, `--run` for the instruments. The hero sits above all three,
+and nothing else on a page may out-shout the first thing you read. There are no
+eyebrow labels — a tiny uppercase kicker above every heading is what made eight
+of ten sections read as the same section.
+
+**The demo panes keep their own colour.** Harbor & Vine is terracotta and
+Ridgeline is hi-vis, and against the cream they detonate — which is the point.
+Those are other people's businesses and they are supposed to look like
+themselves, not like Deacon.
 
 ### The mercury
 
@@ -249,6 +261,16 @@ taking three projects a month is a single volume of attention that cannot be in
 two places, so the mass pools under whichever trade you reach for and leaves
 the other. The merging is an SVG goo filter — blur, then crank alpha contrast —
 and the pooling runs on `:has()`, so the page ships no JavaScript.
+
+At rest the pool is a quiet mix of the two grounds; reaching for a room turns
+it the orange. Both rooms turn it the *same* orange, so it is the travel and
+not the hue that says which one you are opening. The trades sit in the liquid
+with `mix-blend-mode: multiply` and darken where they break its surface — the
+dark-ground version of this used `difference`, which renders a pale pink once
+the ground is cream. The pool anchors to the first line of the trades rather
+than the bottom of their box, because "Small business" wraps below about
+1440px and a bottom-anchored pool then sits under the wrap instead of behind
+the words.
 
 **It appears there and nowhere else.** It was tried behind About's "It's just
 me. On purpose." — the same argument in words — and cut: it sat over the lede
@@ -280,11 +302,11 @@ remembered for is how a signature becomes wallpaper.
   would be *less* honest than none — it is the exact cliché the "before" pane
   is making fun of. Its stock photo is rendered as the grey box with a filename
   that it actually is.
-- **The keyline is the brand.** Panels have a drawn border and neither a
-  radius nor a shadow. The one
-  exception is genuine curvature — a phone frame, a dot — which stays round
-  because the real object is. Don't reintroduce pill buttons or the hard
-  offset shadow; both were removed on purpose.
+- **The keyline and the corner are both the brand.** Panels have a drawn
+  border, a radius from the four-token scale, and — where they are objects you
+  could pick up, like the hero card or the lookup's laptop — a hard offset
+  shadow. Genuine curvature is separate: a phone frame and a dot stay round
+  because the real object is, so those keep literal values rather than tokens.
 - **No-JS must stay readable.** The scroll-reveal hidden state is only applied
   once an inline script confirms JS is running.
 - `prefers-reduced-motion` stops the loops and the diner wave, and shows

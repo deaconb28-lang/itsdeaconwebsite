@@ -1,15 +1,18 @@
-/* The door. Black, white, and one moving thing — see page.tsx.
+/* The door — see page.tsx. Cream, deep teal, and one moving thing.
 
-   This page deliberately does not use the shopfront tokens. The rooms behind
-   it are painted; the door is not. Everything here is drawn from four values
-   and one typeface, because the mercury is the only thing meant to be
-   remembered and every other decision gets out of its way. */
+   It used to keep a private black-and-white palette, on the argument that the
+   rooms behind it were painted and the door was not. They are the same colour
+   now, so the private palette is gone and this page draws from the site
+   tokens like everything else. Everything except the mercury still gets out
+   of the mercury's way.
+
+   One value is local and has to be: --pool, the colour of the liquid before
+   anyone reaches for a room. It cannot be an --ink-NN alpha, because the goo
+   filter crushes alpha through a steep curve (see Mercury.tsx) and anything
+   translucent vanishes entirely. So it is an opaque 18% teal-in-cream mix. */
 
 .page {
-  --void: #000;
-  --milk: #fff;
-  --ash: #8a8a8a;
-  --edge: rgba(255, 255, 255, 0.16);
+  --pool: #cfcec2;
 
   min-height: 100svh;
   display: flex;
@@ -17,8 +20,8 @@
   justify-content: space-between;
   gap: clamp(24px, 4vh, 48px);
   padding: clamp(18px, 3vw, 34px) clamp(18px, 4vw, 54px);
-  background: var(--void);
-  color: var(--milk);
+  background: var(--cream);
+  color: var(--ink);
   font-family: var(--font-display);
 }
 
@@ -44,7 +47,7 @@
 }
 
 .status {
-  color: var(--ash);
+  color: var(--muted-2);
 }
 
 /* --- the middle ----------------------------------------------------------- */
@@ -65,7 +68,7 @@
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: -0.015em;
-  color: var(--milk);
+  color: var(--ink);
   text-wrap: balance;
 }
 
@@ -84,11 +87,17 @@
   position: absolute;
   z-index: -1;
   left: 50%;
-  bottom: 0;
+  /* Anchored to the FIRST LINE of the trades, not to the bottom of the box.
+     "Small business" wraps to two lines everywhere below about 1440px, and a
+     bottom-anchored pool then sits under the wrap instead of behind the
+     words — which is the whole effect. The font-size here is not for type;
+     it exists so the em below tracks the trades' own clamp. */
+  font-size: clamp(30px, 6.4vw, 96px);
+  top: 0;
   width: min(560px, 74%);
   height: clamp(130px, 15vw, 190px);
-  translate: -50% 0;
-  color: var(--milk);
+  translate: -50% 0.1em;
+  color: var(--pool);
   transition: left 0.85s cubic-bezier(0.32, 0.9, 0.3, 1),
     width 0.85s cubic-bezier(0.32, 0.9, 0.3, 1),
     color 0.5s var(--ease);
@@ -97,20 +106,22 @@
 /* Reaching for a trade pulls the whole mass over and tightens it, because it
    can only be in one place. :has() keeps this a server component.
 
-   It also takes on that room's colour — the liquid turns into the page you
-   are about to open. At rest it is white, because nothing has been chosen. */
+   It also takes Deacon's orange — at rest the mass is the same quiet value as
+   the page it sits on, and reaching for a room is what gives it colour. Both
+   rooms turn it the same orange, so it is the travel and not the hue that
+   says which one you are opening. */
 .choice:has(.tradeLeft:hover) .mercury,
 .choice:has(.tradeLeft:focus-visible) .mercury {
   left: 23%;
   width: min(400px, 46%);
-  color: var(--brand-restaurants);
+  color: var(--brand);
 }
 
 .choice:has(.tradeRight:hover) .mercury,
 .choice:has(.tradeRight:focus-visible) .mercury {
   left: 74%;
   width: min(460px, 52%);
-  color: var(--brand-business);
+  color: var(--brand);
 }
 
 .trades {
@@ -122,24 +133,26 @@
 
 .tradeLeft,
 .tradeRight {
-  color: var(--milk);
+  color: var(--ink);
   font-weight: 900;
   font-size: clamp(30px, 6.4vw, 96px);
   line-height: 0.92;
   letter-spacing: -0.045em;
-  /* The words stand in the pool. Difference keeps every letter legible
-     wherever it breaks the surface — over white it reads black, over the
-     room's colour it reads as that colour's complement, and both stay
-     readable because the pool is always far from the type's own value. */
-  mix-blend-mode: difference;
+  /* The words stand in the pool and darken where they break its surface.
+     This was mix-blend-mode: difference when the page was black and white;
+     differenced against cream the teal renders a pale pink, so the light-
+     ground equivalent is multiply — teal over cream is still teal (12.4:1),
+     teal over the orange goes near-black (about 15:1), and the pool reads as
+     passing behind the letters rather than in front of them. */
+  mix-blend-mode: multiply;
   transition: opacity 0.4s ease;
 }
 
 .slash {
   font-weight: 400;
   font-size: clamp(26px, 5vw, 76px);
-  color: var(--ash);
-  mix-blend-mode: difference;
+  color: var(--muted-2);
+  mix-blend-mode: multiply;
 }
 
 /* The one you are not reaching for steps back. */
@@ -151,7 +164,7 @@
 .lede {
   margin: 0;
   font-size: clamp(14px, 1.2vw, 17px);
-  color: var(--ash);
+  color: var(--muted-2);
 }
 
 /* --- bottom line ---------------------------------------------------------- */
@@ -163,16 +176,16 @@
   gap: 16px;
   flex-wrap: wrap;
   padding-top: clamp(14px, 2vw, 20px);
-  border-top: 1px solid var(--edge);
+  border-top: 1px solid var(--ink-12);
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ash);
+  color: var(--muted-2);
 }
 
 .email {
-  color: var(--milk);
+  color: var(--ink);
   transition: opacity 0.2s;
 }
 
@@ -200,8 +213,11 @@
   /* Stacked, the pool has to clear two lines rather than sit beside one, so it
      gets shallower and stays under the pair. */
   .mercury {
+    top: auto;
+    bottom: 0;
     width: 88%;
     height: 84px;
+    translate: -50% 0;
   }
 
   .mercury {

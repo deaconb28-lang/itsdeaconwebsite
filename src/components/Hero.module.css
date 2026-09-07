@@ -15,6 +15,7 @@
 }
 
 .pill {
+  border-radius: var(--r-pill);
   display: inline-flex;
   align-items: center;
   gap: 9px;
@@ -109,6 +110,7 @@
 
 .primary,
 .secondary {
+  border-radius: var(--r-pill);
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -160,6 +162,8 @@
 }
 
 .card {
+  box-shadow: 14px 14px 0 var(--ink-12);
+  border-radius: var(--r-panel);
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -167,6 +171,7 @@
   padding: 26px 26px 22px;
   border: 3px solid var(--ink);
   background: var(--panel);
+  animation: dc-float 7s ease-in-out infinite;
 }
 
 .star {
@@ -254,6 +259,7 @@
 }
 
 .orderButton {
+  border-radius: var(--r-pill);
   margin-top: 12px;
   padding: 8px;
   text-align: center;
@@ -298,6 +304,7 @@
 }
 
 .chip {
+  border-radius: var(--r-pill);
   padding: 6px;
   border: 1px solid var(--ink-3);
   }

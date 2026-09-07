@@ -1,7 +1,6 @@
 .section {
   background: var(--ink);
   color: var(--cream);
-  --ac: #fff;
   padding: var(--pad-y) var(--pad-x);
 }
 
@@ -29,6 +28,7 @@
 }
 
 .hint {
+  border-radius: var(--r-pill);
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -46,11 +46,12 @@
 /* --- the napkin ----------------------------------------------------------- */
 
 .napkin {
+  box-shadow: 16px 16px 0 var(--ink-18);
+  border-radius: var(--r-panel);
   padding: clamp(24px, 3.4vw, 40px);
   border: var(--keyline) solid var(--ink);
   background: var(--cream);
   color: var(--ink);
-  --ac: #000;
 }
 
 .rows {
@@ -83,6 +84,7 @@
 
 /* The editable field is the emphasised element of the whole section. */
 .field {
+  border-radius: var(--r-field);
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -131,6 +133,7 @@
 }
 
 .stamp {
+  border-radius: var(--r-pill);
   margin: 8px 0 0;
   padding: 16px 20px;
   border: 3px solid var(--ac);
@@ -142,6 +145,7 @@
 }
 
 .cta {
+  border-radius: var(--r-pill);
   display: flex;
   align-items: center;
   justify-content: center;

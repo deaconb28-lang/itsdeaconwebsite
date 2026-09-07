@@ -1,7 +1,6 @@
 .section {
   background: var(--ink);
   color: var(--cream);
-  --ac: #fff;
   padding: var(--pad-y) var(--pad-x);
 }
 

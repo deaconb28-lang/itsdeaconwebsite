@@ -26,6 +26,7 @@
 /* --- the anchor price ----------------------------------------------------- */
 
 .anchor {
+  border-radius: var(--r-panel);
   display: flex;
   align-items: center;
   gap: 18px;
@@ -80,6 +81,7 @@
 }
 
 .card {
+  border-radius: var(--r-panel);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -97,10 +99,10 @@
 
 .solid {
   /* A dark panel in a light section. It has to declare the WHOLE ground, not
-     just the accent: --ac alone left --ground inheriting #fff from the light
-     section, so every fill-with-accent inside went white on white. */
-  --ac: #fff;
-  --ground: #000;
+     just the accent: --ac alone left --ground inheriting the cream from the
+     section, so every fill-with-accent inside went cream on cream. */
+  --ac: var(--cream);
+  --ground: var(--ink);
   border: 3px solid var(--ink);
   background: var(--ink);
   color: var(--cream);
@@ -117,6 +119,7 @@
 
 .badgeSolid,
 .badgeOutline {
+  border-radius: var(--r-pill);
   position: absolute;
   top: -14px;
   left: 30px;
@@ -125,10 +128,11 @@
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  }
+}
 
 .badgeSolid {
-  background: var(--brand);
+  /* 10px white on orange — the deep one, see rule 2 in globals.css. */
+  background: var(--brand-deep);
   color: var(--on-brand);
 }
 
@@ -239,6 +243,7 @@
 }
 
 .valueNote {
+  border-radius: var(--r-field);
   margin: 20px 0 0;
   padding: 12px 14px;
   background: var(--ink-07);
@@ -256,6 +261,7 @@
 .ctaOutline,
 .ctaAccentToCream,
 .ctaAccentToInk {
+  border-radius: var(--r-pill);
   margin-top: 26px;
   text-align: center;
   padding: 15px;

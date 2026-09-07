@@ -68,6 +68,7 @@
 /* --- form ----------------------------------------------------------------- */
 
 .form {
+  border-radius: var(--r-panel);
   padding: 32px;
   border: 3px solid var(--ink);
   background: var(--panel);
@@ -102,6 +103,7 @@
 
 .input,
 .textarea {
+  border-radius: var(--r-field);
   padding: 13px 14px;
   border: 2px solid var(--ink-3);
   background: var(--cream);
@@ -130,6 +132,7 @@
 }
 
 .moneyField {
+  border-radius: var(--r-field);
   display: flex;
   align-items: center;
   gap: 2px;
@@ -160,6 +163,7 @@
 }
 
 .carryOver {
+  border-radius: var(--r-field);
   display: grid;
   gap: 7px;
   padding: 15px 17px;
@@ -191,6 +195,7 @@
 }
 
 .error {
+  border-radius: var(--r-field);
   margin: 0;
   padding: 13px 15px;
   background: var(--ac-1);
@@ -206,6 +211,7 @@
 }
 
 .submit {
+  border-radius: var(--r-pill);
   margin-top: 6px;
   padding: 17px;
   border: none;
@@ -239,6 +245,7 @@
 /* --- confirmation --------------------------------------------------------- */
 
 .confirmation {
+  border-radius: var(--r-panel);
   padding: 40px;
   border: 3px solid var(--ink);
   background: var(--ink);

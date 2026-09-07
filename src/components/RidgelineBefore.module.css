@@ -98,7 +98,7 @@
   height: 104px;
   padding: 8px;
   border: 1px solid #d0d5dd;
-  border-radius: 4px;
+  border-radius: var(--r-chip);
   background: #e4e7ec;
   color: #98a2b3;
   font-size: 8.5px;
@@ -143,7 +143,7 @@
   display: inline-block;
   padding: 7px 16px;
   border: 1px solid #2f6ba8;
-  border-radius: 4px;
+  border-radius: var(--r-chip);
   background: linear-gradient(#5a9bd8, #2f6ba8);
   color: #fff;
   font-size: 10.5px;
@@ -171,7 +171,7 @@
 .card {
   padding: 10px;
   border: 1px solid #e4e7ec;
-  border-radius: 4px;
+  border-radius: var(--r-chip);
   text-align: center;
 }
 
@@ -244,7 +244,7 @@
   justify-content: center;
   width: 16px;
   height: 16px;
-  border-radius: 3px;
+  border-radius: var(--r-chip);
   background: #3b5998;
   color: #fff;
   font-family: Georgia, serif;
@@ -275,7 +275,7 @@
 
 .cookieButton {
   padding: 4px 10px;
-  border-radius: 3px;
+  border-radius: var(--r-chip);
   background: #4a86c8;
   font-weight: 700;
   white-space: nowrap;
@@ -286,7 +286,7 @@
   right: 10px;
   bottom: 44px;
   padding: 7px 12px;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: #4a86c8;
   color: #fff;
   font-size: 9.5px;

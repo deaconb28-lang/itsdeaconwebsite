@@ -58,8 +58,6 @@ const MARQUEE = [
 export default function SmallBusiness() {
   return (
     <SiteStateProvider audience={SMALL_BUSINESS}>
-      {/* The room, and therefore the colour. */}
-      <div data-brand="small-business">
       <StructuredData meta={META} />
       <Effects />
       <Nav />
@@ -79,7 +77,6 @@ export default function SmallBusiness() {
         phrases={MARQUEE}
         crossLink={{ href: "/restaurants", label: "Run a restaurant?" }}
       />
-      </div>
     </SiteStateProvider>
   );
 }

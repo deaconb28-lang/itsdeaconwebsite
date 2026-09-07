@@ -1,5 +1,4 @@
 .marqueeBar {
-  --ac: #fff;
   overflow: hidden;
   background: var(--ink);
   color: var(--cream);
@@ -37,7 +36,6 @@
 }
 
 .footer {
-  --ac: #fff;
   background: var(--ink);
   color: var(--cream-6);
   display: flex;

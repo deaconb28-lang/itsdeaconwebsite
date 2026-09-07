@@ -130,6 +130,7 @@
 /* --- the polite option ---------------------------------------------------- */
 
 .booking {
+  border-radius: var(--r-field);
   /* Hugs its content: stretched to the column height it read as an empty
      box, which is the opposite of the point — this is the quieter option. */
   align-self: center;
@@ -156,6 +157,7 @@
 }
 
 .book {
+  border-radius: var(--r-chip);
   display: block;
   padding: 9px;
   background: var(--rl-signal);

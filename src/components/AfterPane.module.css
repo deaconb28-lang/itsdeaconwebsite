@@ -48,7 +48,7 @@
 
 .bookPill {
   padding: 8px 16px;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: var(--hv-black);
   color: var(--hv-cream);
   font-family: var(--font-mono);
