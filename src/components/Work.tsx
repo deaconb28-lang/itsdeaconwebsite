@@ -1,8 +1,6 @@
 import Image from "next/image";
 
-import glacier from "../../public/assets/glacier-house.png";
-import kylani from "../../public/assets/kylani.png";
-import supercruise from "../../public/assets/supercruise.png";
+import { WORK } from "@/lib/work";
 import styles from "./Work.module.css";
 
 /**
@@ -11,44 +9,10 @@ import styles from "./Work.module.css";
  * Glacier House used to run full width with a second column of spec rows,
  * making this the tallest section on the page for the sake of one project.
  * Same three pieces of work, one shape, a third of the height.
+ *
+ * The list itself is in src/lib/work.ts — the front page shows the same three
+ * smaller, and one list is the only way the two stay in agreement.
  */
-const WORK = [
-  {
-    index: "01",
-    kind: "Restaurant & pizzeria",
-    title: "Glacier House",
-    body: "A Mt. Hood room whose whole menu used to be a PDF. Now the site takes orders and holds the kitchen hours.",
-    url: "glacierpublichouse.com",
-    href: null,
-    image: glacier,
-    alt: "The Glacier House homepage",
-    contain: false,
-  },
-  {
-    index: "02",
-    kind: "Product site",
-    title: "Kylani",
-    body: "One claim, one input, one thing to do next.",
-    url: "kylani.app",
-    href: "https://kylani.app",
-    image: kylani,
-    alt: "The Kylani product site",
-    contain: false,
-  },
-  {
-    index: "03",
-    kind: "App landing",
-    title: "Supercruise",
-    body: "A dense financial product made legible for a general audience.",
-    url: "supercruise.app",
-    href: "https://bagcheck-oev7.vercel.app",
-    image: supercruise,
-    alt: "The Supercruise app landing page",
-    // Source is 1895x998 and crops badly on cover.
-    contain: true,
-  },
-];
-
 export function Work() {
   return (
     <section id="work" data-ground="dark" className={styles.section}>
@@ -71,9 +35,13 @@ export function Work() {
                 </div>
                 <div className={styles.chromeUrl}>{item.url}</div>
                 <span
-                  className={item.href ? styles.statusLive : styles.statusClient}
+                  className={
+                    item.status === "client"
+                      ? styles.statusClient
+                      : styles.statusLive
+                  }
                 >
-                  {item.href ? "● Live" : "Client"}
+                  {item.status === "client" ? "● Client" : "● Live"}
                 </span>
               </div>
 
@@ -97,16 +65,14 @@ export function Work() {
                   <h3 className={styles.title}>{item.title}</h3>
                   <p className={styles.body}>{item.body}</p>
                 </div>
-                {item.href && (
-                  <span className={styles.arrow} aria-hidden="true">
-                    ↗
-                  </span>
-                )}
+                <span className={styles.arrow} aria-hidden="true">
+                  ↗
+                </span>
               </div>
             </>
           );
 
-          return item.href ? (
+          return (
             <a
               key={item.index}
               href={item.href}
@@ -117,10 +83,6 @@ export function Work() {
             >
               {inner}
             </a>
-          ) : (
-            <div key={item.index} data-reveal="" className={styles.card}>
-              {inner}
-            </div>
           );
         })}
       </div>

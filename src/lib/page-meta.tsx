@@ -52,7 +52,16 @@ export function structuredData(meta: PageMeta) {
     description: meta.description,
     url: new URL(meta.path, siteUrl()).toString(),
     email: "hello@itsdeacon.com",
-    areaServed: "United States",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Salem",
+      addressRegion: "OR",
+      addressCountry: "US",
+    },
+    areaServed: {
+      "@type": "City",
+      name: "Salem, Oregon",
+    },
     priceRange: "$1,200",
     serviceType: meta.serviceType,
   };

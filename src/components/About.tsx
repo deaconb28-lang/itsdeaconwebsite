@@ -74,7 +74,6 @@ export function About() {
               hello@itsdeacon.com
             </a>
           </div>
-
         </div>
       </div>
     </section>

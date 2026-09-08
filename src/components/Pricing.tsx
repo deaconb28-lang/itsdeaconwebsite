@@ -60,7 +60,7 @@ export function Pricing({ features }: { features: PricingFeatures }) {
             </span>
           </div>
           <p className={styles.cadenceOnInk}>Cancel the monthly anytime</p>
-          <p className={styles.subtitleOnInk}>the site, plus us on call</p>
+          <p className={styles.subtitleOnInk}>the site, plus me on call</p>
           <div className={`${styles.features} ${styles.featuresOnInk}`}>
             <Feature>Everything in the Full Redesign</Feature>
             {features.care.map((line) => (

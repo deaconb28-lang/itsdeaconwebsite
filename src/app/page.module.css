@@ -1,28 +1,25 @@
-/* The door — see page.tsx. Cream, deep teal, and one moving thing.
+/* The front page — see page.tsx for why it is no longer a chooser.
 
-   It used to keep a private black-and-white palette, on the argument that the
-   rooms behind it were painted and the door was not. They are the same colour
-   now, so the private palette is gone and this page draws from the site
-   tokens like everything else. Everything except the mercury still gets out
-   of the mercury's way.
-
-   One value is local and has to be: --pool, the colour of the liquid before
-   anyone reaches for a room. It cannot be an --ink-NN alpha, because the goo
-   filter crushes alpha through a steep curve (see Mercury.tsx) and anything
-   translucent vanishes entirely. So it is an opaque 18% teal-in-cream mix. */
+   Nothing here is amorphous and nothing is tracked uppercase. Both were the
+   register the page was trying to leave: a diffuse organic mass over a bare
+   ground with 11px mono chrome reads as a developer tool no matter what
+   colour it is painted. What carries the page instead is a photograph, three
+   real screenshots, and one sentence set larger than anything else on it. */
 
 .page {
-  --pool: #cfcec2;
-
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(24px, 4vh, 48px);
-  padding: clamp(18px, 3vw, 34px) clamp(18px, 4vw, 54px);
+  gap: clamp(48px, 7vw, 88px);
+  padding: clamp(20px, 3vw, 34px) var(--pad-x) clamp(28px, 4vw, 44px);
   background: var(--cream);
   color: var(--ink);
-  font-family: var(--font-display);
+}
+
+.page > * {
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
 }
 
 /* --- top line ------------------------------------------------------------- */
@@ -33,138 +30,204 @@
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
 }
 
 .brand {
   font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 17px;
-  letter-spacing: 0.04em;
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: -0.01em;
 }
 
+/* Sentence case, at reading size. This was 11px mono at .16em tracking, which
+   is the single loudest dev-tool signal a page can wear. */
 .status {
+  font-size: 15px;
   color: var(--muted-2);
 }
 
-/* --- the middle ----------------------------------------------------------- */
+/* --- the greeting --------------------------------------------------------- */
 
-.stage {
+.main {
   flex: 1;
-  min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: clamp(22px, 4vh, 48px);
+  gap: clamp(46px, 6vw, 76px);
 }
 
+.intro {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(22px, 3.4vw, 40px);
+  flex-wrap: wrap;
+}
+
+/* Same crop as the About section's portrait — 4:5, pulled high to the face. */
+.portrait {
+  position: relative;
+  flex-shrink: 0;
+  width: clamp(132px, 15vw, 184px);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--r-field);
+  border: 2px solid var(--ink-12);
+  background: var(--ink-04);
+  box-shadow: 10px 10px 0 var(--ink-07);
+}
+
+.portraitImage {
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+
+.introText {
+  flex: 1;
+  min-width: min(320px, 100%);
+}
+
+.hi {
+  margin: 0 0 10px;
+  font-size: 19px;
+  font-style: italic;
+  color: var(--muted-2);
+}
+
+/* The largest type on the page, and it is a sentence about the work rather
+   than a routing label. */
 .headline {
   margin: 0;
-  max-width: 24ch;
-  font-size: clamp(21px, 2.2vw, 32px);
-  font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: -0.015em;
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--say);
+  /* The filled block below is a line box, and under about 1.05 it overlaps
+     the line above. */
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+}
+
+.place {
+  background: var(--brand);
+  color: var(--on-brand);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0 0.14em;
+}
+
+.offer {
+  margin: clamp(20px, 2.4vw, 28px) 0 0;
+  max-width: 46ch;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* The two pitch pages, as links in a sentence rather than a fork in the road. */
+.inline {
   color: var(--ink);
-  text-wrap: balance;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--brand);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
 }
 
-/* --- the choice, and the mass that follows it ----------------------------- */
+.inline:hover {
+  color: var(--brand-deep);
+}
 
-.choice {
+/* --- the work ------------------------------------------------------------- */
+
+.workHeading {
+  margin: 0 0 clamp(18px, 2.2vw, 26px);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+/* Photographs with names under them, not a grid of cards. The interior Work
+   section is the one that wears browser chrome; repeating it here would make
+   the same thing twice. */
+.workList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  gap: clamp(20px, 3vw, 34px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.workLink {
+  display: block;
+  color: var(--ink);
+}
+
+.shot {
   position: relative;
-  isolation: isolate;
-  /* Room beneath the trades for the pool they stand in. */
-  padding-bottom: clamp(64px, 8vw, 104px);
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--r-field);
+  border: 2px solid var(--ink-12);
+  background: var(--panel);
+  transition: border-color 0.2s, transform 0.2s var(--ease);
 }
 
-/* The company. One volume of attention, sitting behind both trades until you
-   reach for one. */
-.mercury {
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  /* Anchored to the FIRST LINE of the trades, not to the bottom of the box.
-     "Small business" wraps to two lines everywhere below about 1440px, and a
-     bottom-anchored pool then sits under the wrap instead of behind the
-     words — which is the whole effect. The font-size here is not for type;
-     it exists so the em below tracks the trades' own clamp. */
-  font-size: clamp(30px, 6.4vw, 96px);
-  top: 0;
-  width: min(560px, 74%);
-  height: clamp(130px, 15vw, 190px);
-  translate: -50% 0.1em;
-  color: var(--pool);
-  transition: left 0.85s cubic-bezier(0.32, 0.9, 0.3, 1),
-    width 0.85s cubic-bezier(0.32, 0.9, 0.3, 1),
-    color 0.5s var(--ease);
+.workLink:hover .shot {
+  border-color: var(--ink);
+  transform: translateY(-3px);
 }
 
-/* Reaching for a trade pulls the whole mass over and tightens it, because it
-   can only be in one place. :has() keeps this a server component.
-
-   It also takes Deacon's orange — at rest the mass is the same quiet value as
-   the page it sits on, and reaching for a room is what gives it colour. Both
-   rooms turn it the same orange, so it is the travel and not the hue that
-   says which one you are opening. */
-.choice:has(.tradeLeft:hover) .mercury,
-.choice:has(.tradeLeft:focus-visible) .mercury {
-  left: 23%;
-  width: min(400px, 46%);
-  color: var(--brand);
+.shotImage {
+  object-fit: cover;
+  object-position: top center;
 }
 
-.choice:has(.tradeRight:hover) .mercury,
-.choice:has(.tradeRight:focus-visible) .mercury {
-  left: 74%;
-  width: min(460px, 52%);
-  color: var(--brand);
+.shotContain {
+  object-fit: contain;
+  object-position: top center;
 }
 
-.trades {
+.workName {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
-  gap: clamp(10px, 2vw, 30px);
+  gap: 8px;
+  margin-top: 14px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.01em;
 }
 
-.tradeLeft,
-.tradeRight {
-  color: var(--ink);
-  font-weight: 900;
-  font-size: clamp(30px, 6.4vw, 96px);
-  line-height: 0.92;
-  letter-spacing: -0.045em;
-  /* The words stand in the pool and darken where they break its surface.
-     This was mix-blend-mode: difference when the page was black and white;
-     differenced against cream the teal renders a pale pink, so the light-
-     ground equivalent is multiply — teal over cream is still teal (12.4:1),
-     teal over the orange goes near-black (about 15:1), and the pool reads as
-     passing behind the letters rather than in front of them. */
-  mix-blend-mode: multiply;
-  transition: opacity 0.4s ease;
+.workArrow {
+  color: var(--brand-deep);
+  font-size: 14px;
 }
 
-.slash {
-  font-weight: 400;
-  font-size: clamp(26px, 5vw, 76px);
+.workNote {
+  display: block;
+  margin-top: 4px;
+  max-width: 34ch;
+  font-size: 15px;
+  line-height: 1.55;
   color: var(--muted-2);
-  mix-blend-mode: multiply;
 }
 
-/* The one you are not reaching for steps back. */
-.choice:has(.tradeLeft:hover) .tradeRight,
-.choice:has(.tradeRight:hover) .tradeLeft {
-  opacity: 0.42;
-}
-
-.lede {
+.capacity {
   margin: 0;
-  font-size: clamp(14px, 1.2vw, 17px);
+  /* Wide enough that the closing sentence and its link hold one line on a
+     laptop rather than orphaning "— I answer." */
+  max-width: 66ch;
+  font-size: 17px;
+  font-style: italic;
   color: var(--muted-2);
+}
+
+/* The one link in the closing line is not an aside. */
+.capacity .inline {
+  font-style: normal;
 }
 
 /* --- bottom line ---------------------------------------------------------- */
@@ -175,74 +238,39 @@
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  padding-top: clamp(14px, 2vw, 20px);
-  border-top: 1px solid var(--ink-12);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  padding-top: clamp(18px, 2.4vw, 24px);
+  border-top: 2px solid var(--ink-12);
+  font-size: 15px;
   color: var(--muted-2);
 }
 
 .email {
   color: var(--ink);
-  transition: opacity 0.2s;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--ink-25);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s;
 }
 
 .email:hover {
-  opacity: 0.6;
+  text-decoration-color: var(--brand);
 }
 
-/* Below the point where two trades fit on one line they stack, and the mass
-   sits behind the pair rather than travelling between them. */
-@media (max-width: 720px) {
-  .trades {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+/* The portrait and the greeting stop sitting side by side before the headline
+   is squeezed into two-word lines. */
+@media (max-width: 560px) {
+  .intro {
+    gap: 20px;
   }
 
-  .slash {
-    display: none;
-  }
-
-  .choice {
-    padding-bottom: 46px;
-  }
-
-  /* Stacked, the pool has to clear two lines rather than sit beside one, so it
-     gets shallower and stays under the pair. */
-  .mercury {
-    top: auto;
-    bottom: 0;
-    width: 88%;
-    height: 84px;
-    translate: -50% 0;
-  }
-
-  .mercury {
-    transition: translate 0.85s cubic-bezier(0.32, 0.9, 0.3, 1);
-  }
-
-  .choice:has(.tradeLeft:hover) .mercury,
-  .choice:has(.tradeLeft:focus-visible) .mercury {
-    left: 50%;
-    translate: -50% -44%;
-    width: 92%;
-  }
-
-  .choice:has(.tradeRight:hover) .mercury,
-  .choice:has(.tradeRight:focus-visible) .mercury {
-    left: 50%;
-    translate: -50% 0;
-    width: 92%;
+  .portrait {
+    width: 116px;
   }
 }
 
-/* The drift is ambient and the pooling is a response to a deliberate action,
-   so the drift goes and the pooling stays — just without the travel. */
 @media (prefers-reduced-motion: reduce) {
-  .mercury {
-    transition: none;
+  .workLink:hover .shot {
+    transform: none;
   }
 }

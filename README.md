@@ -7,16 +7,26 @@ local businesses.
 
 | Route | What it is |
 |---|---|
-| `/` | The door. One viewport, and a single mass of mercury that pools under whichever trade you reach for. |
+| `/` | The front page. Who Deacon is, where he is, three sites he built, and the two pitches linked inside a sentence. |
 | `/restaurants` | The original pitch, moved here verbatim. |
 | `/small-business` | The same argument, made to someone who gets *found* rather than recommended. |
 
-`/` was two side-by-side cards, which is the pattern Upwork, PayPal, Loom,
-Sketch and — fatally — Wix all use to segment a signup. A shop that letters by
-hand cannot open on the same screen as the website builder it argues against,
-so the trades became ruled rows on a board: a device from the subject's own
-world rather than a SaaS onboarding step. The 01/02 numbering went with the
-cards, since it implied a sequence and these are alternatives.
+`/` has been a segmentation gate twice — first two side-by-side cards (the
+pattern Upwork, PayPal, Loom, Sketch and, fatally, Wix all use to sort a
+signup), then two trade names at 96px over a drifting mass of liquid. The
+second was worse than the first: one diffuse organic shape on a bare ground
+with tracked-uppercase-mono chrome is the house style of every infrastructure
+company's landing page, and the headline underneath it was
+`clamp(21px, 2.2vw, 32px)` — smaller than the scale this site reserves for
+calculators. The page shouted about which funnel you belonged to and mumbled
+about the work.
+
+So it is not a gate any more. The sentence about the work is the largest thing
+on the page, the two pitches are links inside a sentence, and the page carries
+what somebody actually wants before they call a stranger: his face, his town,
+and three sites he really built that open in a new tab. **Nothing on `/` may be
+larger than its `<h1>`** — `check2.mjs` asserts it at three widths, because
+that inversion is the whole point and it is easy to undo by accident.
 
 Each pitch is one page and one argument, and **the section order *is* the
 pitch**: a visitor sees the price before they are invited to look up their own
@@ -253,29 +263,6 @@ of ten sections read as the same section.
 Ridgeline is hi-vis, and against the cream they detonate — which is the point.
 Those are other people's businesses and they are supposed to look like
 themselves, not like Deacon.
-
-### The mercury
-
-The homepage's liquid (`src/components/Mercury.tsx`) is the company: one person
-taking three projects a month is a single volume of attention that cannot be in
-two places, so the mass pools under whichever trade you reach for and leaves
-the other. The merging is an SVG goo filter — blur, then crank alpha contrast —
-and the pooling runs on `:has()`, so the page ships no JavaScript.
-
-At rest the pool is a quiet mix of the two grounds; reaching for a room turns
-it the orange. Both rooms turn it the *same* orange, so it is the travel and
-not the hue that says which one you are opening. The trades sit in the liquid
-with `mix-blend-mode: multiply` and darken where they break its surface — the
-dark-ground version of this used `difference`, which renders a pale pink once
-the ground is cream. The pool anchors to the first line of the trades rather
-than the bottom of their box, because "Small business" wraps below about
-1440px and a bottom-anchored pool then sits under the wrap instead of behind
-the words.
-
-**It appears there and nowhere else.** It was tried behind About's "It's just
-me. On purpose." — the same argument in words — and cut: it sat over the lede
-and made the section harder to read. Repeating the one thing a site is
-remembered for is how a signature becomes wallpaper.
 
 ## Things worth knowing before changing it
 
