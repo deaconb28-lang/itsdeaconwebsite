@@ -137,6 +137,73 @@
   color: var(--brand-deep);
 }
 
+/* --- the two doors -------------------------------------------------------- */
+
+/* Full-width ruled rows, so the type can be genuinely large without the page
+   turning back into a two-card chooser. The row is the target, not the words
+   inside it. */
+.route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: clamp(20px, 2.6vw, 30px) clamp(14px, 1.8vw, 22px);
+  border-top: 2px solid var(--ink-12);
+  color: var(--ink);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.route:last-of-type {
+  border-bottom: 2px solid var(--ink-12);
+}
+
+.route:hover,
+.route:focus-visible {
+  background: var(--ink-04);
+  border-color: var(--ink);
+}
+
+.routeText {
+  min-width: 0;
+}
+
+.routeTitle {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--show);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.routeNote {
+  display: block;
+  margin-top: 8px;
+  max-width: 62ch;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--muted-2);
+}
+
+/* Big enough to read as the destination rather than as punctuation. */
+.routeArrow {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: clamp(46px, 4.4vw, 62px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--brand-deep);
+  color: var(--on-brand);
+  font-size: clamp(20px, 2vw, 26px);
+  transition: transform 0.25s var(--ease);
+}
+
+.route:hover .routeArrow,
+.route:focus-visible .routeArrow {
+  transform: translateX(6px);
+}
+
 /* --- the work ------------------------------------------------------------- */
 
 .workHeading {
@@ -270,7 +337,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .workLink:hover .shot {
+  .workLink:hover .shot,
+  .route:hover .routeArrow,
+  .route:focus-visible .routeArrow {
     transform: none;
   }
 }

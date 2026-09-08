@@ -78,18 +78,45 @@ export default function Home() {
             </h1>
 
             <p className={styles.offer}>
-              Free homepage first, before you owe me a cent. I&rsquo;ve written
-              the whole thing up{" "}
-              <Link href="/restaurants" className={styles.inline}>
-                for restaurants
-              </Link>
-              , or{" "}
-              <Link href="/small-business" className={styles.inline}>
-                for everything else
-              </Link>
-              .
+              Free homepage first, before you owe me a cent.
             </p>
           </div>
+        </section>
+
+        {/* The two pitches, as two doors rather than two words in a
+            paragraph. Ruled rows and not a pair of cards: a card pair is the
+            signup-segmentation pattern this page spent a redesign getting out
+            of, and rows let the type run at --show without boxing the reader
+            into a choice before he has been told anything. */}
+        <section className={styles.routes}>
+          <h2 className={styles.workHeading}>
+            I&rsquo;ve written the whole thing up.
+          </h2>
+
+          <Link href="/restaurants" className={styles.route}>
+            <span className={styles.routeText}>
+              <span className={styles.routeTitle}>I run a restaurant</span>
+              <span className={styles.routeNote}>
+                Menus, hours, bookings, and the phone that never stops.
+              </span>
+            </span>
+            <span className={styles.routeArrow} aria-hidden="true">
+              →
+            </span>
+          </Link>
+
+          <Link href="/small-business" className={styles.route}>
+            <span className={styles.routeText}>
+              <span className={styles.routeTitle}>I run something else</span>
+              <span className={styles.routeNote}>
+                Trades, shops, studios, services — anywhere people search
+                first.
+              </span>
+            </span>
+            <span className={styles.routeArrow} aria-hidden="true">
+              →
+            </span>
+          </Link>
         </section>
 
         <section className={styles.work}>

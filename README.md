@@ -22,9 +22,13 @@ calculators. The page shouted about which funnel you belonged to and mumbled
 about the work.
 
 So it is not a gate any more. The sentence about the work is the largest thing
-on the page, the two pitches are links inside a sentence, and the page carries
-what somebody actually wants before they call a stranger: his face, his town,
-and three sites he really built that open in a new tab. **Nothing on `/` may be
+on the page, and it carries what somebody actually wants before they call a
+stranger: his face, his town, and three sites he really built that open in a
+new tab. The two pitches follow it as **ruled rows, not a card pair** — a card
+pair is the segmentation pattern above, and rows let the type run at `--show`
+without boxing the reader into a choice before he has been told anything. They
+are phrased in the visitor's voice ("I run a restaurant"), not as category
+labels. **Nothing on `/` may be
 larger than its `<h1>`** — `check2.mjs` asserts it at three widths, because
 that inversion is the whole point and it is easy to undo by accident.
 
