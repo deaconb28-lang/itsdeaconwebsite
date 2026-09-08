@@ -7,7 +7,7 @@ local businesses.
 
 | Route | What it is |
 |---|---|
-| `/` | The front page. Who Deacon is, where he is, three sites he built, and the two pitches linked inside a sentence. |
+| `/` | The front page. Who Deacon is, where he is, what it costs, two doors into the pitches, and three sites he built. |
 | `/restaurants` | The original pitch, moved here verbatim. |
 | `/small-business` | The same argument, made to someone who gets *found* rather than recommended. |
 
@@ -267,6 +267,16 @@ of ten sections read as the same section.
 Ridgeline is hi-vis, and against the cream they detonate — which is the point.
 Those are other people's businesses and they are supposed to look like
 themselves, not like Deacon.
+
+### Social cards
+
+Each route has its own `opengraph-image.png` beside its `page.tsx`, and Next's
+file convention turns it into `og:image` and `twitter:image` at 1200×630 with
+no code in `page-meta.tsx`. They are rendered by `scripts/og.mjs`, which drives
+a browser at the running site and swaps the body for the card — so the type is
+the site's own Archivo and the colours are the live tokens, with no font binary
+in the repo and no network call at build time. **Regenerate them whenever the
+palette or a hero headline changes**; nothing checks that they still match.
 
 ## Things worth knowing before changing it
 

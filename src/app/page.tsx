@@ -50,7 +50,9 @@ export default function Home() {
 
       <header className={styles.head}>
         <span className={styles.brand}>Deacon</span>
-        <span className={styles.status}>Open — three projects a month</span>
+        <a href="mailto:hello@itsdeacon.com" className={styles.headEmail}>
+          hello@itsdeacon.com
+        </a>
       </header>
 
       <main className={styles.main}>
@@ -77,9 +79,24 @@ export default function Home() {
               time.
             </h1>
 
-            <p className={styles.offer}>
-              Free homepage first, before you owe me a cent.
-            </p>
+            <div className={styles.offer}>
+              <p className={styles.offerLead}>
+                I build your homepage first, before you owe me a cent.
+              </p>
+
+              <div className={styles.price}>
+                <span className={styles.priceFigure}>$1,200</span>
+                <span className={styles.priceNote}>
+                  after that, if you want the rest of the site. An agency
+                  quotes the same work at $6,000&ndash;15,000.
+                </span>
+              </div>
+
+              <p className={styles.offerFoot}>
+                The mockup is free and yours to keep &mdash; even if you tell
+                me no today.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -119,7 +136,15 @@ export default function Home() {
           </Link>
         </section>
 
-        <section className={styles.work}>
+        <section data-ground="dark" className={styles.work}>
+          <p className={styles.stat}>
+            <span className={styles.statFigure}>75%</span>
+            <span className={styles.statClaim}>
+              judge how trustworthy a business is by how its website looks.
+              <span className={styles.statSource}>Stanford University</span>
+            </span>
+          </p>
+
           <h2 className={styles.workHeading}>Some of what I&rsquo;ve built.</h2>
 
           <ul className={styles.workList}>
