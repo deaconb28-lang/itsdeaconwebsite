@@ -74,29 +74,9 @@ export default function Home() {
             <p className={styles.hi}>hi &mdash; I&rsquo;m Deacon.</p>
 
             <h1 className={styles.headline}>
-              I build websites for local businesses in{" "}
-              <span className={styles.place}>Salem</span>, by hand, one at a
-              time.
+              Your website should be your{" "}
+              <span className={styles.accent}>hardest worker.</span>
             </h1>
-
-            <div className={styles.offer}>
-              <p className={styles.offerLead}>
-                I build your homepage first, before you owe me a cent.
-              </p>
-
-              <div className={styles.price}>
-                <span className={styles.priceFigure}>$1,200</span>
-                <span className={styles.priceNote}>
-                  after that, if you want the rest of the site. An agency
-                  quotes the same work at $6,000&ndash;15,000.
-                </span>
-              </div>
-
-              <p className={styles.offerFoot}>
-                The mockup is free and yours to keep &mdash; even if you tell
-                me no today.
-              </p>
-            </div>
           </div>
         </section>
 

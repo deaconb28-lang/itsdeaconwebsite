@@ -8,6 +8,8 @@
  * Regenerate after a palette or headline change:
  *   npm run build && npx next start &
  *   OG_BASE=http://localhost:3000 node scripts/og.mjs
+ *
+ * Add OG_BROWSER=/path/to/chrome if Playwright has no browser of its own.
  */
 import { chromium } from "playwright";
 
@@ -17,16 +19,21 @@ const OUT = new URL("../src/app", import.meta.url).pathname;
 const CARDS = [
   { route: "/", file: `${OUT}/opengraph-image.png`,
     lead: "hi — I’m Deacon.",
-    head: ["Websites for local businesses in ", "Salem"], hi: 1 },
+    head: ["Your website should be your ", "hardest worker."], hi: 1 },
   { route: "/restaurants", file: `${OUT}/restaurants/opengraph-image.png`,
     lead: "For restaurants",
     head: ["Make customers ", "hungry", " before they ever walk in the door."], hi: 1 },
   { route: "/small-business", file: `${OUT}/small-business/opengraph-image.png`,
     lead: "For small business",
-    head: ["Your website should be your ", "hardest-working employee."], hi: 1 },
+    head: ["You’re one of ", "three names on a screen."], hi: 1 },
 ];
 
-const b = await chromium.launch();
+/* OG_BROWSER points at a Chromium binary when the local Playwright install
+   does not have its own (a sandbox with a pinned build, for instance).
+   Unset, Playwright uses whatever `npx playwright install` put down. */
+const b = await chromium.launch(
+  process.env.OG_BROWSER ? { executablePath: process.env.OG_BROWSER } : {},
+);
 
 for (const card of CARDS) {
   const p = await b.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });

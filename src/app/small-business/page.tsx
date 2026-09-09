@@ -49,7 +49,7 @@ export const metadata = metadataFor(META);
  * restaurant page's along with the headline.
  */
 const MARQUEE = [
-  "Your hardest-working employee",
+  "You’re one of three names",
   "Free mockup first",
   "Live in two weeks",
   "No hostages",

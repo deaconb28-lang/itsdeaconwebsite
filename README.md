@@ -7,7 +7,7 @@ local businesses.
 
 | Route | What it is |
 |---|---|
-| `/` | The front page. Who Deacon is, where he is, what it costs, two doors into the pitches, and three sites he built. |
+| `/` | The front page. Who Deacon is, the tagline, two doors into the pitches, and three sites he built. |
 | `/restaurants` | The original pitch, moved here verbatim. |
 | `/small-business` | The same argument, made to someone who gets *found* rather than recommended. |
 
@@ -268,6 +268,24 @@ Ridgeline is hi-vis, and against the cream they detonate — which is the point.
 Those are other people's businesses and they are supposed to look like
 themselves, not like Deacon.
 
+### One line, one page
+
+**"Your website should be your hardest worker."** is the homepage's, and it is
+the homepage's alone. It sat on `/small-business` for a while, and putting it
+back on `/` without moving it would have left two indexed pages making the same
+claim in the same words — which is the thing the per-route canonicals exist to
+avoid. `/small-business` took back **"You're one of three names on a screen."**,
+which is also the better line for it: the hero's own graphic beside that
+headline is three local search results.
+
+Anything that quotes a headline has to move with it. The `SiteFooter` marquee's
+first phrase is a quote of the hero above it, and `HeroBusiness`'s card aside
+captions the picture — both changed too.
+
+**Trailing punctuation goes inside the accent span**, never after it. The block
+carries `padding: 0 .14em`, so a comma or full stop left outside sits away from
+the word with a visible gap in it.
+
 ### Social cards
 
 Each route has its own `opengraph-image.png` beside its `page.tsx`, and Next's
@@ -329,13 +347,6 @@ both to fix things that were broken rather than to restyle anything:
    page as you scrolled. Below 620px the brand and the call to action take the
    first line and the links scroll along the second — the two lines the handoff
    describes.
-2. **The hero headline** (`Hero.module.css`, `max-width: 359px`). Its
-   non-breaking hyphen means "hardest-working" can never split, so the word has
-   to fit whole; at the 44px floor it needs more room than a 320px screen has.
-   Below the handoff's narrowest tested width the type steps down. 375px and up
-   are untouched. That phrase now heads `/small-business`, but the rule stays
-   in `Hero.module.css` because both heroes share `.headline` —
-   `HeroBusiness` imports this module for its entire left column.
 
 Every `repeat(auto-fit, minmax(Npx, 1fr))` also became
 `minmax(min(Npx, 100%), 1fr)`, which behaves identically above the floor and
