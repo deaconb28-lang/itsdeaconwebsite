@@ -84,12 +84,11 @@ export default function Home() {
             paragraph. Ruled rows and not a pair of cards: a card pair is the
             signup-segmentation pattern this page spent a redesign getting out
             of, and rows let the type run at --show without boxing the reader
-            into a choice before he has been told anything. */}
+            into a choice before he has been told anything. No heading over
+            them either: "I run a restaurant →" says what it is and where it
+            goes, and a line announcing that a section is starting is the tic
+            the eyebrows came out for. */}
         <section className={styles.routes}>
-          <h2 className={styles.workHeading}>
-            I&rsquo;ve written the whole thing up.
-          </h2>
-
           <Link href="/restaurants" className={styles.route}>
             <span className={styles.routeText}>
               <span className={styles.routeTitle}>I run a restaurant</span>
