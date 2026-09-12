@@ -78,6 +78,63 @@
   font-weight: 800;
 }
 
+/* --- the two dropdowns ---------------------------------------------------- */
+
+/* They sit inside the sentence, so they are underlined words with a caret
+   rather than boxes. The box treatment is reserved for the spend field, which
+   is the one thing this section wants you to change first. */
+.choice {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 0 2px 1px;
+  border-bottom: 2px dashed var(--ac);
+}
+
+/* The word itself. The select on top is what actually changes it. */
+.chosen {
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+
+/* Invisible and exactly over the word, so the hit target is the word. */
+.select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* The dropdown list itself is painted by the OS, which on a dark system theme
+   inherits neither the panel nor the ink. Naming both keeps the options
+   legible wherever they are drawn. */
+.select option {
+  background: var(--panel);
+  color: var(--ink);
+}
+
+/* The ring goes on the wrapper: the control it belongs to is invisible. */
+.choice:focus-within {
+  outline: 3px solid var(--ac);
+  outline-offset: 3px;
+}
+
+.caret {
+  font-size: 0.7em;
+  color: var(--ac);
+  pointer-events: none;
+}
+
 .figureAccent {
   color: var(--ac);
 }
@@ -93,6 +150,13 @@
   border: 3px solid var(--ac);
   background: var(--panel);
   box-shadow: 0 3px 0 var(--ac);
+}
+
+/* The input inside sets outline:none so the box reads as one field; the ring
+   has to land on the box or tabbing into the calculator shows nothing at all. */
+.field:focus-within {
+  outline: 3px solid var(--ac);
+  outline-offset: 3px;
 }
 
 .fieldLabel {

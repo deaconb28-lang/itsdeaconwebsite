@@ -4,10 +4,19 @@ import { useCallback, useEffect, useState } from "react";
 
 import type { Finding } from "@/lib/audit";
 import type { Audience } from "@/lib/audience";
+import { BUILD_OPTIONS, money, optionById } from "@/lib/offerings";
 import type { PreviewResult } from "@/lib/preview";
 import { normaliseUrl } from "@/lib/url";
 import { useSiteState } from "./SiteState";
 import styles from "./Lookup.module.css";
+
+/**
+ * The button quotes the build it is offering, and it quotes it from the menu
+ * rather than from memory: this line used to be a written-out price and it was
+ * the one place on the site that could silently disagree with the pricing
+ * section.
+ */
+const REDESIGN_PRICE = money(optionById(BUILD_OPTIONS, "redesign").amount);
 
 type Phase = "idle" | "checking" | "ready" | "error";
 
@@ -278,8 +287,12 @@ function Report({
         {audit.summary}
       </p>
 
-      <a href="#contact" className={styles.fix}>
-        {clean || audit.blocked ? "Get a free mockup" : "Fix it for $1,200"}
+      {/* Tagged like the pricing cards, so an enquiry that starts here is
+          distinguishable from one that starts at the bottom of the page. */}
+      <a href="#contact" data-tier="redesign" className={styles.fix}>
+        {clean || audit.blocked
+          ? "Get a free mockup"
+          : `Fix it for ${REDESIGN_PRICE}`}
         <span aria-hidden="true">→</span>
       </a>
     </div>

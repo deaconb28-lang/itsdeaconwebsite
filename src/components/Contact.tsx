@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useSiteState } from "./SiteState";
 import styles from "./Contact.module.css";
@@ -26,13 +26,35 @@ export type ContactCopy = {
 };
 
 export function Contact({ copy }: { copy: ContactCopy }) {
-  const { spend, setSpend, figures, audience } = useSiteState();
+  const { spend, setSpend, buildId, planId, figures, audience, tier, setTier } =
+    useSiteState();
   const { units, form } = audience;
   const [fields, setFields] = useState<Fields>(EMPTY);
   const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof Fields, string>>>({});
+
+  /**
+   * Which pricing card sent them down here.
+   *
+   * One delegated listener on the document rather than a handler per button:
+   * the pricing section is a server component and stays one, and this way a
+   * CTA added later is picked up without wiring anything. Clicking a second
+   * card overwrites the first, which is the right answer — the last one they
+   * chose is the one they meant.
+   */
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const chosen = target.closest("[data-tier]")?.getAttribute("data-tier");
+      if (chosen) setTier(chosen);
+    };
+
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, [setTier]);
 
   const set = useCallback(
     <K extends keyof Fields>(key: K, value: Fields[K]) => {
@@ -49,6 +71,7 @@ export function Contact({ copy }: { copy: ContactCopy }) {
       `Reach me at: ${fields.email || "—"}`,
       `Current site: ${fields.currentSite || "—"}`,
       `Average ${units.one}: $${spend || figures.price}`,
+      `Looking at: ${figures.choice.build.label}, ${figures.choice.plan.label}`,
       "",
       fields.notes,
     ].join("\n");
@@ -58,7 +81,7 @@ export function Contact({ copy }: { copy: ContactCopy }) {
       : "Free mockup";
 
     return `mailto:${INBOX}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  }, [fields, spend, figures.price, form.nameLabel, units.one]);
+  }, [fields, spend, figures.price, figures.choice, form.nameLabel, units.one]);
 
   const submit = useCallback(
     async (event: React.FormEvent) => {
@@ -76,6 +99,9 @@ export function Contact({ copy }: { copy: ContactCopy }) {
           body: JSON.stringify({
             ...fields,
             spend,
+            build: buildId,
+            plan: planId,
+            tier,
             audience: audience.id,
             company: honeypot,
           }),
@@ -104,7 +130,7 @@ export function Contact({ copy }: { copy: ContactCopy }) {
         );
       }
     },
-    [fields, honeypot, status, spend, audience.id],
+    [fields, honeypot, status, spend, buildId, planId, tier, audience.id],
   );
 
   return (
@@ -188,7 +214,8 @@ export function Contact({ copy }: { copy: ContactCopy }) {
                 </span>
                 <span>
                   {units.cadence} at that price is{" "}
-                  <b>{figures.monthly}</b> a month. The build clears by{" "}
+                  <b>{figures.monthly}</b> a month.{" "}
+                  <b>{figures.choice.build.label}</b> clears by{" "}
                   <b>{figures.payback}</b>, then it&rsquo;s{" "}
                   <b>{figures.surplus}</b> a month, yours.
                 </span>

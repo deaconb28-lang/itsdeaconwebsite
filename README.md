@@ -68,6 +68,32 @@ That boundary is the point. Parameterising everything would turn deliberate
 copy into template soup, and a general-audience page that reads as a template
 is the one thing a one-person shop cannot afford.
 
+## What is on sale, and where the prices live
+
+**Two axes, not three tiers.** You pick a build — The Report `$300`, The
+Redesign `$1,200`, The Redesign + Refresh `$2,000` — and then you add a monthly
+plan, Care `$75` or Care + Hosting `$200`, or you don't. The pricing section is
+therefore two rows and not one row of three, because the layout has to say that
+before anyone reads a word. It used to be three cards that were all the same
+`$1,200` build differing only by the monthly attached, which made a monthly look
+like something you chose *instead of* a cheaper build.
+
+**Every price on the site is a number in `src/lib/offerings.ts`,** in
+`BUILD_OPTIONS` and `PLAN_OPTIONS`. The pricing cards render it, the napkin
+calculator does arithmetic with it, the "Fix it for …" button in the looker
+quotes it, the Report's 30-day credit names it, and the JSON-LD `priceRange`
+and `OfferCatalog` are derived from it. Change a price there and the six agree;
+there is nowhere else to change it. `offeringsFor()` welds those numbers to the
+per-audience words in each route's `copy.ts`, which is what stops the two pitch
+pages drifting — there is no way to add a tier to one page and forget the other.
+
+The napkin math takes the build and the monthly as parameters now, chosen from
+two dropdowns **inside the sentence** rather than from a control panel above it;
+the section is already a thing you type into, and a second place to fiddle would
+have read as a form. The visible word is a span with the real `<select>`
+invisible on top of it, because a select is always as wide as its longest option
+and "Care" otherwise sat in a box the width of "The Redesign + Refresh".
+
 ## Running it
 
 ```bash
@@ -101,8 +127,14 @@ be traced afterwards.
 copy, and hands it to whichever provider is configured — **Resend** if
 `RESEND_API_KEY` is set, otherwise **SMTP** if `SMTP_HOST`/`SMTP_USER`/`SMTP_PASS`
 are. `Reply-To` is the sender's address, so replying from the inbox goes straight
-back to them. The email carries the visitor's napkin-math figures and says
+back to them. The email carries the visitor's napkin-math figures, which build
+and monthly they were priced against, which pricing card they clicked, and
 which page they came from.
+
+The clicked card arrives as `tier`, and the route resolves it against the menu
+rather than printing it: what reaches the inbox is one of five known names or
+nothing at all. Three of the buttons read "Start a build", so without it every
+enquiry from the pricing section looks the same.
 
 The route also accepts the old `restaurant` and `table` field names alongside
 today's `business` and `spend`, and answers a missing name under both keys.
@@ -194,6 +226,7 @@ src/
   components/             one file per section, colocated CSS module
   lib/
     audience.ts           the two readers — nouns and defaults, never sentences
+    offerings.ts          every price on the site, once
     napkin.ts             the arithmetic behind the math and contact sections
     url.ts                normalising and the public-address rules
     safe-fetch.ts         DNS-checked fetch that re-validates redirects

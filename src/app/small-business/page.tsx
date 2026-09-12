@@ -17,7 +17,7 @@ import { metadataFor, StructuredData, type PageMeta } from "@/lib/page-meta";
 import {
   CONTACT,
   NAPKIN_LEDE,
-  PRICING,
+  OFFERINGS,
   PROCESS_NOTE,
   PROCESS_STEPS,
 } from "./copy";
@@ -35,6 +35,7 @@ const META: PageMeta = {
     "Deacon",
   ],
   serviceType: "Small business website design and development",
+  offers: true,
 };
 
 export const metadata = metadataFor(META);
@@ -67,7 +68,7 @@ export default function SmallBusiness() {
         <DifferenceBusiness />
         <Work />
         <Process steps={PROCESS_STEPS} note={PROCESS_NOTE} />
-        <Pricing features={PRICING} />
+        <Pricing offerings={OFFERINGS} />
         <Lookup />
         <NapkinMath lede={NAPKIN_LEDE} />
         <About />

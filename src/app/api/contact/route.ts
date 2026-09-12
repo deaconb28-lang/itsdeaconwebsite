@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 import { audienceFrom, type Audience } from "@/lib/audience";
 import { envOr } from "@/lib/env";
 import { sendMail } from "@/lib/mail";
-import { calcNapkin } from "@/lib/napkin";
+import { calcNapkin, choiceFrom } from "@/lib/napkin";
+import { BUILD_OPTIONS, PLAN_OPTIONS } from "@/lib/offerings";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -53,6 +54,11 @@ type ContactPayload = {
   spend?: unknown;
   table?: unknown;
   notes?: unknown;
+  /** Which build and which monthly the napkin math was set to. */
+  build?: unknown;
+  plan?: unknown;
+  /** The id of the pricing card whose button they clicked, if they clicked one. */
+  tier?: unknown;
   audience?: unknown;
   /** Honeypot — a real person never fills this in. */
   company?: unknown;
@@ -97,6 +103,9 @@ export async function POST(request: Request) {
     .replace(/[^0-9]/g, "")
     .slice(0, MAX_LENGTHS.spend);
   const notes = str(payload.notes).slice(0, MAX_LENGTHS.notes);
+  // Resolved against the menu rather than trusted: what lands in the inbox is
+  // one of five known names or nothing at all, never a string a bot chose.
+  const tier = tierName(str(payload.tier));
 
   const fieldErrors: Record<string, string> = {};
   if (!business) {
@@ -115,13 +124,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, fieldErrors }, { status: 400 });
   }
 
-  const figures = calcNapkin(spend, audience.units);
+  const figures = calcNapkin(
+    spend,
+    audience.units,
+    choiceFrom(str(payload.build), str(payload.plan)),
+  );
   const subject = `New mockup request — ${business}`;
   const enquiry: Enquiry = {
     business,
     email,
     currentSite,
     notes,
+    tier,
     figures,
     audience,
   };
@@ -164,15 +178,32 @@ type Enquiry = {
   email: string;
   currentSite: string;
   notes: string;
+  /** The card they clicked, already resolved to a name. Empty if they scrolled. */
+  tier: string;
   figures: ReturnType<typeof calcNapkin>;
   audience: Audience;
 };
+
+/**
+ * Turns a posted tier id into the name of the thing it refers to.
+ *
+ * Three buttons on the page read "Start a build", so without this every
+ * enquiry from the pricing section looks the same in the inbox as every other.
+ * Unknown ids resolve to nothing rather than to a guess.
+ */
+function tierName(id: string): string {
+  const match = [...BUILD_OPTIONS, ...PLAN_OPTIONS].find(
+    (option) => option.id === id,
+  );
+  return match ? match.label : "";
+}
 
 function renderText({
   business,
   email,
   currentSite,
   notes,
+  tier,
   figures,
   audience,
 }: Enquiry) {
@@ -181,8 +212,10 @@ function renderText({
     `${pad("Came from")}${audience.path}`,
     `${pad("Reach them")}${email}`,
     `${pad("Current site")}${currentSite || "—"}`,
+    `${pad("Clicked")}${tier || "—"}`,
     "",
     "Their napkin math",
+    `  Priced against: ${figures.choice.build.label}, ${figures.choice.plan.label}`,
     `  Average ${audience.units.one}: $${figures.price}`,
     `  Two a week:     ${figures.monthly} a month`,
     `  Build clears:   ${figures.payback}`,
@@ -207,6 +240,7 @@ function renderHtml({
   email,
   currentSite,
   notes,
+  tier,
   figures,
   audience,
 }: Enquiry) {
@@ -224,9 +258,14 @@ function renderHtml({
     <table style="border-collapse:collapse;width:100%">
       ${row("Reach them", `<a href="mailto:${escapeHtml(email)}" style="color:#B8420F">${escapeHtml(email)}</a>`)}
       ${row("Current site", currentSite ? linkify(currentSite) : "&mdash;")}
+      ${row("Clicked", tier ? `<b>${escapeHtml(tier)}</b>` : "&mdash;")}
     </table>
     <div style="margin:22px 0;padding:16px 18px;border-radius:8px;background:rgba(224,87,28,.1)">
       <p style="margin:0 0 8px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#B8420F">Their napkin math</p>
+      <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:#3F5049">
+        Priced against <b style="color:#13312C">${escapeHtml(figures.choice.build.label)}</b> and
+        <b style="color:#13312C">${escapeHtml(figures.choice.plan.label)}</b>.
+      </p>
       <p style="margin:0;font-size:15px;line-height:1.6;color:#3F5049">
         Average ${escapeHtml(audience.units.one)} <b style="color:#13312C">$${figures.price}</b> &middot;
         two a week is <b style="color:#13312C">${escapeHtml(figures.monthly)}</b> a month &middot;

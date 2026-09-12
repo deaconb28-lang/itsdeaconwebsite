@@ -23,62 +23,53 @@
   letter-spacing: -0.035em;
 }
 
-/* --- the anchor price ----------------------------------------------------- */
+/* --- the two rows --------------------------------------------------------- */
 
-.anchor {
-  border-radius: var(--r-panel);
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
-  padding: 14px 20px;
-  border: 2px solid var(--ink);
-  background: var(--panel);
-}
-
-.anchorLabel,
-.anchorLabelAccent {
+.sub {
   margin: 0;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  max-width: 48ch;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--muted);
 }
 
-.anchorLabel {
+.builds {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 20px;
+}
+
+/* The plans get their own auto-fit track rather than inheriting the builds'.
+   Three over two does not divide, and a shared grid would have left a plan
+   card sitting in a third of the width with a hole beside it. The wider floor
+   is also what makes them go two-up where the builds go three-up. */
+.plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
+  gap: 20px;
+}
+
+.plansHeader {
+  margin: clamp(44px, 5vw, 64px) 0 24px;
+}
+
+.plansHeading {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--show);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.plansNote {
+  margin: 22px 0 0;
+  font-size: 15px;
+  font-style: italic;
   color: var(--muted-2);
 }
 
-.anchorLabelAccent {
-  color: var(--ac);
-}
-
-.anchorStruck,
-.anchorPrice {
-  margin: 3px 0 0;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 27px;
-  letter-spacing: -0.02em;
-}
-
-.anchorStruck {
-  color: var(--faint);
-  text-decoration: line-through;
-}
-
-.anchorArrow {
-  font-size: 22px;
-  color: var(--faint);
-}
-
-/* --- plans ---------------------------------------------------------------- */
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(265px, 100%), 1fr));
-  gap: 20px;
-}
+/* --- cards ---------------------------------------------------------------- */
 
 .card {
   border-radius: var(--r-panel);
@@ -97,28 +88,30 @@
   background: var(--ink-04);
 }
 
+/* data-ground="dark" on the element carries --ac, --ground and the greys.
+   It does not carry the --ink-NN ramp, so the two tints used inside a card
+   are remapped here or they are teal on teal. */
 .solid {
-  /* A dark panel in a light section. It has to declare the WHOLE ground, not
-     just the accent: --ac alone left --ground inheriting the cream from the
-     section, so every fill-with-accent inside went cream on cream. */
-  --ac: var(--cream);
-  --ground: var(--ink);
   border: 3px solid var(--ink);
   background: var(--ink);
   color: var(--cream);
+  --ink-07: var(--cream-1);
+  --ink-12: var(--cream-2);
 }
 
-.tinted {
-  border: 3px solid var(--ac);
-  background: var(--ac-07);
+/* A plan is an add-on, and the card should say so before the words do: a
+   keyline instead of a 3px border, a tinted ground instead of a panel, and a
+   price set at the size of a heading rather than a headline. */
+.plan {
+  border: var(--keyline) solid var(--ink-25);
+  background: var(--ink-04);
 }
 
-.tinted:hover {
-  background: var(--ac-13);
+.plan:hover {
+  border-color: var(--ink);
 }
 
-.badgeSolid,
-.badgeOutline {
+.badge {
   border-radius: var(--r-pill);
   position: absolute;
   top: -14px;
@@ -128,18 +121,9 @@
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-}
-
-.badgeSolid {
-  /* 10px white on orange — the deep one, see rule 2 in globals.css. */
+  /* 10px white on orange, so the deep one. See rule 2 in globals.css. */
   background: var(--brand-deep);
   color: var(--on-brand);
-}
-
-.badgeOutline {
-  border: 2px solid var(--ac);
-  background: var(--cream);
-  color: var(--ac);
 }
 
 .planName {
@@ -150,16 +134,19 @@
   letter-spacing: -0.02em;
 }
 
+.plan .planName {
+  font-size: 23px;
+}
+
 .priceRow {
-  margin: 20px 0 4px;
+  margin: 18px 0 0;
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .price {
-  margin: 20px 0 4px;
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 54px;
@@ -167,69 +154,77 @@
   letter-spacing: -0.035em;
 }
 
-/* Inside a price row the margin is carried by the row itself. */
-.priceRow .price {
-  margin: 0;
+.plan .price {
+  font-size: 36px;
 }
 
-.monthly {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 25px;
-  color: var(--ac);
-}
-
-.per {
-  font-size: 14px;
-}
-
-.cadence,
-.cadenceOnInk {
-  margin: 0;
+.cadence {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.cadence {
   color: var(--muted-2);
 }
 
-.cadenceOnInk {
-  color: var(--cream-55);
+/* --- the anchor, which belongs to one build ------------------------------- */
+
+.anchor {
+  margin: 12px 0 0;
+  font-size: 15px;
+  color: var(--muted-2);
 }
 
-.subtitle,
-.subtitleOnInk {
-  margin: 16px 0 20px;
+.anchorStruck {
+  font-weight: 700;
+  text-decoration: line-through;
+}
+
+/* --- card body ------------------------------------------------------------ */
+
+.tagline {
+  margin: 18px 0 0;
   font-size: 16px;
   font-style: italic;
-}
-
-.subtitle {
   color: var(--muted-2);
 }
 
-.subtitleOnInk {
-  color: var(--cream-65);
+.blurb {
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* Points at the card next door rather than naming another thing you get, so
+   it sits above the rule instead of inside the list. */
+.leadIn {
+  margin: 20px 0 0;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--ink-12);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.solid .leadIn,
+.solid .blurb,
+.solid .features {
+  color: var(--cream-82);
 }
 
 .features {
   display: grid;
   gap: 12px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
   font-size: 16px;
   line-height: 1.5;
   color: var(--muted);
-  /* Absorbs the leftover height so every CTA lands on the same baseline,
-     while align-content keeps the bullets together at the top instead of
-     spreading them down the card. */
+  /* Absorbs the leftover height so every CTA in a row lands on the same
+     baseline, while align-content keeps the bullets together at the top. */
   flex: 1;
   align-content: start;
-}
-
-.featuresOnInk {
-  color: var(--cream-82);
 }
 
 .feature {
@@ -238,67 +233,57 @@
 }
 
 .check {
-  color: var(--ac);
+  flex-shrink: 0;
+  color: var(--brand);
   font-weight: 700;
 }
 
-.valueNote {
-  border-radius: var(--r-field);
-  margin: 20px 0 0;
-  padding: 12px 14px;
-  background: var(--ink-07);
+.note {
+  margin: 16px 0 0;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--muted);
-}
-
-.valueNote b {
-  color: var(--ink);
+  color: var(--muted-2);
 }
 
 /* --- calls to action ------------------------------------------------------ */
 
-.ctaOutline,
-.ctaAccentToCream,
-.ctaAccentToInk {
+.cta,
+.ctaSolid {
   border-radius: var(--r-pill);
   margin-top: 26px;
   text-align: center;
   padding: 15px;
-    font-weight: 600;
+  font-weight: 600;
   font-size: 15px;
   transition: background 0.2s, color 0.2s;
 }
 
-.ctaOutline {
+.cta {
   border: 2px solid var(--ink);
-}
-
-.ctaOutline:hover {
-  background: var(--ink);
-  color: var(--cream);
-}
-
-.ctaAccentToCream {
-  background: var(--ac);
-  color: var(--ground);
-}
-
-.ctaAccentToCream:hover {
-  background: var(--cream);
   color: var(--ink);
 }
 
-.ctaAccentToInk {
-  margin-top: 20px;
-  background: var(--ac);
-  /* Oxblood is a dark ground: ink on it is 1.3:1, cream is 7.6:1. */
+.cta:hover {
+  background: var(--ink);
   color: var(--cream);
 }
 
-.ctaAccentToInk:hover {
-  background: var(--ink);
-  color: var(--cream);
+.plan .cta {
+  border-color: var(--ink-25);
+}
+
+.plan .cta:hover {
+  border-color: var(--ink);
+}
+
+.ctaSolid {
+  background: var(--brand-deep);
+  color: var(--on-brand);
+}
+
+.ctaSolid:hover {
+  background: var(--cream);
+  color: var(--ink);
 }
 
 /* --- footnote ------------------------------------------------------------- */

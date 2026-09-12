@@ -6,7 +6,16 @@
 
 import type { ContactCopy } from "@/components/Contact";
 import type { ProcessStep } from "@/components/Process";
-import type { PricingFeatures } from "@/components/Pricing";
+import {
+  BUILD_OPTIONS,
+  money,
+  offeringsFor,
+  optionById,
+  type Offerings,
+} from "@/lib/offerings";
+
+/** Named rather than written out, so the credit can never outlive the price. */
+const REPORT_PRICE = money(optionById(BUILD_OPTIONS, "report").amount);
 
 export const PROCESS_STEPS: readonly ProcessStep[] = [
   {
@@ -35,18 +44,77 @@ export const PROCESS_NOTE =
   "Tell me your business and I’ll spend an evening on it and send back a " +
   "finished homepage. Turn me down and the page is still yours to use.";
 
-export const PRICING: PricingFeatures = {
-  redesign: [
-    "A whole new site — home, what you do, your story, contact",
-    "One-tap calls, directions, quotes or booking",
-    "Google Search & Maps done right — you own every file",
-  ],
-  care: [
-    "Changes and new work — text me, done same-day",
-    "Services, hours, and prices kept current",
-  ],
-  hosting: ["Quote forms, booking, and map connections kept running"],
-};
+export const OFFERINGS: Offerings = offeringsFor({
+  report: {
+    tagline: "You want to know what's wrong before you spend real money.",
+    blurb:
+      "A full walkthrough of the site you have now, page by page, on a " +
+      "laptop and on a phone. You get a written report back: what's costing " +
+      "you customers, what to fix first, what's worth building, and what " +
+      "that should cost.",
+    features: [
+      "Page-by-page review on desktop and mobile",
+      "Load speed, search visibility, and mobile checks, with the actual numbers",
+      "A prioritized list of fixes, ranked by what each one will do for you",
+      "A recommendation for what to build next, with realistic pricing",
+      "Back to you in about a week",
+    ],
+    notes: [
+      "Yours to keep either way. Build it yourself, hand it to whoever runs " +
+        "your site, or hire anyone you like.",
+      `If you decide to build with me within 30 days, the ${REPORT_PRICE} comes off the price.`,
+    ],
+  },
+  redesign: {
+    tagline: "The site, done right.",
+    blurb:
+      "A new website, built from scratch, launched and working. You see the " +
+      "finished homepage before you pay a dollar.",
+    features: [
+      "Every page rebuilt: what you do, your service area, your story, contact",
+      "Fast on a phone, because that's where almost everyone will see it",
+      "Services, hours, and prices loaded and correct on day one",
+      "Click to call, quote requests, and map links wired up",
+      "Your domain stays in your name",
+      "Two rounds of changes after you see it, then we launch",
+      "About two weeks start to finish",
+    ],
+    notes: [
+      "Nothing due until you've looked at the finished site and told me it's good.",
+    ],
+  },
+  refresh: {
+    tagline:
+      "The site, plus the photos to fill it, plus everywhere else people find you.",
+    leadIn: "Everything in The Redesign",
+    features: [
+      "A photo shoot at your place: the van, the workshop, the work itself",
+      "Edited photos, yours to keep and use anywhere, on the site, on Facebook, on your truck and your cards",
+      "Your Google Business Profile rebuilt: hours, service areas, categories, photos",
+      "Maps, Yelp, and your Facebook page all pointing at the same correct information",
+      "Search setup so you turn up when someone nearby is looking, and when they ask an AI assistant who to call",
+    ],
+  },
+  care: {
+    features: [
+      "Text or email me a change and it's live the same day",
+      "Services, prices, hours, holiday closures, new photos",
+      "Small additions as you think of them",
+      "Cancel whenever, no notice",
+    ],
+  },
+  careHosting: {
+    leadIn: "Everything in Care",
+    features: [
+      "Hosting and the SSL certificate, handled",
+      "Security monitoring, backups, and updates",
+      "Ongoing search work: Google, Maps, and the AI assistants people now ask for recommendations",
+      "A short monthly note on what people did on your site",
+      "Cancel whenever, no notice",
+    ],
+  },
+  plansNote: "More than one location? Those get quoted on their own. Just ask.",
+});
 
 export const NAPKIN_LEDE =
   "This is what happens when two people who were comparing three names on a " +
