@@ -17,7 +17,7 @@ import {
 } from "@/lib/offerings";
 
 /** Named rather than written out, so the credit can never outlive the price. */
-const REPORT_PRICE = money(optionById(BUILD_OPTIONS, "report").amount);
+const REFRESH_PRICE = money(optionById(BUILD_OPTIONS, "refresh").amount);
 
 export const PROCESS_STEPS: readonly ProcessStep[] = [
   {
@@ -47,28 +47,28 @@ export const PROCESS_NOTE =
   "finished homepage. Turn me down and the page is still yours to use.";
 
 export const OFFERINGS: Offerings = offeringsFor({
-  report: {
-    tagline: "You want to know what's wrong before you spend real money.",
+  refresh: {
+    tagline: "You have a site. It just isn't pulling its weight.",
     blurb:
-      "A full walkthrough of the site you have now, page by page, on a " +
-      "laptop and on a phone. You get a written report back: what's costing " +
-      "you customers, what to fix first, what's worth building, and what " +
-      "that should cost.",
+      "I take the site you already have and fix what's actually costing you " +
+      "tables. Same site, same address, working properly by the end of the week.",
     features: [
-      "Page-by-page review on desktop and mobile",
-      "Load speed, search visibility, and mobile checks, with the actual numbers",
-      "A prioritized list of fixes, ranked by what each one will do for you",
-      "A recommendation for what to build next, with realistic pricing",
-      "Back to you in about a week",
+      "Menu, hours, and phone number correct, current, and easy to find",
+      "Fixed for a phone, because that's where almost everyone will see it",
+      "Load speed, broken links, and whatever is keeping you out of search",
+      "Online ordering, reservations, and map links actually wired up",
+      "Done in about a week",
     ],
     notes: [
-      "Yours to keep either way. Build it yourself, hand it to whoever runs " +
-        "your site, or hire anyone you like.",
-      `If you decide to build with me within 30 days, the ${REPORT_PRICE} comes off the price.`,
+      "This is the right call when the bones are fine and the details have " +
+        "drifted. If the site is fighting you, the rebuild costs less than " +
+        "doing this twice.",
+      `If you decide to build with me within 30 days, the ${REFRESH_PRICE} comes off the price.`,
     ],
   },
-  redesign: {
+  rebuild: {
     tagline: "The site, done right.",
+    leadIn: "Everything in The Refresh",
     blurb:
       "A new website, built from scratch, launched and working. You see the " +
       "finished homepage before you pay a dollar.",
@@ -85,10 +85,10 @@ export const OFFERINGS: Offerings = offeringsFor({
       "Nothing due until you've looked at the finished site and told me it's good.",
     ],
   },
-  refresh: {
+  redo: {
     tagline:
       "The site, plus the photos to fill it, plus everywhere else people find you.",
-    leadIn: "Everything in The Redesign",
+    leadIn: "Everything in The Rebuild + Refresh",
     features: [
       "A photo shoot at your place: the room, the counter, the plates",
       "Edited photos, yours to keep and use anywhere, on the site, on Instagram, on printed menus",

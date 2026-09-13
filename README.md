@@ -70,13 +70,19 @@ is the one thing a one-person shop cannot afford.
 
 ## What is on sale, and where the prices live
 
-**Two axes, not three tiers.** You pick a build — The Report `$300`, The
-Redesign `$1,200`, The Redesign + Refresh `$2,000` — and then you add a monthly
-plan, Care `$75` or Care + Hosting `$200`, or you don't. The pricing section is
-therefore two rows and not one row of three, because the layout has to say that
-before anyone reads a word. It used to be three cards that were all the same
-`$1,200` build differing only by the monthly attached, which made a monthly look
-like something you chose *instead of* a cheaper build.
+**Two axes, not three tiers.** You pick a build — The Refresh `$300`, The
+Rebuild + Refresh `$1,200`, The Complete Redo `$2,000` — and then you add a
+monthly plan, Care `$75` or Care + Hosting `$200`, or you don't. The pricing
+section is therefore two rows and not one row of three, because the layout has
+to say that before anyone reads a word. It used to be three cards that were all
+the same `$1,200` build differing only by the monthly attached, which made a
+monthly look like something you chose *instead of* a cheaper build.
+
+**The builds are one ladder, each rung containing the one below it**, and each
+card says so in a `leadIn` above its list. The `$300` entry used to be a written
+report about the site rather than work on it, which left a visitor comparing a
+document to a website; it is now a fix of the site you already have, and the
+names carry the escalation.
 
 **Every price on the site is a number in `src/lib/offerings.ts`,** in
 `BUILD_OPTIONS` and `PLAN_OPTIONS`. The pricing cards render it, the napkin

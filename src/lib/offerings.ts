@@ -29,10 +29,16 @@ export function money(amount: number): string {
   return `$${amount.toLocaleString("en-US")}`;
 }
 
+/**
+ * One ladder, each rung containing the one below it. The entry used to be a
+ * written report about the site rather than work on it, which made the $300
+ * a different kind of thing from the two above it and left a visitor comparing
+ * a document to a website.
+ */
 export const BUILD_OPTIONS: readonly PriceOption[] = [
-  { id: "report", label: "The Report", amount: 300 },
-  { id: "redesign", label: "The Redesign", amount: 1200 },
-  { id: "refresh", label: "The Redesign + Refresh", amount: 2000 },
+  { id: "refresh", label: "The Refresh", amount: 300 },
+  { id: "rebuild", label: "The Rebuild + Refresh", amount: 1200 },
+  { id: "redo", label: "The Complete Redo", amount: 2000 },
 ];
 
 /**
@@ -47,7 +53,7 @@ export const PLAN_OPTIONS: readonly PriceOption[] = [
 ];
 
 /** What the napkin math opens on: the middle build and the cheaper plan. */
-export const DEFAULT_BUILD_ID = "redesign";
+export const DEFAULT_BUILD_ID = "rebuild";
 export const DEFAULT_PLAN_ID = "care";
 
 export function optionById(
@@ -84,22 +90,22 @@ export type Offerings = {
 
 /** The per-audience half. Everything here is words; nothing here is a price. */
 export type OfferingWords = {
-  report: { tagline: string; blurb: string; features: readonly string[]; notes: readonly string[] };
-  redesign: { tagline: string; blurb: string; features: readonly string[]; notes: readonly string[] };
-  refresh: { tagline: string; leadIn: string; features: readonly string[] };
-  care: { features: readonly string[] };
-  careHosting: { leadIn: string; features: readonly string[] };
+  refresh: OfferingCopy;
+  rebuild: OfferingCopy;
+  redo: OfferingCopy;
+  care: OfferingCopy;
+  careHosting: OfferingCopy;
   plansNote: string;
 };
 
 const BUILD_CTA: Record<string, string> = {
-  report: "Get the report",
-  redesign: "Start a build",
-  refresh: "Start a build",
+  refresh: "Start a refresh",
+  rebuild: "Start a build",
+  redo: "Start a build",
 };
 
 /** The words half: everything an Offering has that is not a price or a name. */
-type OfferingCopy = Omit<
+export type OfferingCopy = Omit<
   Offering,
   "id" | "name" | "amount" | "price" | "priceNote" | "ctaLabel"
 >;
@@ -133,9 +139,9 @@ function plan(id: string, extra: OfferingCopy): Offering {
 export function offeringsFor(words: OfferingWords): Offerings {
   return {
     builds: [
-      build("report", words.report),
-      build("redesign", { ...words.redesign, featured: true }),
       build("refresh", words.refresh),
+      build("rebuild", { ...words.rebuild, featured: true }),
+      build("redo", words.redo),
     ],
     plans: [plan("care", words.care), plan("care-hosting", words.careHosting)],
     plansNote: words.plansNote,

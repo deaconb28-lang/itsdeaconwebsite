@@ -3,19 +3,23 @@
   padding: 0 var(--pad-x) clamp(60px, 6vw, 96px);
 }
 
+/* Matches Lookup's column exactly. See Pricing.tsx for why. */
+.inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* The sub line used to be flung to the opposite end of a space-between row,
+   which at laptop width put a 17px sentence a metre from the heading it
+   belongs to. Stacked, it reads as the heading's second line. */
 .header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-bottom: 44px;
+  margin-bottom: clamp(38px, 4.2vw, 52px);
   padding-top: 56px;
   border-top: 3px solid var(--ink);
 }
 
 .heading {
-  margin: 0;
+  margin: 0 0 14px;
   font-family: var(--font-display);
   font-weight: 800;
   font-size: var(--say);
@@ -27,16 +31,18 @@
 
 .sub {
   margin: 0;
-  max-width: 48ch;
-  font-size: 17px;
+  max-width: 54ch;
+  font-size: 18px;
   line-height: 1.55;
   color: var(--muted);
 }
 
+/* Builds stay stretched: three CTAs landing on one line is what says these
+   are the same kind of choice. */
 .builds {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-  gap: 20px;
+  gap: 22px;
 }
 
 /* The plans get their own auto-fit track rather than inheriting the builds'.
@@ -46,7 +52,12 @@
 .plans {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
-  gap: 20px;
+  gap: 22px;
+  /* Not stretched, unlike the builds. Care has four bullets and Care +
+     Hosting has six, and matching their heights left a third of the Care card
+     as empty ground with its button marooned at the bottom. They are add-ons
+     of different sizes and the cards are allowed to say so. */
+  align-items: start;
 }
 
 .plansHeader {
@@ -76,8 +87,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 30px;
-  transition: background 0.25s;
+  padding: clamp(26px, 2.4vw, 34px);
+  transition: background 0.25s, transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
 }
 
 .plain {
@@ -86,17 +98,31 @@
 
 .plain:hover {
   background: var(--ink-04);
+  transform: translateY(-4px);
+  box-shadow: 8px 8px 0 var(--ink-12);
 }
 
 /* data-ground="dark" on the element carries --ac, --ground and the greys.
    It does not carry the --ink-NN ramp, so the two tints used inside a card
-   are remapped here or they are teal on teal. */
+   are remapped here or they are teal on teal.
+
+   The hard offset shadow is the house idiom — the napkin panel and the
+   portrait both wear one — and it is what makes this card read as the chosen
+   one from across the page rather than merely as the dark one. It is drawn
+   with --ink-2, which is deliberately NOT one of the tints remapped above:
+   the shadow falls on cream, so it has to stay teal. */
 .solid {
   border: 3px solid var(--ink);
   background: var(--ink);
   color: var(--cream);
+  box-shadow: 12px 12px 0 var(--ink-2);
   --ink-07: var(--cream-1);
   --ink-12: var(--cream-2);
+}
+
+.solid:hover {
+  transform: translateY(-4px);
+  box-shadow: 16px 16px 0 var(--ink-2);
 }
 
 /* A plan is an add-on, and the card should say so before the words do: a
@@ -109,13 +135,14 @@
 
 .plan:hover {
   border-color: var(--ink);
+  transform: translateY(-3px);
 }
 
 .badge {
   border-radius: var(--r-pill);
   position: absolute;
   top: -14px;
-  left: 30px;
+  left: clamp(26px, 2.4vw, 34px);
   padding: 5px 13px;
   font-family: var(--font-mono);
   font-size: 10px;
@@ -139,7 +166,7 @@
 }
 
 .priceRow {
-  margin: 18px 0 0;
+  margin: 16px 0 0;
   display: flex;
   align-items: baseline;
   gap: 10px;
@@ -169,23 +196,40 @@
 /* --- the anchor, which belongs to one build ------------------------------- */
 
 .anchor {
-  margin: 12px 0 0;
+  margin: 20px 0 0;
+  padding-top: 20px;
+  border-top: 2px solid var(--ink-12);
   font-size: 15px;
   color: var(--muted-2);
 }
 
+/* One number, so it breaks as one number: this was wrapping after the en
+   dash and leaving "15,000." alone on the next line. */
 .anchorStruck {
   font-weight: 700;
   text-decoration: line-through;
+  white-space: nowrap;
 }
 
 /* --- card body ------------------------------------------------------------ */
 
+/* The first thing under the price, and the first rule in the card: the cost
+   is one block, what you get is another. */
 .tagline {
-  margin: 18px 0 0;
+  margin: 20px 0 0;
+  padding-top: 20px;
+  border-top: 2px solid var(--ink-12);
   font-size: 16px;
   font-style: italic;
   color: var(--muted-2);
+}
+
+/* Except where the anchor sits between them — then the rule belongs above the
+   anchor, or the struck-through agency price is orphaned from its price. */
+.anchor + .tagline {
+  padding-top: 0;
+  border-top: none;
+  margin-top: 14px;
 }
 
 .blurb {
@@ -223,8 +267,20 @@
   color: var(--muted);
   /* Absorbs the leftover height so every CTA in a row lands on the same
      baseline, while align-content keeps the bullets together at the top. */
-  flex: 1;
+  flex: 1 0 auto;
   align-content: start;
+}
+
+/* Where a card has notes, they are the last thing before the button, so the
+   slack has to fall after them. Absorbing it in the list instead pushed the
+   Refresh card's two notes to the floor and left a hand-width of empty ground
+   in the middle of the card. */
+.card:has(.note) .features {
+  flex: 0 0 auto;
+}
+
+.card:has(.note) .note:last-of-type {
+  flex: 1 0 auto;
 }
 
 .feature {
@@ -307,4 +363,15 @@
 .footerAside {
   font-style: italic;
   color: var(--muted-2);
+}
+
+/* The global rule zeroes transition duration but leaves the transform itself,
+   so a hover still jumps four pixels. page.module.css names the same
+   exception for the same reason. */
+@media (prefers-reduced-motion: reduce) {
+  .plain:hover,
+  .solid:hover,
+  .plan:hover {
+    transform: none;
+  }
 }

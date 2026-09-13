@@ -18,41 +18,52 @@ import styles from "./Pricing.module.css";
 export function Pricing({ offerings }: { offerings: Offerings }) {
   return (
     <section id="pricing" className={styles.section}>
-      <div className={styles.header}>
-        <h2 className={styles.heading}>What it costs</h2>
-        <p className={styles.sub}>
-          Pick a build. Add a monthly plan if you want me to keep it current,
-          or don&rsquo;t.
-        </p>
-      </div>
+      {/* Same 1180px column as the looker directly below, so the two read as
+          one block rather than as two sections that happen to be adjacent.
+          Unconstrained, three cards of short bullets stretched to the full
+          1900px and the section went thin and sparse at exactly the width
+          most people will see it. */}
+      <div className={styles.inner}>
+        <div className={styles.header}>
+          <h2 className={styles.heading}>What it costs</h2>
+          <p className={styles.sub}>
+            Pick a build. Add a monthly plan if you want me to keep it current,
+            or don&rsquo;t.
+          </p>
+        </div>
 
-      <div className={styles.builds}>
-        {offerings.builds.map((item) => (
-          <Card key={item.id} item={item} />
-        ))}
-      </div>
+        <div className={styles.builds}>
+          {offerings.builds.map((item) => (
+            <Card key={item.id} item={item} />
+          ))}
+        </div>
 
-      <div className={styles.plansHeader}>
-        <h3 className={styles.plansHeading}>Then, if you want it looked after</h3>
-        <p className={styles.sub}>Add either one to any build. Cancel whenever.</p>
-      </div>
+        <div className={styles.plansHeader}>
+          <h3 className={styles.plansHeading}>
+            Then, if you want it looked after
+          </h3>
+          <p className={styles.sub}>
+            Add either one to any build. Cancel whenever.
+          </p>
+        </div>
 
-      <div className={styles.plans}>
-        {offerings.plans.map((item) => (
-          <Card key={item.id} item={item} plan />
-        ))}
-      </div>
+        <div className={styles.plans}>
+          {offerings.plans.map((item) => (
+            <Card key={item.id} item={item} plan />
+          ))}
+        </div>
 
-      <p className={styles.plansNote}>{offerings.plansNote}</p>
+        <p className={styles.plansNote}>{offerings.plansNote}</p>
 
-      <div className={styles.footer}>
-        <span>
-          <b>The mockup is free and yours to keep</b> &mdash; even if you tell
-          me no today.
-        </span>
-        <span className={styles.footerAside}>
-          you talk, I type &mdash; no homework
-        </span>
+        <div className={styles.footer}>
+          <span>
+            <b>The mockup is free and yours to keep</b> &mdash; even if you tell
+            me no today.
+          </span>
+          <span className={styles.footerAside}>
+            you talk, I type &mdash; no homework
+          </span>
+        </div>
       </div>
     </section>
   );
@@ -88,7 +99,7 @@ function Card({ item, plan = false }: { item: Offering; plan?: boolean }) {
 
       {/* The anchor belongs to this build and to no other, which is why it is
           inside the card now rather than over the whole section. */}
-      {item.id === "redesign" && (
+      {item.id === "rebuild" && (
         <p className={styles.anchor}>
           An agency quotes this build at{" "}
           <span className={styles.anchorStruck}>{AGENCY_ANCHOR}</span>.

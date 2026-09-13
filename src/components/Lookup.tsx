@@ -16,7 +16,7 @@ import styles from "./Lookup.module.css";
  * the one place on the site that could silently disagree with the pricing
  * section.
  */
-const REDESIGN_PRICE = money(optionById(BUILD_OPTIONS, "redesign").amount);
+const REBUILD_PRICE = money(optionById(BUILD_OPTIONS, "rebuild").amount);
 
 type Phase = "idle" | "checking" | "ready" | "error";
 
@@ -289,10 +289,10 @@ function Report({
 
       {/* Tagged like the pricing cards, so an enquiry that starts here is
           distinguishable from one that starts at the bottom of the page. */}
-      <a href="#contact" data-tier="redesign" className={styles.fix}>
+      <a href="#contact" data-tier="rebuild" className={styles.fix}>
         {clean || audit.blocked
           ? "Get a free mockup"
-          : `Fix it for ${REDESIGN_PRICE}`}
+          : `Fix it for ${REBUILD_PRICE}`}
         <span aria-hidden="true">→</span>
       </a>
     </div>
