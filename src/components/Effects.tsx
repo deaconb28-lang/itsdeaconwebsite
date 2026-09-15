@@ -52,7 +52,11 @@ function setupReveal(reduced: boolean): () => void {
   );
 
   nodes.forEach((node, index) => {
-    node.dataset.d = String(index % 3);
+    // A section that cares about its own order says so in the markup; the
+    // rest fall back to a rolling three-phase stagger. The pricing cards were
+    // getting whatever phase their position in the page-wide list happened to
+    // land on, so a row of three could start 1, 2, 0 and read as shuffled.
+    if (node.dataset.d === undefined) node.dataset.d = String(index % 3);
     observer.observe(node);
   });
 

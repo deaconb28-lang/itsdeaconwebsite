@@ -93,6 +93,15 @@ there is nowhere else to change it. `offeringsFor()` welds those numbers to the
 per-audience words in each route's `copy.ts`, which is what stops the two pitch
 pages drifting — there is no way to add a tier to one page and forget the other.
 
+**The section assembles itself as you reach it.** Three motions, all built on
+what `Effects` already provides rather than on anything new: the three build
+cards land left to right (they carry `data-d`, which `Effects` now respects
+instead of overwriting with a page-wide rolling phase — a row of three was
+starting 1, 2, 0 and reading as shuffled); the agency price is crossed out
+while you watch, using the same `[data-grow]` sweep the five-second bars use;
+and each card's ticks fill in top to bottom once the card itself has settled.
+All three resolve to the finished state with JavaScript off or motion reduced.
+
 The napkin math takes the build and the monthly as parameters now, chosen from
 two dropdowns **inside the sentence** rather than from a control panel above it;
 the section is already a thing you type into, and a second place to fiddle would

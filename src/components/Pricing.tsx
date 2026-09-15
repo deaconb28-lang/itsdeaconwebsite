@@ -33,8 +33,8 @@ export function Pricing({ offerings }: { offerings: Offerings }) {
         </div>
 
         <div className={styles.builds}>
-          {offerings.builds.map((item) => (
-            <Card key={item.id} item={item} />
+          {offerings.builds.map((item, index) => (
+            <Card key={item.id} item={item} order={index} />
           ))}
         </div>
 
@@ -48,8 +48,8 @@ export function Pricing({ offerings }: { offerings: Offerings }) {
         </div>
 
         <div className={styles.plans}>
-          {offerings.plans.map((item) => (
-            <Card key={item.id} item={item} plan />
+          {offerings.plans.map((item, index) => (
+            <Card key={item.id} item={item} order={index} plan />
           ))}
         </div>
 
@@ -77,12 +77,25 @@ export function Pricing({ offerings }: { offerings: Offerings }) {
  * --ground and all three greys at once. The old version needed a parallel
  * `OnInk` class for every text style because it only set the accent.
  */
-function Card({ item, plan = false }: { item: Offering; plan?: boolean }) {
+function Card({
+  item,
+  order,
+  plan = false,
+}: {
+  item: Offering;
+  /** Position in its own row, so the row lands left to right. */
+  order: number;
+  plan?: boolean;
+}) {
   const tone = item.featured ? styles.solid : plan ? styles.plan : styles.plain;
 
   return (
     <article
       data-reveal=""
+      // Effects multiplies this by 80ms. Without it the card inherits a phase
+      // from its position in the page-wide reveal list, and a row of three can
+      // start 1, 2, 0 and read as shuffled rather than dealt.
+      data-d={order}
       {...(item.featured ? { "data-ground": "dark" } : {})}
       className={`${styles.card} ${tone}`}
     >
@@ -102,7 +115,16 @@ function Card({ item, plan = false }: { item: Offering; plan?: boolean }) {
       {item.id === "rebuild" && (
         <p className={styles.anchor}>
           An agency quotes this build at{" "}
-          <span className={styles.anchorStruck}>{AGENCY_ANCHOR}</span>.
+          <span className={styles.anchorStruck}>
+            {AGENCY_ANCHOR}
+            {/* The rule is drawn rather than set with text-decoration, so the
+                existing [data-grow] primitive can sweep it across as the card
+                arrives. It is the one rhetorical moment in the section: the
+                agency price gets crossed out while you watch. With JS off or
+                motion reduced it is simply a struck-through price. */}
+            <span className={styles.strike} data-grow="" aria-hidden="true" />
+          </span>
+          .
         </p>
       )}
 

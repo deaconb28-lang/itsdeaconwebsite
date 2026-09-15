@@ -204,11 +204,27 @@
 }
 
 /* One number, so it breaks as one number: this was wrapping after the en
-   dash and leaving "15,000." alone on the next line. */
+   dash and leaving "15,000." alone on the next line.
+
+   No text-decoration here — the rule through it is a real element below, so
+   the [data-grow] primitive in globals.css can sweep it across as the card
+   arrives. Two strikes would otherwise draw over each other. */
 .anchorStruck {
+  position: relative;
   font-weight: 700;
-  text-decoration: line-through;
   white-space: nowrap;
+}
+
+/* Sits where a line-through would, and is what actually gets animated.
+   With JS off it has no scaleX(0) to start from, so it renders full width and
+   the price simply reads as struck. */
+.strike {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0.52em;
+  height: 2px;
+  background: currentColor;
 }
 
 /* --- card body ------------------------------------------------------------ */
@@ -294,6 +310,72 @@
   font-weight: 700;
 }
 
+/* The ticks land one after another once their card has settled, so a card
+   reads as being filled in rather than as arriving finished. Gated on
+   html.dc-js: with no JavaScript the card never gets .dc-in and the ticks have
+   to be visible from the start.
+
+   The keyframe is declared here rather than reused from globals because CSS
+   Modules scopes animation names, and a module referencing a global keyframe
+   by name silently animates nothing. */
+@keyframes tick {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+:global(html.dc-js) .card .check {
+  opacity: 0;
+}
+
+:global(html.dc-js) .card:global(.dc-in) .check {
+  /* Longhands, not the `animation` shorthand. The shorthand resets every
+     sub-property it does not name, including animation-delay — and this rule
+     outranks the per-index delays below, so it was quietly zeroing all of
+     them and every tick fired at once. Measured before it was caught. */
+  animation-name: tick;
+  animation-duration: 0.34s;
+  animation-timing-function: var(--ease);
+  animation-fill-mode: both;
+}
+
+/* The card's own rise is 0.8s, and the row staggers 80ms per card on top of
+   that, so the ticks wait until 0.86s before starting. Earlier and they run
+   underneath the card's fade, where nobody can see them: measured, tick three
+   was finishing while its own card was still at 0.8 opacity.
+
+   55ms apart from there. Eight covers the longest list; anything past it keeps
+   the last delay rather than trailing forever. */
+.feature:nth-child(1) .check {
+  animation-delay: 0.86s;
+}
+.feature:nth-child(2) .check {
+  animation-delay: 0.92s;
+}
+.feature:nth-child(3) .check {
+  animation-delay: 0.97s;
+}
+.feature:nth-child(4) .check {
+  animation-delay: 1.03s;
+}
+.feature:nth-child(5) .check {
+  animation-delay: 1.08s;
+}
+.feature:nth-child(6) .check {
+  animation-delay: 1.14s;
+}
+.feature:nth-child(7) .check {
+  animation-delay: 1.19s;
+}
+.feature:nth-child(n + 8) .check {
+  animation-delay: 1.25s;
+}
+
 .note {
   margin: 16px 0 0;
   font-size: 14px;
@@ -373,5 +455,14 @@
   .solid:hover,
   .plan:hover {
     transform: none;
+  }
+
+  /* The global rule zeroes animation duration, which would leave the ticks
+     mid-keyframe at whatever `both` fills from. Name the resting state. */
+  :global(html.dc-js) .card .check,
+  :global(html.dc-js) .card:global(.dc-in) .check {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 }
